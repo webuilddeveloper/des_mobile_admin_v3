@@ -134,13 +134,16 @@ class _OperationalDataPageState extends State<OperationalDataPage>
         },
       ),
     );
+    print('------token------->>> ${token}');
 
-    print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyy $_selectedDay');
+    print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyy 11 $_selectedDay');
 
     if (response.statusCode == 200) {
       List<dynamic> data = response.data['data'];
       logE(data);
-      print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyy ${data[0]['workdate'].toString()}');
+      // print(
+      //   'yyyyyyyyyyyyyyyyyyyyyyyyyyyyy 22 ${data[0]['workdate'].toString()}',
+      // );
 
       var selectedWorkData = data.firstWhere((item) {
         DateTime workdate = DateTime.parse(item['workdate']);
@@ -157,15 +160,9 @@ class _OperationalDataPageState extends State<OperationalDataPage>
 
         return isSameDay(workdateOnly, selectedDay);
       }, orElse: () => null);
-      // var selectedWorkData = data.firstWhere(
-      //   (item) {
-      //     DateTime workdate = DateTime.parse(item['workdate']);
-      //     return isSameDay(workdate, _selectedDay);
-      //   },
-      //   orElse: () => null,
-      // );
 
-      print('zzzzzzzzzzzzzzzzzzzz $selectedWorkData');
+      print('---------selectedWorkData-------->>>  $selectedWorkData');
+
       if (selectedWorkData != null) {
         setState(() {
           myProcessModel = selectedWorkData;

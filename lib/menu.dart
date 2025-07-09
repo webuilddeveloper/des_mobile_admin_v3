@@ -1425,8 +1425,7 @@ class _MenupageState extends State<Menupage> {
 
       mSetState(() => loadingcheckIn = true);
       String img = await _checkImage();
-      // logWTF(img);
-      // ตรวจ รูปภาพจาก API checkImage
+      print('---------------img-------------${img}');
       if (img.isNotEmpty) {
         var a = await networkImageToBase64(img);
         mSetState(() {
@@ -1435,16 +1434,12 @@ class _MenupageState extends State<Menupage> {
         bool isCallLocationAPI = await _checkCallLocationAPI();
         ResponseStatus distancePass;
 
-        // ข้าม API Location Center
-        // isCallLocationAPI เป็น true เรียก API ปกติ
-        // isCallLocationAPI เป็น false ข้าม API
         if (isCallLocationAPI) {
           distancePass = await _callDataCheckDistance();
         } else {
           distancePass = ResponseStatus.success;
         }
-        // logWTF(distancePass);
-        print('---------------distancePass-------------');
+
         logWTF(distancePass);
 
         if (distancePass == ResponseStatus.error) {
@@ -1519,7 +1514,6 @@ class _MenupageState extends State<Menupage> {
   late DateTime _today;
 
   _callReadGetStaffCalende() async {
-    print('------------------->>>>>> _callReadGetStaffCalende');
     _today = DateTime.now();
     setState(() {
       loadingcheckIn = true;
@@ -1537,9 +1531,6 @@ class _MenupageState extends State<Menupage> {
       );
     }
 
-    print(
-      '----------------->>>> $ondeURL/api/StaffCalendar/GetStaffCalenderWorkday?month=$month&year=$year&isPagination=false&key=false&direction=true&isGetPrvious_Next_Data=true',
-    );
     Response response = await Dio().get(
       '$ondeURL/api/StaffCalendar/GetStaffCalenderWorkday?month=$month&year=$year&isPagination=false&key=false&direction=true&isGetPrvious_Next_Data=true',
       options: Options(
@@ -1561,16 +1552,10 @@ class _MenupageState extends State<Menupage> {
         return isSameDay(workdate, _today);
       }, orElse: () => null);
 
-      print(
-        '------------selectedWorkData------------------${selectedWorkData.toString()}',
-      );
       if (selectedWorkData != null) {
         setState(() {
           getStaffCalende = selectedWorkData;
           logWTF(getStaffCalende);
-          print(
-            '================getStaffCalende==checkin=============>>>>> ${getStaffCalende['checkin']}',
-          );
         });
       } else {
         setState(() {
@@ -1635,30 +1620,20 @@ class _MenupageState extends State<Menupage> {
 
   Future<ResponseStatus> _faceRecognitionPresent() async {
     try {
-      print('--------------->>>>> faceRecognitionPresent started');
-
       var response = await regula.FaceSDK.instance.startFaceCapture();
-
       if (response.image == null) {
         return ResponseStatus.fail;
       }
-
       Uint8List imageFile = response.image!.image;
-
       if (imageFile.isEmpty) {
         return ResponseStatus.fail;
       }
-
       Fluttertoast.showToast(msg: 'รอสักครู่ระบบกำลังตรวจสอบตัวตนของท่าน.....');
-
       regula.MatchFacesImage imageMatch = regula.MatchFacesImage(
         imageFile,
         regula.ImageType.PRINTED,
       );
       String matchImg = await _matchFaces(imageMatch);
-
-      print('------------------>>> matchImg result: $matchImg');
-
       if (matchImg == 'success') {
         return ResponseStatus.success;
       } else if (matchImg == 'not_match') {
@@ -1693,13 +1668,11 @@ class _MenupageState extends State<Menupage> {
         Fluttertoast.showToast(
           msg: 'รอสักครู่ระบบกำลังตรวจสอบตัวตนของท่าน.....',
         );
-
         regula.MatchFacesImage imageMatch = regula.MatchFacesImage(
           imageFile,
           regula.ImageType.LIVE,
         );
         String matchImg = await _matchFaces(imageMatch);
-
         if (matchImg == 'success') {
           return ResponseStatus.success;
         } else if (matchImg == 'not_match') {
@@ -1720,37 +1693,19 @@ class _MenupageState extends State<Menupage> {
   Future<String> _matchFaces(regula.MatchFacesImage imageScan) async {
     try {
       print('------------------>>>> start matchFaces');
-
       if (imageLoadT == null) {
         print('Reference image not loaded');
         return 'error';
       }
-      print('------------------->>>>  image loaded :${imageLoadT} ');
-      print(
-        '------------------->>>>  image loaded runtimeType : ${imageLoadT.runtimeType} ',
-      );
-      print('------------------->>>>  imageScan  :${imageScan.image} ');
-      print(
-        '------------------->>>>  imageScan  runtimeType  :${imageScan.image.runtimeType} ',
-      );
 
       var pic1 = regula.MatchFacesImage(imageLoadT!, regula.ImageType.PRINTED);
       var request = regula.MatchFacesRequest([pic1, imageScan]);
-      print('------------------>>>> MatchFaces request: $request');
-      print(
-        '------------------>>>> MatchFaces request image1: ${request.images[0].image.length}',
-      );
-      print(
-        '------------------>>>> MatchFaces request image2: ${request.images[1].image.length}',
-      );
-
       var response = await regula.FaceSDK.instance.matchFaces(request);
-      print('------------------>>>> MatchFaces response: $response');
+
       var split = await regula.FaceSDK.instance.splitComparedFaces(
         response.results,
         0.75,
       );
-      print('------------------------>>>> Similarity ');
       String similarity =
           split.matchedFaces.isNotEmpty
               ? "${(split.matchedFaces[0].similarity * 100).toStringAsFixed(2)}%"
@@ -1778,10 +1733,7 @@ class _MenupageState extends State<Menupage> {
     try {
       http.Response response = await http.get(Uri.parse(imageUrl));
       final bytes = response.bodyBytes;
-      print('--------bytes------>>>> Image bytes length: ${bytes}');
-      print(
-        '-------base64Encode------->>>> Image base64Encode: ${base64Encode(bytes)}',
-      );
+
       return base64Encode(bytes);
     } catch (e) {
       print('Error converting network image to base64: $e');
@@ -1817,7 +1769,8 @@ class _MenupageState extends State<Menupage> {
         '$serverUrl/dcc-api/configulation/scanface/read',
         data: {},
       );
-      logWTF(response.data);
+      logWTF(response.data); 
+      
       if (response.data['status'].toUpperCase() == 'S') {
         return response.data['objectData'];
       } else {

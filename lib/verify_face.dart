@@ -31,7 +31,6 @@ class _VerifyFacePageState extends State<VerifyFacePage> {
     final (success, error) = await regula.FaceSDK.instance.initialize();
     if (!success) {
       print("❌ FaceSDK init failed: ${error?.message}");
-      // เพิ่มการแสดง error message ให้ user เห็น
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
