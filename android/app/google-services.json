@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "795306744403",
+    "project_id": "des-admin",
+    "storage_bucket": "des-admin.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795306744403:android:7e4be56a79b18772bd84a6",
+        "android_client_info": {
+          "package_name": "td.webuild.desadmin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZXtQSv6669nz_kFXK0wDlBqvER3mPYuE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+
+}
