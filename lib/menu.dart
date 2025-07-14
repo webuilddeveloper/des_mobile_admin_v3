@@ -597,7 +597,9 @@ class _MenupageState extends State<Menupage> {
 
     initializeSDK();
 
-    NotificationService.instance.start(context);
+    // NotificationService.instance.start(context);
+    NotificationService.setupFirebaseMessaging();
+    NotificationService.requestPermission();
     homePage = HomePage(changePage: _changePage);
     profilePage = ProfilePage(changePage: _changePage);
     messageListPage = MessageListPage(changePage: _changePage);
@@ -1769,8 +1771,8 @@ class _MenupageState extends State<Menupage> {
         '$serverUrl/dcc-api/configulation/scanface/read',
         data: {},
       );
-      logWTF(response.data); 
-      
+      logWTF(response.data);
+
       if (response.data['status'].toUpperCase() == 'S') {
         return response.data['objectData'];
       } else {

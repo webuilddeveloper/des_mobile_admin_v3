@@ -1,210 +1,209 @@
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:des_mobile_admin_v3/config.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_new_badger/flutter_new_badger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  '9999', // id
-  'your channel name', // title
-  // 'This channel is used for important notifications.', // description
-  importance: Importance.high,
-  playSound: true,
+FirebaseOptions firebaseOption = FirebaseOptions(
+  apiKey:
+      Platform.isAndroid
+          ? "AIzaSyAZXtQSv6669nz_kFXK0wDlBqvER3mPYuE"
+          : "AIzaSyBnMhHuyDpQcRYHw-eiZnMXbu3Xi9-gL9M",
+  appId:
+      Platform.isAndroid
+          ? "1:795306744403:android:7e4be56a79b18772bd84a6"
+          : "1:795306744403:ios:0f1548853b2ec325bd84a6",
+  messagingSenderId: "795306744403",
+  projectId: "des-admin",
 );
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: firebaseOption);
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // await Firebase.initializeApp();
-  _updateBagder(message.data);
-}
-
-final storage = FlutterSecureStorage();
-
-_updateBagder(message) async {
-  final storage = FlutterSecureStorage();
-  final valueStorage = await storage.read(key: 'dataUserLoginDES');
-  final token = await storage.read(key: 'tokenD');
-
-  final dataValue =
-      valueStorage == null ? {'email': ''} : json.decode(valueStorage);
-  final email = dataValue['email']?.toString() ?? '';
-
-  if ((token != null && token != '') && (email != '')) {
-    try {
-      final response = await Dio().post(
-        'm/v2/notification/count',
-        data: {"email": email, "token": token},
-      );
-
-      final total = response.data['total'];
-      if (total != null && total is int) {
-        await FlutterNewBadger.setBadge(total);
-      }
-    } catch (e) {
-    }
-  }
+  print('Handling a background message: ${message.messageId}');
+  // NotificationService.showNotification(message);
+  await NotificationService._updateBadge(message.data);
+  await NotificationService.showNotification(message);
 }
 
 class NotificationService {
-  /// We want singelton object of ``NotificationService`` so create private constructor
-  /// Use NotificationService as ``NotificationService.instance``
-  final storage = const FlutterSecureStorage();
+  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  static const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/launcher_icon');
 
-  NotificationService._internal();
+  static const DarwinInitializationSettings initializationSettingsIOS =
+      DarwinInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+      );
 
-  static final NotificationService instance = NotificationService._internal();
-  bool _started = false;
-  void start(BuildContext context) {
-    if (!_started) {
-      _integrateNotification(context);
-      _refreshToken();
-      _started = true;
+  static const InitializationSettings initializationSettings =
+      InitializationSettings(
+        android: initializationSettingsAndroid,
+        iOS: initializationSettingsIOS,
+      );
+
+  static const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel',
+    'High Importance Notifications',
+    importance: Importance.high,
+  );
+
+  static Future<void> _updateBadge(Map<String, dynamic> messageData) async {
+    print('[🔔] _updateBadge called with messageData: $messageData');
+
+    final storage = FlutterSecureStorage();
+    final valueStorage = await storage.read(key: 'dataUserLoginDES');
+    final token = await storage.read(key: 'tokenD');
+
+    print('[📦] Storage email/token: $valueStorage / $token');
+
+    final dataValue =
+        valueStorage == null ? {'email': ''} : json.decode(valueStorage);
+    final email = dataValue['email']?.toString() ?? '';
+
+    if ((token != null && token != '') && (email != '')) {
+      try {
+        final response = await Dio().post(
+          '$ondeURL/m/v2/notification/count',
+          data: {"email": email, "token": token},
+        );
+
+        final total = response.data['total'];
+        print('[✅] Badge total from API: $total');
+
+        if (total != null && total is int) {
+          await FlutterNewBadger.setBadge(total);
+          print('[📱] Badge updated to: $total');
+        }
+      } catch (e) {
+        print('[❌] Error updating badge: $e');
+      }
+    } else {
+      print('[⚠️] Missing email/token, badge not updated');
     }
   }
 
-  Future<void> _refreshToken() async {
-    FirebaseMessaging.instance.getToken().then((token) async {
-      // logD('token: $token');
-
-      storage.write(key: 'tokenD', value: token);
-    }, onError: _tokenRefreshFailure);
-  }
-
-  void _tokenRefresh(String newToken) async {
-    // print('New Token : $newToken');
-
-    storage.write(key: 'tokenD', value: newToken);
-  }
-
-  void _tokenRefreshFailure(error) {
-  }
-
-  void _integrateNotification(BuildContext context) {
-    _initializeLocalNotification();
-    _registerNotification(context);
-  }
-
-  Future<void> _initializeLocalNotification() async {
+  static Future<void> initialize() async {
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
         >()
         ?.createNotificationChannel(channel);
 
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
-
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        if (response.payload != null) {
+          print('notification payload: ${response.payload}');
+        }
+      },
     );
 
-    await FirebaseMessaging.instance.subscribeToTopic('all');
+    // await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  void _registerNotification(BuildContext context) {
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      _updateBagder(message.data);
-
-      RemoteNotification notification = message.notification!;
-      AndroidNotification? android = message.notification?.android;
-      if (android != null) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              // channel.description,
-              color: Colors.blue,
-              playSound: true,
-              icon: '@mipmap/ic_launcher',
-            ),
-          ),
+  static Future<void> requestPermission() async {
+    NotificationSettings settings = await FirebaseMessaging.instance
+        .requestPermission(
+          alert: true,
+          announcement: false,
+          badge: true,
+          sound: true,
+          carPlay: false,
+          criticalAlert: false,
+          provisional: false,
         );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  static Future<void> subscribeToAllTopic(param) async {
+    await FirebaseMessaging.instance.unsubscribeFromTopic('des-admin');
+    await FirebaseMessaging.instance.subscribeToTopic('des-admin');
+    print('Subscribed to topic "$param"');
+  }
+
+  static Future<void> showNotification(RemoteMessage message) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+          'high_importance_channel',
+          'High Importance Notifications',
+          importance: Importance.high,
+          priority: Priority.high,
+        );
+
+    const DarwinNotificationDetails iOSPlatformChannelSpecifics =
+        DarwinNotificationDetails();
+
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      message.notification?.title,
+      message.notification?.body,
+      platformChannelSpecifics,
+    );
+  }
+
+  static void setupFirebaseMessaging() {
+    FirebaseMessaging.instance.getToken().then((token) async {
+      print('--------->>> FCM Token: $token');
+      DateTime now = new DateTime.now();
+      var currentYear = now.year;
+      var dateStart = '2023-01-01';
+      var dateEnd = '$currentYear-12-31';
+
+      if (token != null) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? accessToken = prefs.getString('access_token');
+
+          final response = await Dio().get(
+            '$ondeURL/api/ticket/getTrackTicket/$dateStart/$dateEnd',
+            data: {'token': token},
+            
+            options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+          );
+        } catch (e) {
+          print('------3--->>>  Error registering notification token: $e');
+        }
+      } else {
+        print('------4--->>>  Failed to get FCM token');
       }
+    });
+
+    FirebaseMessaging.instance.subscribeToTopic('des-admin');
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print(
+        '------>>>> Message received in foreground: ${message.notification?.title}',
+      );
+      await _updateBadge(message.data);
+      await showNotification(message);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-
-      RemoteNotification notification = message.notification!;
-      AndroidNotification? android = message.notification?.android;
-      if (android != null) {
-        showDialog(
-          context: context,
-          builder: (_) {
-            return AlertDialog(
-              title: Text(notification.title!),
-              content: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [Text(notification.body!)],
-                ),
-              ),
-            );
-          },
-        );
-      } else {
-        switch (message.data['page']) {
-          case 'NEWS':
-            {
-              // var response = await Dio().post(
-              //     '$serverUrl/dcc-api/m/eventcalendar/read',
-              //     data: {'code': message.data['code']});
-              // var newsPage = response.data;
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => NewsDetailPage(
-              //       model: newsPage[0],
-              //     ),
-              //   ),
-              // );
-            }
-            break;
-          default:
-        }
-      }
+      print('------>>>> Notification opened!');
+      await _updateBadge(message.data);
+      
     });
-
-    FirebaseMessaging.instance.onTokenRefresh.listen(
-      _tokenRefresh,
-      onError: _tokenRefreshFailure,
-    );
-  }
-
-  void showNotification() {
-    flutterLocalNotificationsPlugin.show(
-      0,
-      "Testing ",
-      "How you doin ?",
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          importance: Importance.high,
-          // color: Colors.blue,
-          playSound: true,
-          icon: '@mipmap/ic_launcher',
-        ),
-      ),
-    );
   }
 }

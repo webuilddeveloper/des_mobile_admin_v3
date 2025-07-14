@@ -10,14 +10,11 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'config.dart';
 
-// ignore: must_be_immutable
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
 
   @override
   State<ReportPage> createState() => _ReportPageState();
-
-  // getState() => homeCentralPageState;
 }
 
 class _ReportPageState extends State<ReportPage> {
@@ -49,7 +46,7 @@ class _ReportPageState extends State<ReportPage> {
     "ticketDone": 0,
     "ticketInProgress": 0,
   };
-  String _selectedDashboard = '0';
+  String _selectedDashboard = '510';
 
   // Future<dynamic> _futureProblemModel = Future.value([
   //   {
@@ -702,14 +699,14 @@ class _ReportPageState extends State<ReportPage> {
             child: InkWell(
               onTap:
                   () => setState(() {
-                    _selectedDashboard = "0";
+                    _selectedDashboard = "510";
                     _callReadTrack();
                     // _callRead();
                   }),
               child: Container(
                 width: double.infinity,
                 decoration:
-                    _selectedDashboard == "0"
+                    _selectedDashboard == "510"
                         ? const BoxDecoration(
                           gradient: LinearGradient(
                             colors: [Color(0xFF760CB7), Color(0xFFBB36AE)],
@@ -758,7 +755,7 @@ class _ReportPageState extends State<ReportPage> {
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
                               color:
-                                  _selectedDashboard == "0"
+                                  _selectedDashboard == "510"
                                       ? Color(0xFFFFFFFF)
                                       : Color(0xFF8414B5),
                             ),
@@ -769,7 +766,7 @@ class _ReportPageState extends State<ReportPage> {
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
                               color:
-                                  _selectedDashboard == "0"
+                                  _selectedDashboard == "510"
                                       ? Color(0xFFFFFFFF)
                                       : Color(0xFF8414B5),
                             ),
@@ -801,7 +798,7 @@ class _ReportPageState extends State<ReportPage> {
             child: InkWell(
               onTap:
                   () => setState(() {
-                    _selectedDashboard = "1";
+                    _selectedDashboard = "511";
                     // _callRead();
                     _callReadTrack();
                   }),
@@ -809,7 +806,7 @@ class _ReportPageState extends State<ReportPage> {
                 width: double.infinity,
                 height: 120,
                 decoration:
-                    _selectedDashboard == "1"
+                    _selectedDashboard == "511"
                         ? const BoxDecoration(
                           gradient: LinearGradient(
                             colors: [Color(0xFF760CB7), Color(0xFFBB36AE)],
@@ -858,7 +855,7 @@ class _ReportPageState extends State<ReportPage> {
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
                               color:
-                                  _selectedDashboard == "1"
+                                  _selectedDashboard == "511"
                                       ? Color(0xFFFFFFFF)
                                       : Color(0xFF8414B5),
                             ),
@@ -869,7 +866,7 @@ class _ReportPageState extends State<ReportPage> {
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
                               color:
-                                  _selectedDashboard == "1"
+                                  _selectedDashboard == "511"
                                       ? Color(0xFFFFFFFF)
                                       : Color(0xFF8414B5),
                             ),
@@ -901,7 +898,7 @@ class _ReportPageState extends State<ReportPage> {
             child: InkWell(
               onTap:
                   () => setState(() {
-                    _selectedDashboard = "2";
+                    _selectedDashboard = "512";
                     // _callRead();
                     _callReadTrack();
                   }),
@@ -922,7 +919,7 @@ class _ReportPageState extends State<ReportPage> {
                   width: double.infinity,
                   height: 120,
                   decoration:
-                      _selectedDashboard == "2"
+                      _selectedDashboard == "512"
                           ? const BoxDecoration(
                             gradient: LinearGradient(
                               colors: [Color(0xFF760CB7), Color(0xFFBB36AE)],
@@ -967,7 +964,7 @@ class _ReportPageState extends State<ReportPage> {
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                           color:
-                              _selectedDashboard == "2"
+                              _selectedDashboard == "512"
                                   ? Color(0xFFFFFFFF)
                                   : Color(0xFF8414B5),
                         ),
@@ -978,7 +975,7 @@ class _ReportPageState extends State<ReportPage> {
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
                           color:
-                              _selectedDashboard == "2"
+                              _selectedDashboard == "512"
                                   ? Color(0xFFFFFFFF)
                                   : Color(0xFF8414B5),
                         ),
@@ -996,7 +993,7 @@ class _ReportPageState extends State<ReportPage> {
             child: InkWell(
               onTap:
                   () => setState(() {
-                    _selectedDashboard = "3";
+                    _selectedDashboard = "513";
                     // _callRead();
                     _callReadTrack();
                   }),
@@ -1017,7 +1014,7 @@ class _ReportPageState extends State<ReportPage> {
                   width: double.infinity,
                   height: 120,
                   decoration:
-                      _selectedDashboard == "3"
+                      _selectedDashboard == "513"
                           ? const BoxDecoration(
                             gradient: LinearGradient(
                               colors: [Color(0xFF760CB7), Color(0xFFBB36AE)],
@@ -1062,7 +1059,7 @@ class _ReportPageState extends State<ReportPage> {
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                           color:
-                              _selectedDashboard == "3"
+                              _selectedDashboard == "513"
                                   ? Color(0xFFFFFFFF)
                                   : Color(0xFF8414B5),
                         ),
@@ -1073,7 +1070,7 @@ class _ReportPageState extends State<ReportPage> {
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
                           color:
-                              _selectedDashboard == "3"
+                              _selectedDashboard == "513"
                                   ? Color(0xFFFFFFFF)
                                   : Color(0xFF8414B5),
                         ),
@@ -1409,8 +1406,15 @@ class _ReportPageState extends State<ReportPage> {
     );
   }
 
-  _convertDate(String date) {
-    return DateFormat('dd-MM-yyyy').format(DateTime.parse(date));
+  String _convertDate(dynamic dateInput) {
+    if (dateInput == null) return '-- -- ----';
+
+    try {
+      final date = DateTime.parse(dateInput);
+      return DateFormat('dd-MM-yyyy').format(date);
+    } catch (e) {
+      return '-- -- ----';
+    }
   }
 
   void goBack() async {
@@ -1505,47 +1509,33 @@ class _ReportPageState extends State<ReportPage> {
   // }
 
   _callReadTrack() async {
-    DateTime now = new DateTime.now();
-    var currentYear = now.year;
-    var dateStart = '2023-01-01';
-    var dateEnd = '${currentYear}-12-31';
+    DateTime dateEnd = DateTime.now();
+    DateTime dateStart = DateTime(dateEnd.year, dateEnd.month - 3, dateEnd.day);
 
-    // setState(() => _loading = true);
-    Dio dio = Dio();
-    var response = await dio.get(
-      '$ondeURL/api/ticket/getTrackTicket/$dateStart/$dateEnd',
-    );
+    String dateEndStr = dateEnd.toIso8601String().substring(0, 10);
+    String dateStartStr = dateStart.toIso8601String().substring(0, 10);
 
-    // logWTF(response.data['data']);
+    String token = await ManageStorage.read('accessToken_122') ?? '';
 
-    setState(() {
-      // print('---------_callReadTrack------------${_selectedDashboard}');
-      if (_selectedDashboard == '0') {
-        listDataTrack = response.data['data'].getRange(0, 2);
-        _futureFollowModel = Future.value(listDataTrack);
-      } else if (_selectedDashboard == '1') {
-        listDataTrack = response.data['data']
-            .where((i) => i['statusCode'] == 511)
-            .toList()
-            .getRange(0, 2);
-        _futureFollowModel = Future.value(listDataTrack);
-      } else if (_selectedDashboard == '2') {
-        listDataTrack = response.data['data']
-            .where((i) => i['statusCode'] == 512)
-            .toList()
-            .getRange(0, 2);
-        _futureFollowModel = Future.value(listDataTrack);
-      } else if (_selectedDashboard == '3') {
-        listDataTrack = response.data['data']
-            .where((i) => i['statusCode'] == 513)
-            .toList()
-            .getRange(0, 2);
-        _futureFollowModel = Future.value(listDataTrack);
+    try {
+      final dio = Dio();
+      final response = await dio.get(
+        '$ondeURL/api/ticket/getTrackTicket/$dateStartStr/$dateEndStr/$_selectedDashboard/NNOTFILTER/0',
+        queryParameters: {'CurrentPage': 1, 'RecordPerPage': 10},
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          modellistDataTrack = response.data['data'];
+          _futureFollowModel = Future.value(modellistDataTrack);
+        });
+      } else {
+        print('Error: ${response.statusMessage}');
       }
-      modellistDataTrack = response.data['data'];
-    });
-
-    // setState(() => _loading = false);
+    } catch (e) {
+      print('Exception: $e');
+    }
   }
 
   dynamic subTypesTicketk;
@@ -1554,7 +1544,6 @@ class _ReportPageState extends State<ReportPage> {
   _callsubTypesTicketk(model) async {
     String token = await ManageStorage.read('accessToken_122') ?? '';
     ticketTypeCode = model['ticketTypeCode'];
-    // print('-----------ticketTypeCode---------------${ticketTypeCode}');
 
     Dio dio = Dio();
     try {

@@ -61,46 +61,7 @@ class _MyAppState extends State<MyApp> {
   void dispose() {
     super.dispose();
   }
-// --------- >>> uni_links เปลี่ยนเป็น app_links แล้ว.  <<< ----------- 
-//  void _handleIncomingLinks() {
-//     if (!kIsWeb) {
-//       try {
-//         // logWTF('_handleIncomingLinks');
-//         uriLinkStream.listen(
-//           (Uri? uri) async {
-//             // logWTF('model');
-//             // logWTF('model --- $uri');
-//             SharedPreferences prefs = await SharedPreferences.getInstance();
-//             String? state = prefs.getString('thaiDState') ?? '';
-//             String? action = prefs.getString('thaiDAction') ?? '';
-//             // logWTF('got uri: $uri');
-//             if (state == uri!.queryParameters['state']) {
-//               await prefs.setString(
-//                 'thaiDCode',
-//                 uri.queryParameters['code'].toString(),
-//               );
-//               if (action == 'create') {
-//                 navigatorKey.currentState!.pushReplacementNamed(
-//                   '/verifyThaiId',
-//                 );
-//               }
-//               if (action == 'update') {
-//                 navigatorKey.currentState!.pushReplacementNamed(
-//                   '/profileVerify',
-//                 );
-//               }
-//             }
-//           },
-//           onError: (Object err) {
-//             logD('got err: $err');
-//           },
-//         );
-//       } catch (e) {
-//         logE(e);
-//       }
-//     }
-//   } 
-  
+
   void _handleIncomingLinks() {
     if (!kIsWeb) {
       try {
@@ -136,7 +97,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -77,6 +77,7 @@ dependencies:
   flutter_face_api: ^7.1.282
   flutter_face_core_basic: ^7.1.147
   latlong2: ^0.9.1
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -93,6 +94,13 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/icon_app.png"
+  remove_alpha_ios: true
+  
 flutter:
 
   # The following line ensures that the Material Icons font is
