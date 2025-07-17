@@ -1126,7 +1126,7 @@ class _ReportPageState extends State<ReportPage> {
                     children: [
                       Text(
                         'วันที่รับแจ้ง ${_convertDate(model['ticketDate'] ?? '')}',
-                        // modellistDataTrack[index]['ticketName'],
+
                         style: const TextStyle(
                           fontSize: 14,
                           fontFamily: 'Kanit',
@@ -1134,7 +1134,7 @@ class _ReportPageState extends State<ReportPage> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      // const SizedBox(width: 20),
+
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
@@ -1142,9 +1142,7 @@ class _ReportPageState extends State<ReportPage> {
                         ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: const Color(0xFF8414B5),
-                          ), // Border color
+                          border: Border.all(color: const Color(0xFF8414B5)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -1154,14 +1152,10 @@ class _ReportPageState extends State<ReportPage> {
                               backgroundColor:
                                   Colors.yellow, // Color of the dot
                             ),
-                            const SizedBox(
-                              width: 8,
-                            ), // Spacing between dot and text
+                            const SizedBox(width: 8),
                             Text(
-                              model['statusCodeText'], // Your text here
-                              style: const TextStyle(
-                                color: Color(0xFF8414B5), // Text color
-                              ),
+                              model['statusCodeText'],
+                              style: const TextStyle(color: Color(0xFF8414B5)),
                             ),
                           ],
                         ),
@@ -1229,8 +1223,6 @@ class _ReportPageState extends State<ReportPage> {
                     ],
                   ),
                   const SizedBox(height: 12),
-
-                  // const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1277,14 +1269,11 @@ class _ReportPageState extends State<ReportPage> {
                                 ),
                               ),
                               FutureBuilder(
-                                future: _callsubTypesTicketk(
-                                  model,
-                                ), // ฟังก์ชันที่ดึงข้อมูลจาก API
+                                future: _callsubTypesTicketk(model),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
                                     return const SizedBox();
-                                    // return const CircularProgressIndicator();
                                   } else {
                                     return Text(
                                       subTypesTicketk[0]['ticketSubtypeName'] ??
@@ -1469,45 +1458,6 @@ class _ReportPageState extends State<ReportPage> {
     setState(() => _loading = false);
   }
 
-  // _callRead() async {
-  //   DateTime now = new DateTime.now();
-  //   var currentYear = now.year;
-  //   var dateStart = '${currentYear}-01-01';
-  //   var dateEnd = '${currentYear}-12-31';
-  //   setState(() => _loading = true);
-  //   Dio dio = Dio();
-  //   var response = await dio.get(
-  //     '$ondeURL/api/ticket/getTickets/$dateStart/$dateEnd',
-  //   );
-  //   // logWTF(response.data['data']);
-  //   setState(() {
-  //     // print('---------_callRead------------${_selectedDashboard}');
-  //     if (_selectedDashboard == '0') {
-  //       listData = response.data['data'].getRange(0, 2);
-  //       _futureProblemModel = Future.value(listData);
-  //     } else if (_selectedDashboard == '1') {
-  //       listData = response.data['data']
-  //           .where((i) => i['statusCode'] == 511)
-  //           .toList()
-  //           .getRange(0, 2);
-  //       _futureProblemModel = Future.value(listData);
-  //     } else if (_selectedDashboard == '2') {
-  //       listData = response.data['data']
-  //           .where((i) => i['statusCode'] == 512)
-  //           .toList()
-  //           .getRange(0, 2);
-  //       _futureProblemModel = Future.value(listData);
-  //     } else if (_selectedDashboard == '3') {
-  //       listData = response.data['data']
-  //           .where((i) => i['statusCode'] == 513)
-  //           .toList()
-  //           .getRange(0, 2);
-  //       _futureProblemModel = Future.value(listData);
-  //     }
-  //   });
-  //   setState(() => _loading = false);
-  // }
-
   _callReadTrack() async {
     DateTime dateEnd = DateTime.now();
     DateTime dateStart = DateTime(dateEnd.year, dateEnd.month - 3, dateEnd.day);
@@ -1573,7 +1523,6 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   void onRefresh() async {
-    // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
 }

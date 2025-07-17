@@ -1288,15 +1288,30 @@ class _HomePageState extends State<HomePage> {
   }
 
   _notiCount() async {
-    var profile = await ManageStorage.readDynamic('profileMe');
+    // var profile = await ManageStorage.readDynamic('profileMe');
+    var accessToken = await ManageStorage.read('accessToken_122') ?? '';
     try {
-      Response response = await Dio().post(
-        '$serverUrl/dcc-api/m/v2/notificationbooking/count',
-        data: {'centerId': profile['centerId'].toString()},
+      // Response response = await Dio().post(
+      //   '$serverUrl/dcc-api/m/v2/notificationbooking/count',
+      //   data: {'centerId': profile['centerId'].toString()},
+      // );
+
+      final response = await Dio().get(
+        '$ondeURL/api/Notify/count/me?isPortal=false',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $accessToken',
+          },
+        ),
       );
-      setState(() {
-        _notiCountTotal = response.data['objectData']['total'];
-      });
+      if (response.statusCode == 200) {
+        setState(() {
+          _notiCountTotal = response.data['data']['notRead'];
+        });
+      } else {
+        logE('Error: ${response.statusCode} - ${response.data}');
+      }
     } on DioError catch (e) {
       logE(e.toString());
     } catch (e) {

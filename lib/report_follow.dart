@@ -36,7 +36,7 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
   String selectProvince = "1";
   String selectDistrict = "1";
   String selectSubDistrict = "1";
-  int tabSelector = 0;
+  int tabSelector = 510;
   bool _loading = false;
   dynamic listData;
 
@@ -746,38 +746,119 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
     super.dispose();
   }
 
+  dynamic modellistDataTrack;
+
+  // _callRead() async {
+  //   setState(() => _loading = true);
+
+  //   // DateTime now = new DateTime.now();
+  //   // var currentYear = now.year;
+  //   // var dateStart = '2023-01-01';
+  //   // var dateEnd = '${currentYear}-12-31';
+
+  //   // Dio dio = Dio();
+  //   // var response = await dio.get(
+  //   //   '$ondeURL/api/ticket/getTrackTicket/$dateStart/$dateEnd',
+  //   // );
+  //   // logWTF(response.data['data']);
+
+  //   // setState(() {
+  //   //   if (tabSelector == 1) {
+  //   //     listData =
+  //   //         response.data['data'].where((i) => i['statusCode'] == 511).toList();
+  //   //     _futureFollowModel = Future.value(listData);
+  //   //   } else if (tabSelector == 2) {
+  //   //     listData =
+  //   //         response.data['data'].where((i) => i['statusCode'] == 512).toList();
+  //   //     _futureFollowModel = Future.value(listData);
+  //   //   } else if (tabSelector == 3) {
+  //   //     listData =
+  //   //         response.data['data'].where((i) => i['statusCode'] == 513).toList();
+  //   //     _futureFollowModel = Future.value(listData);
+  //   //   } else {
+  //   //     listData = response.data['data'];
+  //   //     _futureFollowModel = Future.value(listData);
+  //   //   }
+  //   // });
+  //   // setState(() => _loading = false);
+  //   DateTime dateEnd = DateTime.now();
+  //   DateTime dateStart = DateTime(dateEnd.year, dateEnd.month - 3, dateEnd.day);
+
+  //   String dateEndStr = dateEnd.toIso8601String().substring(0, 10);
+  //   String dateStartStr = dateStart.toIso8601String().substring(0, 10);
+
+  //   String token = await ManageStorage.read('accessToken_122') ?? '';
+
+  //   try {
+  //     final dio = Dio();
+  //     final response = await dio.get(
+  //       '$ondeURL/api/ticket/getTrackTicket/$dateStartStr/$dateEndStr/$tabSelector/NNOTFILTER/0',
+  //       queryParameters: {'CurrentPage': 1, 'RecordPerPage': 10},
+  //       options: Options(headers: {'Authorization': 'Bearer $token'}),
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       setState(() {
+  //         modellistDataTrack = response.data['data'];
+  //         _futureFollowModel = Future.value(modellistDataTrack);
+  //       });
+  //     } else {
+  //       print('Error: ${response.statusMessage}');
+  //     }
+  //   } catch (e) {
+  //     print('Exception: $e');
+  //   }
+  // }
   _callRead() async {
     setState(() => _loading = true);
 
-    DateTime now = new DateTime.now();
-    var currentYear = now.year;
-    var dateStart = '2023-01-01';
-    var dateEnd = '${currentYear}-12-31';
+    DateTime dateEnd = DateTime.now();
+    DateTime dateStart = DateTime(dateEnd.year, dateEnd.month - 3, dateEnd.day);
 
-    Dio dio = Dio();
-    var response = await dio.get(
-      '$ondeURL/api/ticket/getTrackTicket/$dateStart/$dateEnd',
-    );
-    logWTF(response.data['data']);
+    String dateEndStr = dateEnd.toIso8601String().substring(0, 10);
+    String dateStartStr = dateStart.toIso8601String().substring(0, 10);
 
-    setState(() {
-      if (tabSelector == 1) {
-        listData =
-            response.data['data'].where((i) => i['statusCode'] == 511).toList();
-        _futureFollowModel = Future.value(listData);
-      } else if (tabSelector == 2) {
-        listData =
-            response.data['data'].where((i) => i['statusCode'] == 512).toList();
-        _futureFollowModel = Future.value(listData);
-      } else if (tabSelector == 3) {
-        listData =
-            response.data['data'].where((i) => i['statusCode'] == 513).toList();
-        _futureFollowModel = Future.value(listData);
+    String token = await ManageStorage.read('accessToken_122') ?? '';
+
+    // กำหนด statusCode ตาม tabSelector
+    int statusCode;
+    switch (tabSelector) {
+      case 0:
+        statusCode = 510;
+        break;
+      case 1:
+        statusCode = 511;
+        break;
+      case 2:
+        statusCode = 512;
+        break;
+      case 3:
+        statusCode = 513;
+        break;
+      default:
+        statusCode = 510;
+    }
+
+    try {
+      final dio = Dio();
+      final response = await dio.get(
+        '$ondeURL/api/ticket/getTrackTicket/$dateStartStr/$dateEndStr/$statusCode/NNOTFILTER/0',
+        queryParameters: {'CurrentPage': 1, 'RecordPerPage': 10},
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          modellistDataTrack = response.data['data'];
+          _futureFollowModel = Future.value(modellistDataTrack);
+        });
       } else {
-        listData = response.data['data'];
-        _futureFollowModel = Future.value(listData);
+        print('Error: ${response.statusMessage}');
       }
-    });
+    } catch (e) {
+      print('Exception: $e');
+    }
+
     setState(() => _loading = false);
   }
 

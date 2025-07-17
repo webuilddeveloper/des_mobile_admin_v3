@@ -20,8 +20,9 @@ class ReservationEditPage extends StatefulWidget {
   State<ReservationEditPage> createState() => _ReservationEditPageState();
 }
 
-final RefreshController _refreshController =
-    RefreshController(initialRefresh: false);
+final RefreshController _refreshController = RefreshController(
+  initialRefresh: false,
+);
 
 String now = DateFormat('dd - MM - yyyy').format(DateTime.now());
 
@@ -49,7 +50,9 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
   _selectTime(String time) async {
     dynamic timeSplit = time.split(':');
     var a = TimeOfDay(
-        hour: int.parse(timeSplit[0]), minute: int.parse(timeSplit[1]));
+      hour: int.parse(timeSplit[0]),
+      minute: int.parse(timeSplit[1]),
+    );
     TimeOfDay? newTime = await showTimePicker(context: context, initialTime: a);
     if (newTime == null) return null;
     final hours = newTime.hour.toString().padLeft(2, '0');
@@ -60,10 +63,9 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
   _postpone() async {
     try {
       var accessToken = await ManageStorage.read('accessToken_122') ?? '';
-      var subDate = DateFormat('dd-MM-yyyy')
-          .format(DateTime.now())
-          .replaceAll(' ', '')
-          .split('-');
+      var subDate = DateFormat(
+        'dd-MM-yyyy',
+      ).format(DateTime.now()).replaceAll(' ', '').split('-');
       String tempDate = '${subDate[2]}-${subDate[1]}-${subDate[0]}T00:00:00';
 
       int sth = int.parse(startTime.split(':')[0]);
@@ -74,13 +76,15 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
       // check hours
       if (sth > edh) {
         return Fluttertoast.showToast(
-            msg: 'เวลาเริ่มต้นและเวลาสิ้นสุด ไม่ถูกต้อง');
+          msg: 'เวลาเริ่มต้นและเวลาสิ้นสุด ไม่ถูกต้อง',
+        );
       }
 
       // check minutes
       if (sth == edh && stm >= edm) {
         return Fluttertoast.showToast(
-            msg: 'เวลาเริ่มต้นและเวลาสิ้นสุด ไม่ถูกต้อง');
+          msg: 'เวลาเริ่มต้นและเวลาสิ้นสุด ไม่ถูกต้อง',
+        );
       }
       var data = {
         "bookingDate": tempDate,
@@ -90,18 +94,14 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
         "endTime": endTime,
         "phone": widget.model['phone'] ?? '',
         "desc": "",
-        "remark": ""
+        "remark": "",
       };
 
       setState(() => _loadingSubmit = true);
       Response response = await Dio().put(
         '$ondeURL/api/Booking/PostponeBooking',
         data: data,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-          },
-        ),
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
       );
       logWTF('data');
 
@@ -120,73 +120,74 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext context) => WillPopScope(
-        onWillPop: () => Future.value(false),
-        child: Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          elevation: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SizedBox(
-              height: 127,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'เลื่อนจองสำเร็จ',
-                    style: TextStyle(
-                      color: Color(0xFF7A4CB1),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Text(
-                    'ทำการเลื่อนการจองใช้บริการเรียบร้อย',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context, false);
-                      Navigator.pop(context, false);
-                    },
-                    // Navigator.of(context).pushAndRemoveUntil(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const Menu(),
-                    //   ),
-                    //   (Route<dynamic> route) => false,
-                    // ),
-                    child: Container(
-                      height: 40,
-                      width: 95,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF7A4CB1),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'ตกลง',
+      builder:
+          (BuildContext context) => WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SizedBox(
+                  height: 127,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'เลื่อนจองสำเร็จ',
                         style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
+                          color: Color(0xFF7A4CB1),
+                          fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ),
-                  )
-                ],
+                      const Text(
+                        'ทำการเลื่อนการจองใช้บริการเรียบร้อย',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context, false);
+                          Navigator.pop(context, false);
+                        },
+                        // Navigator.of(context).pushAndRemoveUntil(
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const Menu(),
+                        //   ),
+                        //   (Route<dynamic> route) => false,
+                        // ),
+                        child: Container(
+                          height: 40,
+                          width: 95,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF7A4CB1),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'ตกลง',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
     );
   }
 
@@ -216,9 +217,7 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: const Icon(
-                      Icons.arrow_back_ios_new,
-                    ),
+                    child: const Icon(Icons.arrow_back_ios_new),
                   ),
                 ),
                 Expanded(
@@ -255,7 +254,9 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 20),
+                          horizontal: 20,
+                          vertical: 20,
+                        ),
                         child: _buildBooking(),
                       ),
                     ],
@@ -290,11 +291,7 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
       var accessToken = await ManageStorage.read('accessToken_122') ?? '';
       Response response = await Dio().put(
         '$ondeURL/api/Booking/Cancel?bookingNo=${widget.model['bookingno']}',
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-          },
-        ),
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
       );
       setState(() => _loadingSubmit = false);
 
@@ -314,8 +311,9 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
   }
 
   _dialogCancelBooking() {
-    var bookingDate = DateFormat('dd/MM/yyyy')
-        .format(DateTime.parse(widget.model['bookingdate']));
+    var bookingDate = DateFormat(
+      'dd/MM/yyyy',
+    ).format(DateTime.parse(widget.model['bookingdate']));
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -397,7 +395,7 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -411,73 +409,74 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext context) => WillPopScope(
-        onWillPop: () => Future.value(false),
-        child: Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          elevation: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SizedBox(
-              height: 127,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'ยกเลิกจองสำเร็จ',
-                    style: TextStyle(
-                      color: Color(0xFF7A4CB1),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Text(
-                    'ทำการยกเลิกการจองใช้บริการเรียบร้อย',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context, false);
-                      Navigator.pop(context, false);
-                    },
-                    // Navigator.of(context).pushAndRemoveUntil(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const Menu(),
-                    //   ),
-                    //   (Route<dynamic> route) => false,
-                    // ),
-                    child: Container(
-                      height: 40,
-                      width: 95,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF7A4CB1),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'ตกลง',
+      builder:
+          (BuildContext context) => WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SizedBox(
+                  height: 127,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'ยกเลิกจองสำเร็จ',
                         style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
+                          color: Color(0xFF7A4CB1),
+                          fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ),
-                  )
-                ],
+                      const Text(
+                        'ทำการยกเลิกการจองใช้บริการเรียบร้อย',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context, false);
+                          Navigator.pop(context, false);
+                        },
+                        // Navigator.of(context).pushAndRemoveUntil(
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const Menu(),
+                        //   ),
+                        //   (Route<dynamic> route) => false,
+                        // ),
+                        child: Container(
+                          height: 40,
+                          width: 95,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF7A4CB1),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'ตกลง',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
     );
   }
 
@@ -487,9 +486,7 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
       builder: (_, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.length == 0) {
-            return const Center(
-              child: Text('ไม่พบข้อมูล'),
-            );
+            return const Center(child: Text('ไม่พบข้อมูล'));
           } else {
             return _buildItemBooking(snapshot.data);
           }
@@ -517,12 +514,16 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
             color: Color(0xFFF9E9FF),
             blurRadius: 5,
             offset: Offset(0, 5),
-          )
+          ),
         ],
       ),
       child: Container(
-        padding:
-            const EdgeInsets.only(top: 22, bottom: 20, left: 16, right: 16),
+        padding: const EdgeInsets.only(
+          top: 22,
+          bottom: 20,
+          left: 16,
+          right: 16,
+        ),
         width: double.infinity,
         // height: 60,
         decoration: const BoxDecoration(
@@ -541,30 +542,23 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
             //   maxLines: 2,
             //   overflow: TextOverflow.ellipsis,
             // ),
-            const SizedBox(
-              height: 19,
-            ),
+            const SizedBox(height: 19),
             const Text(
               'ข้อมูลการจอง',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(
-              height: 12,
-            ),
+            const SizedBox(height: 12),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ClipRRect(
-                    // borderRadius: BorderRadius.circular(50),
-                    child: Image.asset(
-                  'assets/images/user_register_menu.png',
-                  width: 16,
-                )),
+                  child: Image.asset(
+                    'assets/images/user_register_menu.png',
+                    width: 16,
+                  ),
+                ),
                 const SizedBox(width: 10),
                 Flexible(
                   child: Text(
@@ -579,9 +573,7 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 13,
-            ),
+            const SizedBox(height: 13),
             Row(
               children: [
                 Expanded(
@@ -589,11 +581,12 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       ClipRRect(
-                          // borderRadius: BorderRadius.circular(50),
-                          child: Image.asset(
-                        'assets/images/calendar.png',
-                        width: 16,
-                      )),
+                        // borderRadius: BorderRadius.circular(50),
+                        child: Image.asset(
+                          'assets/images/calendar.png',
+                          width: 16,
+                        ),
+                      ),
                       const SizedBox(width: 10),
                       Text(
                         _convertDate(model['bookingdate']),
@@ -628,24 +621,17 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
-            const SizedBox(
-              height: 27,
-            ),
+            const SizedBox(height: 27),
             const Text(
               'แก้ไขการจอง',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(
-              height: 11,
-            ),
+            const SizedBox(height: 11),
             Row(
               children: [
                 Expanded(
@@ -660,7 +646,8 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                             setState(() {
                               startTime = value;
                               print(
-                                  '---------startTime--------------${startTime}');
+                                '---------startTime--------------$startTime',
+                              );
                             }),
                           },
                         );
@@ -668,10 +655,13 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 13, vertical: 10),
+                        horizontal: 13,
+                        vertical: 10,
+                      ),
                       decoration: const BoxDecoration(
-                          color: Color(0xFFFBE8FF),
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                        color: Color(0xFFFBE8FF),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
                       child: Row(
                         children: [
                           const Expanded(
@@ -683,117 +673,120 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                             ),
                           ),
                           Expanded(
-                              flex: 4,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'เวลาเริ่มต้น',
-                                    style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black.withOpacity(0.60)),
+                            flex: 4,
+                            child: Column(
+                              children: [
+                                Text(
+                                  'เวลาเริ่มต้น',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black.withOpacity(0.60),
                                   ),
-                                  Text(
-                                    startTime,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  startTime,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
                                   ),
-                                ],
-                              ))
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 40,
-                ),
+                const SizedBox(width: 40),
                 Expanded(
-                    flex: 8,
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          _selectTime(model['endtime']).then(
-                            (value) => {
-                              setState(() {
-                                endTime = value;
-                                print(
-                                    '---------endTime--------------${endTime}');
-                              }),
-                            },
-                          );
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 13, vertical: 10),
-                        decoration: const BoxDecoration(
-                            color: Color(0xFFFBE8FF),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        child: Row(
-                          children: [
-                            const Expanded(
-                              flex: 2,
-                              child: Icon(
-                                Icons.access_time,
-                                size: 35,
-                                color: Color(0XFF7209B7),
-                              ),
-                            ),
-                            Expanded(
-                                flex: 4,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      'เวลาสิ้นสุด',
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w400,
-                                          color:
-                                              Colors.black.withOpacity(0.60)),
-                                    ),
-                                    Text(
-                                      endTime,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ))
-                          ],
-                        ),
+                  flex: 8,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectTime(model['endtime']).then(
+                          (value) => {
+                            setState(() {
+                              endTime = value;
+                              print('---------endTime--------------${endTime}');
+                            }),
+                          },
+                        );
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 13,
+                        vertical: 10,
                       ),
-                    )),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFFBE8FF),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            flex: 2,
+                            child: Icon(
+                              Icons.access_time,
+                              size: 35,
+                              color: Color(0XFF7209B7),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: Column(
+                              children: [
+                                Text(
+                                  'เวลาสิ้นสุด',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black.withOpacity(0.60),
+                                  ),
+                                ),
+                                Text(
+                                  endTime,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
 
-            const SizedBox(
-              height: 28,
-            ),
+            const SizedBox(height: 28),
             InkWell(
-              onTap: (startTime != widget.model['starttime'] ||
-                      endTime != widget.model['endtime'])
-                  ? () {
-                      _postpone();
-                    }
-                  : null,
+              onTap:
+                  (startTime != widget.model['starttime'] ||
+                          endTime != widget.model['endtime'])
+                      ? () {
+                        _postpone();
+                      }
+                      : null,
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 13),
                 width: double.infinity,
                 // height: 60,
                 decoration: BoxDecoration(
-                  color: (startTime != widget.model['starttime'] ||
-                          endTime != widget.model['endtime'])
-                      ? const Color(0xFF7209B7)
-                      : const Color(0xFFD9D9D9),
+                  color:
+                      (startTime != widget.model['starttime'] ||
+                              endTime != widget.model['endtime'])
+                          ? const Color(0xFF7209B7)
+                          : const Color(0xFFD9D9D9),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: const SizedBox(
@@ -810,9 +803,7 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             GestureDetector(
               onTap: () async {
                 // _buildDialogCancel();
@@ -831,7 +822,7 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                       blurRadius: 4,
                       color: Color(0x40F3D2FF),
                       offset: Offset(0, 4),
-                    )
+                    ),
                   ],
                 ),
                 child: Text(
@@ -887,16 +878,21 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
         return Padding(
           padding: const EdgeInsets.all(20.0),
           child: Dialog(
-            insetPadding:
-                const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            insetPadding: const EdgeInsets.symmetric(
+              horizontal: 0,
+              vertical: 0,
+            ),
             backgroundColor: Colors.white,
             shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(11.0))),
+              borderRadius: BorderRadius.all(Radius.circular(11.0)),
+            ),
             child: Stack(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 35, horizontal: 25),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 35,
+                    horizontal: 25,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -909,15 +905,14 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                             'ยกเลิกการจอง',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: Color(0xFF7209B7),
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700),
+                              color: Color(0xFF7209B7),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
                       const Center(
                         child: Text(
                           'คุณยืนยันที่จะยกเลิกการจองนี้\nใช่หรือไม่?',
@@ -925,9 +920,7 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
+                      const SizedBox(height: 30),
                       InkWell(
                         onTap: () {
                           Navigator.of(context).pop();
@@ -964,12 +957,9 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
                   top: 14,
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: const Icon(
-                      Icons.close,
-                      size: 35,
-                    ),
+                    child: const Icon(Icons.close, size: 35),
                   ),
-                )
+                ),
               ],
             ),
           ),

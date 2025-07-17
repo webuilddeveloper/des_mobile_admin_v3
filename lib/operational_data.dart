@@ -105,7 +105,7 @@ class _OperationalDataPageState extends State<OperationalDataPage>
 
   _callRead() async {
     setState(() {
-      isLoading = true; // ตั้งสถานะเป็นกำลังโหลดเมื่อเริ่มดึงข้อมูล
+      isLoading = true; 
     });
     String token = await ManageStorage.read('accessToken_122') ?? '';
 
@@ -123,7 +123,7 @@ class _OperationalDataPageState extends State<OperationalDataPage>
     final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
     pattern.allMatches(token).forEach((match) => print(match.group(0)));
     Response response = await Dio().get(
-      '$ondeURL/api/StaffCalendar/GetStaffCalenderWorkday?month=${_selectedDay.month}&year=${_selectedDay.year}&isPagination=false&key=false&direction=true&isGetPrvious_Next_Data=true',
+      '$ondeURL/api/StaffCalendar/GetStaffCalenderWorkday?month=$month&year=$year&isPagination=false&key=false&direction=true&isGetPrvious_Next_Data=true',
       options: Options(
         validateStatus: (_) => true,
         contentType: 'application/x-www-form-urlencoded',
@@ -134,17 +134,11 @@ class _OperationalDataPageState extends State<OperationalDataPage>
         },
       ),
     );
-    print('------token------->>> ${token}');
-
+    print('------token------->>> $token');
     print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyy 11 $_selectedDay');
-
     if (response.statusCode == 200) {
       List<dynamic> data = response.data['data'];
       logE(data);
-      // print(
-      //   'yyyyyyyyyyyyyyyyyyyyyyyyyyyyy 22 ${data[0]['workdate'].toString()}',
-      // );
-
       var selectedWorkData = data.firstWhere((item) {
         DateTime workdate = DateTime.parse(item['workdate']);
         DateTime selectedDay = DateTime(

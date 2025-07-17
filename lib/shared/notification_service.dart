@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:des_mobile_admin_v3/config.dart';
+import 'package:des_mobile_admin_v3/shared/secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -26,7 +27,6 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: firebaseOption);
 
   print('Handling a background message: ${message.messageId}');
-  // NotificationService.showNotification(message);
   await NotificationService._updateBadge(message.data);
   await NotificationService.showNotification(message);
 }
@@ -57,38 +57,56 @@ class NotificationService {
   );
 
   static Future<void> _updateBadge(Map<String, dynamic> messageData) async {
-    print('[🔔] _updateBadge called with messageData: $messageData');
+    try {
+      var accessToken = await ManageStorage.read('accessToken_122') ?? '';
+      final response = await Dio().get(
+        '$ondeURL/api/Notify/count/me?isPortal=false',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $accessToken',
+          },
+        ),
+      );
 
-    final storage = FlutterSecureStorage();
-    final valueStorage = await storage.read(key: 'dataUserLoginDES');
-    final token = await storage.read(key: 'tokenD');
+      final total = response.data['data']['notRead'];
 
-    print('[📦] Storage email/token: $valueStorage / $token');
+      // เพิ่ม debug ข้อมูลจาก API
+      print('[📊] Full API Response: ${response.data}');
+      print('[🔢] notRead value: $total');
+      print('[🔢] notRead type: ${total.runtimeType}');
 
-    final dataValue =
-        valueStorage == null ? {'email': ''} : json.decode(valueStorage);
-    final email = dataValue['email']?.toString() ?? '';
-
-    if ((token != null && token != '') && (email != '')) {
-      try {
-        final response = await Dio().post(
-          '$ondeURL/m/v2/notification/count',
-          data: {"email": email, "token": token},
-        );
-
-        final total = response.data['total'];
-        print('[✅] Badge total from API: $total');
-
-        if (total != null && total is int) {
-          await FlutterNewBadger.setBadge(total);
-          print('[📱] Badge updated to: $total');
-        }
-      } catch (e) {
-        print('[❌] Error updating badge: $e');
+      int badgeCount = 0;
+      if (total != null && total is int) {
+        badgeCount = total;
+      } else {
+        badgeCount = int.tryParse(total.toString()) ?? 0;
       }
-    } else {
-      print('[⚠️] Missing email/token, badge not updated');
+
+      print('[🏷️] Setting badge to: $badgeCount');
+
+      // ลองใช้ condition ตรวจสอบก่อน setBadge
+      if (badgeCount > 0) {
+        await FlutterNewBadger.setBadge(badgeCount);
+        print('[✅] Badge set successfully');
+      } else {
+        await FlutterNewBadger.removeBadge();
+        print('[🧹] Badge removed (count is 0)');
+      }
+    } catch (e) {
+      print('[❌] Error updating badge: $e');
     }
+  }
+
+  static Future<void> updateBadgeManually() async {
+    print('[🔄] Manually updating badge...');
+    await _updateBadge({});
+  }
+
+  // เพิ่ม method สำหรับ clear badge
+  static Future<void> clearBadge() async {
+    print('[🧹] Clearing badge...');
+    await FlutterNewBadger.setBadge(0);
   }
 
   static Future<void> initialize() async {
@@ -104,10 +122,12 @@ class NotificationService {
         if (response.payload != null) {
           print('notification payload: ${response.payload}');
         }
+        // เมื่อ user tap notification ให้ update badge
+        await _updateBadge({});
       },
     );
 
-    // await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    print('[🔧] NotificationService initialized');
   }
 
   static Future<void> requestPermission() async {
@@ -130,6 +150,9 @@ class NotificationService {
     } else {
       print('User declined or has not accepted permission');
     }
+
+    // หลังจาก request permission แล้ว ให้ update badge
+    await _updateBadge({});
   }
 
   static Future<void> subscribeToAllTopic(param) async {
@@ -179,31 +202,32 @@ class NotificationService {
           final response = await Dio().get(
             '$ondeURL/api/ticket/getTrackTicket/$dateStart/$dateEnd',
             data: {'token': token},
-            
             options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
           );
+          await _updateBadge({});
         } catch (e) {
-          print('------3--->>>  Error registering notification token: $e');
+          print('Error registering notification token: $e');
         }
       } else {
-        print('------4--->>>  Failed to get FCM token');
+        print('Failed to get FCM token');
       }
     });
 
     FirebaseMessaging.instance.subscribeToTopic('des-admin');
-
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print(
-        '------>>>> Message received in foreground: ${message.notification?.title}',
-      );
       await _updateBadge(message.data);
       await showNotification(message);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      print('------>>>> Notification opened!');
       await _updateBadge(message.data);
-      
+    });
+    FirebaseMessaging.instance.getInitialMessage().then((
+      RemoteMessage? message,
+    ) async {
+      if (message != null) {
+        await _updateBadge(message.data);
+      }
     });
   }
 }

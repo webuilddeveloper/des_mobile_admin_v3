@@ -10,6 +10,7 @@ import 'package:des_mobile_admin_v3/shared/notification_service.dart';
 import 'package:des_mobile_admin_v3/shared/secure_storage.dart';
 import 'package:des_mobile_admin_v3/widget/cache_image.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -600,6 +601,8 @@ class _MenupageState extends State<Menupage> {
     // NotificationService.instance.start(context);
     NotificationService.setupFirebaseMessaging();
     NotificationService.requestPermission();
+    NotificationService.initialize();
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     homePage = HomePage(changePage: _changePage);
     profilePage = ProfilePage(changePage: _changePage);
     messageListPage = MessageListPage(changePage: _changePage);

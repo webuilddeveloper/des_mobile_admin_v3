@@ -1,40 +1,46 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:des_mobile_admin_v3/shared/extension.dart';
 import 'package:des_mobile_admin_v3/shared/secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'config.dart';
 import 'notification_form.dart';
 
 class NotificationBookingPage extends StatefulWidget {
-  const NotificationBookingPage({
-    Key? key,
-  }) : super(key: key);
+  const NotificationBookingPage({Key? key}) : super(key: key);
   @override
   State<NotificationBookingPage> createState() => _NotificationListState();
 }
 
 class _NotificationListState extends State<NotificationBookingPage> {
   late bool _loadingWidget;
-  late List<dynamic> _listFirstPage;
-  late List<dynamic> _listSecondPage;
+  // late List<dynamic> _listFirstPage;
+  // late List<dynamic> _listSecondPage;
   late String _selectedType;
   late ScrollController _scrollController;
   late RefreshController _refreshController;
-  late int _limit;
+  // late int _limit;
+
+  // ------->>> Notify <<<------
+  late List<dynamic> _listNotify;
+  late List<dynamic> _listNotifyNotRead;
 
   @override
   void initState() {
-    _limit = 10;
-    _listFirstPage = [];
-    _listSecondPage = [];
+    // _limit = 10;
+    _listNotify = [];
+    _listNotifyNotRead = [];
     _loadingWidget = true;
     _selectedType = '0';
     _scrollController = ScrollController();
     _refreshController = RefreshController();
-    _readBooking();
+    // _readBooking();
+    Notify();
     super.initState();
   }
 
@@ -45,176 +51,240 @@ class _NotificationListState extends State<NotificationBookingPage> {
     super.dispose();
   }
 
-  _read() async {
-    var profile = await ManageStorage.readDynamic('profileMe');
-    logWTF(profile['centerId']);
+  // _read() async {
+  //   var profile = await ManageStorage.readDynamic('profileMe');
+
+  //   logWTF(profile['centerId']);
+  //   try {
+  //     Response response = await Dio().post(
+  //       '$serverUrl/dcc-api/m/v2/notification/read',
+  //       data: {'centerId': profile['centerId'].toString()},
+  //     );
+
+  //     logWTF(response);
+  //     var data = response.data['objectData'];
+
+  //     List<dynamic> list = [];
+
+  //     var listDa =
+  //         data.map<dynamic>((e) {
+  //           DateTime date = dateStringToDateBirthDay(e['createDate']);
+  //           DateTime now = DateTime.now();
+
+  //           int dif = now.difference(date).inDays;
+
+  //           String type =
+  //               (e?['bookingSlotType'] != '' && e?['bookingSlotType'] != null)
+  //                   ? 'ทำการ' + e['bookingSlotType']
+  //                   : 'ทำการเลื่อนการจอง';
+
+  //           var categoryDays =
+  //               dif == 0
+  //                   ? "1"
+  //                   : dif == 1
+  //                   ? "2"
+  //                   : dif <= 7 && dif > 0
+  //                   ? "3"
+  //                   : dif > 7
+  //                   ? "4"
+  //                   : "";
+  //           return {
+  //             "isSelected": false,
+  //             "code": e['code'],
+  //             "email": e['email'],
+  //             "category": "bookingPage",
+  //             "title": "เวลา ${e['startTime']} ถึง ${e['endTime']}",
+  //             "totalDays": dif,
+  //             "categoryDays": categoryDays,
+  //             "status": e?['status'] ?? '',
+  //             "docTime": e?['docTime'] ?? '',
+  //             "createDate": e?['createDate'] ?? '',
+  //             "createBy": e?['createBy'] ?? '',
+  //           };
+  //         }).toList();
+  //     setState(() {
+  //       _listFirstPage = list;
+  //       _loadingWidget = false;
+  //     });
+  //   } on DioError catch (e) {
+  //     setState(() => _loadingWidget = false);
+  //     var err = e.toString();
+  //     if (e.response!.statusCode != 200) {
+  //       err = e.response!.data['message'];
+  //     }
+  //     // Fluttertoast.showToast(msg: err);
+  //   } catch (e) {
+  //     setState(() => _loadingWidget = false);
+  //     logE(e);
+  //   }
+  // }
+
+  // _readBooking() async {
+  //   var profile = await ManageStorage.readDynamic('profileMe');
+  //   logWTF(profile['centerId']);
+  //   try {
+  //     Response response = await Dio().post(
+  //       '$serverUrl/dcc-api/m/v2/notificationbooking/read',
+  //       data: {
+  //         'centerId': profile['centerId'].toString(),
+  //         'skip': 0,
+  //         'limit': _limit,
+  //       },
+  //     );
+
+  //     logWTF(response);
+  //     var data = response.data['objectData'];
+
+  //     List<dynamic> list = [];
+
+  //     list =
+  //         data.map<dynamic>((e) {
+  //           DateTime date = dateStringToDateBirthDay(e['createDate']);
+  //           DateTime now = DateTime.now();
+
+  //           int dif = now.difference(date).inDays;
+
+  //           String type =
+  //               (e?['bookingSlotType'] != '' && e?['bookingSlotType'] != null)
+  //                   ? 'ทำการ' + e['bookingSlotType']
+  //                   : 'ทำการเลื่อนการจอง';
+
+  //           var categoryDays =
+  //               dif == 0
+  //                   ? "1"
+  //                   : dif == 1
+  //                   ? "2"
+  //                   : dif <= 7 && dif > 0
+  //                   ? "3"
+  //                   : dif > 7
+  //                   ? "4"
+  //                   : "";
+  //           return {
+  //             "isSelected": false,
+  //             "code": e['code'],
+  //             "email": e['email'],
+  //             "category": "bookingPage",
+  //             "title":
+  //                 "มีผู้ใช้งาน ${e['email']} จองใช้บริการศูนย์ฯวัน ${dateStringToDateStringFormat(e['createDate'])} เวลา ${e['startTime']} ถึง ${e['endTime']}",
+  //             "totalDays": dif,
+  //             "categoryDays": categoryDays,
+  //             "status": e?['status'] ?? '',
+  //             "docTime": e?['docTime'] ?? '',
+  //             "createDate": e?['createDate'] ?? '',
+  //             "createBy": e?['createBy'] ?? '',
+  //           };
+  //         }).toList();
+  //     setState(() {
+  //       _listFirstPage = list;
+  //       _loadingWidget = false;
+  //       // chkListCount = _listFirstPage.length > 0 ? true : false;
+  //       // chkListActive =
+  //       //     _listFirstPage.where((x) => x['status'] != "A").toList().length > 0
+  //       //         ? true
+  //       //         : false;
+  //       // totalSelected = 0;
+  //     });
+  //   } on DioError catch (e) {
+  //     setState(() => _loadingWidget = false);
+  //     var err = e.toString();
+  //     if (e.response!.statusCode != 200) {
+  //       err = e.response!.data['message'];
+  //     }
+  //     // Fluttertoast.showToast(msg: err);
+  //   } catch (e) {
+  //     setState(() => _loadingWidget = false);
+  //     logE(e);
+  //   }
+  // }
+  _update(int id) async {
+    print('----------->>>  _update: $id');
+    var accessToken = await ManageStorage.read('accessToken_122') ?? '';
+    var headers = {'Authorization': 'Bearer $accessToken'};
+
     try {
-      Response response = await Dio().post(
-        '$serverUrl/dcc-api/m/v2/notification/read',
-        data: {
-          'centerId': profile['centerId'].toString(),
-        },
+      Response response = await Dio().request(
+        '$ondeURL/api/notify/read/$id',
+        options: Options(method: 'PUT', headers: headers),
       );
+      if (response.statusCode == 200) {
+        print('--------Update Success-------- : ${response.data}');
+        setState(() {
+          for (var item in _listNotify) {
+            if (item['id'] == id) {
+              item['isRead'] = 1;
+              break;
+            }
+          }
+          // ✅ กรองรายการที่ยังไม่อ่านใหม่
+          _listNotifyNotRead =
+              _listNotify.where((e) => e['isRead'] == 0).toList();
+        });
+      }
+    } on DioError catch (e) {
+      setState(() => _loadingWidget = false);
+      String err = e.toString();
+      if (e.response != null && e.response?.statusCode != 200) {
+        err = e.response?.data['message'] ?? 'Unknown error';
+      }
 
-      logWTF(response);
-      var data = response.data['objectData'];
+      print('Error: $err');
+      // Fluttertoast.showToast(msg: err);
+    } catch (e) {
+      setState(() => _loadingWidget = false);
+      print('---------- Error -----------: $e');
+      logE(e);
+      print('----------------------------');
+    }
+  }
 
-      List<dynamic> list = [];
+  Notify() async {
+    var accessToken = await ManageStorage.read('accessToken_122') ?? '';
+    var headers = {'Authorization': 'Bearer $accessToken'};
+    var dio = Dio();
 
-      var listDa = data.map<dynamic>((e) {
-        DateTime date = dateStringToDateBirthDay(e['createDate']);
-        DateTime now = DateTime.now();
+    var response = await dio.request(
+      '$ondeURL/api/Notify/me?take=10&onlyNotRead=false&IsPortal=false',
+      options: Options(method: 'GET', headers: headers),
+    );
 
-        int dif = now.difference(date).inDays;
-
-        String type =
-            (e?['bookingSlotType'] != '' && e?['bookingSlotType'] != null)
-                ? 'ทำการ' + e['bookingSlotType']
-                : 'ทำการเลื่อนการจอง';
-
-        var categoryDays = dif == 0
-            ? "1"
-            : dif == 1
-                ? "2"
-                : dif <= 7 && dif > 0
-                    ? "3"
-                    : dif > 7
-                        ? "4"
-                        : "";
-        return {
-          "isSelected": false,
-          "code": e['code'],
-          "email": e['email'],
-          "category": "bookingPage",
-          "title": "เวลา ${e['startTime']} ถึง ${e['endTime']}",
-          "totalDays": dif,
-          "categoryDays": categoryDays,
-          "status": e?['status'] ?? '',
-          "docTime": e?['docTime'] ?? '',
-          "createDate": e?['createDate'] ?? '',
-          "createBy": e?['createBy'] ?? '',
-        };
-      }).toList();
+    if (response.statusCode == 200) {
       setState(() {
-        _listFirstPage = list;
-        _loadingWidget = false;
+        _listNotify = response.data['data'];
+        _listNotifyNotRead =
+            _listNotify.where((e) => e['isRead'] == 0).toList();
+        setState(() => _loadingWidget = false);
+        print('------1--->>>  _listNotify: $_listNotify');
+        print('------1.2--->>>  _listNotifyNotRead  $_listNotifyNotRead');
+        print('------2--->>>  _listNotify length: ${_listNotify.length}');
+        print(
+          '------2.2--->>>  _listNotifyNotRead length: ${_listNotifyNotRead.length}',
+        );
+        print('------3--->>>  _listNotify: ${_listNotify[0]['message']}');
       });
-    } on DioError catch (e) {
+    } else {
+      print('Error: ${response.statusMessage}');
       setState(() => _loadingWidget = false);
-      var err = e.toString();
-      if (e.response!.statusCode != 200) {
-        err = e.response!.data['message'];
-      }
-      // Fluttertoast.showToast(msg: err);
-    } catch (e) {
-      setState(() => _loadingWidget = false);
-      logE(e);
     }
   }
 
-  _readBooking() async {
-    var profile = await ManageStorage.readDynamic('profileMe');
-    logWTF(profile['centerId']);
+  String formatDateDMY(String? rawDateTime) {
+    if (rawDateTime == null || rawDateTime.isEmpty) return '';
     try {
-      Response response = await Dio().post(
-        '$serverUrl/dcc-api/m/v2/notificationbooking/read',
-        data: {
-          'centerId': profile['centerId'].toString(),
-          'skip': 0,
-          'limit': _limit,
-        },
-      );
-
-      logWTF(response);
-      var data = response.data['objectData'];
-
-      List<dynamic> list = [];
-
-      list = data.map<dynamic>((e) {
-        DateTime date = dateStringToDateBirthDay(e['createDate']);
-        DateTime now = DateTime.now();
-
-        int dif = now.difference(date).inDays;
-
-        String type =
-            (e?['bookingSlotType'] != '' && e?['bookingSlotType'] != null)
-                ? 'ทำการ' + e['bookingSlotType']
-                : 'ทำการเลื่อนการจอง';
-
-        var categoryDays = dif == 0
-            ? "1"
-            : dif == 1
-                ? "2"
-                : dif <= 7 && dif > 0
-                    ? "3"
-                    : dif > 7
-                        ? "4"
-                        : "";
-        return {
-          "isSelected": false,
-          "code": e['code'],
-          "email": e['email'],
-          "category": "bookingPage",
-          "title":
-              "มีผู้ใช้งาน ${e['email']} จองใช้บริการศูนย์ฯวัน ${dateStringToDateStringFormat(e['createDate'])} เวลา ${e['startTime']} ถึง ${e['endTime']}",
-          "totalDays": dif,
-          "categoryDays": categoryDays,
-          "status": e?['status'] ?? '',
-          "docTime": e?['docTime'] ?? '',
-          "createDate": e?['createDate'] ?? '',
-          "createBy": e?['createBy'] ?? '',
-        };
-      }).toList();
-      setState(() {
-        _listFirstPage = list;
-        _loadingWidget = false;
-        // chkListCount = _listFirstPage.length > 0 ? true : false;
-        // chkListActive =
-        //     _listFirstPage.where((x) => x['status'] != "A").toList().length > 0
-        //         ? true
-        //         : false;
-        // totalSelected = 0;
-      });
-    } on DioError catch (e) {
-      setState(() => _loadingWidget = false);
-      var err = e.toString();
-      if (e.response!.statusCode != 200) {
-        err = e.response!.data['message'];
-      }
-      // Fluttertoast.showToast(msg: err);
+      DateTime dateTime = DateTime.parse(rawDateTime);
+      return DateFormat('dd/MM/yyyy').format(dateTime);
     } catch (e) {
-      setState(() => _loadingWidget = false);
-      logE(e);
+      return '';
     }
   }
 
-  _update(param) async {
-    var profile = await ManageStorage.readDynamic('profileMe');
-    logWTF(profile['centerId']);
+  String formatTime(String? rawDateTime) {
+    if (rawDateTime == null || rawDateTime.isEmpty) return '';
     try {
-      Response response = await Dio().post(
-        '$serverUrl/dcc-api/m/v2/notificationbooking/update',
-        data: {
-          'code': param,
-        },
-      );
-    } on DioError catch (e) {
-      setState(() => _loadingWidget = false);
-      var err = e.toString();
-      if (e.response!.statusCode != 200) {
-        err = e.response!.data['message'];
-      }
-      // Fluttertoast.showToast(msg: err);
+      DateTime dateTime = DateTime.parse(rawDateTime);
+      return DateFormat('HH:mm').format(dateTime); // แสดงเวลา เช่น 13:45
     } catch (e) {
-      setState(() => _loadingWidget = false);
-      logE(e);
+      return '';
     }
-  }
-
-  void _onLoading() async {
-    _limit += 10;
-    await _readBooking();
-    _refreshController.loadComplete();
   }
 
   @override
@@ -274,10 +344,7 @@ class _NotificationListState extends State<NotificationBookingPage> {
               children: const [
                 Text(
                   'การแจ้งเตือน',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                 ),
               ],
             ),
@@ -318,9 +385,10 @@ class _NotificationListState extends State<NotificationBookingPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(17.5),
-                    color: _selectedType == '0'
-                        ? const Color(0xFFFFFFFF)
-                        : Colors.transparent,
+                    color:
+                        _selectedType == '0'
+                            ? const Color(0xFFFFFFFF)
+                            : Colors.transparent,
                   ),
                   alignment: Alignment.center,
                   child: Text(
@@ -329,9 +397,10 @@ class _NotificationListState extends State<NotificationBookingPage> {
                       fontFamily: 'Kanit',
                       fontSize: 20,
                       fontWeight: FontWeight.w400,
-                      color: _selectedType == '1'
-                          ? const Color(0xFFFFFFFF)
-                          : const Color(0xFF7209B7),
+                      color:
+                          _selectedType == '1'
+                              ? const Color(0xFFFFFFFF)
+                              : const Color(0xFF7209B7),
                     ),
                   ),
                 ),
@@ -348,9 +417,10 @@ class _NotificationListState extends State<NotificationBookingPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: _selectedType == '1'
-                        ? const Color(0xFFFFFFFF)
-                        : Colors.transparent,
+                    color:
+                        _selectedType == '1'
+                            ? const Color(0xFFFFFFFF)
+                            : Colors.transparent,
                   ),
                   alignment: Alignment.center,
                   child: Text(
@@ -359,9 +429,10 @@ class _NotificationListState extends State<NotificationBookingPage> {
                       fontFamily: 'Kanit',
                       fontSize: 20,
                       fontWeight: FontWeight.w400,
-                      color: _selectedType == '1'
-                          ? const Color(0xFF7209B7)
-                          : const Color(0xFFFFFFFF),
+                      color:
+                          _selectedType == '1'
+                              ? const Color(0xFF7209B7)
+                              : const Color(0xFFFFFFFF),
                     ),
                   ),
                 ),
@@ -375,7 +446,7 @@ class _NotificationListState extends State<NotificationBookingPage> {
 
   Widget _buildSelectedType(String type) {
     if (type == '1') {
-      if (_listSecondPage.isEmpty) {
+      if (_listNotifyNotRead.isEmpty) {
         return Container(
           alignment: Alignment.center,
           constraints: const BoxConstraints(minHeight: 200),
@@ -393,17 +464,17 @@ class _NotificationListState extends State<NotificationBookingPage> {
             idleIcon: Icon(Icons.arrow_upward, color: Colors.transparent),
           ),
           controller: _refreshController,
-          onLoading: _onLoading,
+          // onLoading: _onLoading,
           child: FadingEdgeScrollView.fromScrollView(
             child: ListView.separated(
               shrinkWrap: true,
               controller: _scrollController,
               physics: const ClampingScrollPhysics(), // 2nd
               padding: EdgeInsets.zero,
-              itemCount: _listFirstPage.length,
+              itemCount: _listNotifyNotRead.length,
               separatorBuilder: (_, __) => const SizedBox(height: 10),
               itemBuilder: (context, index) {
-                return _buildCard(_listFirstPage[index]);
+                return _buildCard(_listNotifyNotRead[index]);
               },
             ),
           ),
@@ -411,7 +482,7 @@ class _NotificationListState extends State<NotificationBookingPage> {
       );
     }
 
-    if (_listFirstPage.isEmpty) {
+    if (_listNotify.isEmpty) {
       return Container(
         alignment: Alignment.center,
         constraints: const BoxConstraints(minHeight: 200),
@@ -429,17 +500,17 @@ class _NotificationListState extends State<NotificationBookingPage> {
           idleIcon: Icon(Icons.arrow_upward, color: Colors.transparent),
         ),
         controller: _refreshController,
-        onLoading: _onLoading,
+        // onLoading: _onLoading,
         child: FadingEdgeScrollView.fromScrollView(
           child: ListView.separated(
             shrinkWrap: true,
             controller: _scrollController,
             physics: const ClampingScrollPhysics(), // 2nd
             padding: EdgeInsets.zero,
-            itemCount: _listFirstPage.length,
+            itemCount: _listNotify.length,
             separatorBuilder: (_, __) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
-              return _buildCard(_listFirstPage[index]);
+              return _buildCard(_listNotify[index]);
             },
           ),
         ),
@@ -450,15 +521,17 @@ class _NotificationListState extends State<NotificationBookingPage> {
   Widget _buildCard(dynamic param) {
     return GestureDetector(
       onTap: () async {
-        _update(param['code']);
+        print('----------->>>  _listNotify: ${param['message']}');
+        _update(param['id']);
         if (!mounted) return;
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => NotificationFormPage(
-              title: 'แจ้งเตือนระบบ',
-              title2: param['title'],
-            ),
+            builder:
+                (_) => NotificationFormPage(
+                  title: 'แจ้งเตือนระบบ',
+                  title2: param['message'],
+                ),
           ),
         );
       },
@@ -484,9 +557,10 @@ class _NotificationListState extends State<NotificationBookingPage> {
               height: 6,
               width: 6,
               decoration: BoxDecoration(
-                color: param['status'] == 'N'
-                    ? const Color(0xFF7209B7)
-                    : Colors.white,
+                color:
+                    param['isRead'].toString() == '0'
+                        ? const Color(0xFF7209B7)
+                        : Colors.white,
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
@@ -499,14 +573,16 @@ class _NotificationListState extends State<NotificationBookingPage> {
                     'แจ้งเตือนระบบ',
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w500,
                       color: Color(0xFF000000),
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  SizedBox(height: 4),
                   Text(
-                    param['title'],
+                    // param['title'],
+                    param['message'] ?? '',
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
@@ -514,6 +590,36 @@ class _NotificationListState extends State<NotificationBookingPage> {
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          'วันที่ ${formatDateDMY(param['notiDate'])}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Flexible(
+                        child: Text(
+                          'เวลา ${formatTime(param['notiDate'])}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.right,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

@@ -62,6 +62,9 @@ class _ReservationTodayPageState extends State<ReservationTodayPage> {
     super.dispose();
   }
 
+  final DateTime _fromDate = DateTime.now().subtract(Duration(days: 3));
+  final DateTime _toDate = DateTime.now().add(Duration(days: 3));
+
   _callRead() async {
     try {
       setState(() => _loading = true);
@@ -91,18 +94,51 @@ class _ReservationTodayPageState extends State<ReservationTodayPage> {
           _futureModel = Future.value(listData);
           _loading = false;
         });
+        // } else {
+        //   Dio dio = Dio();
+        //   print('--------dateStr------>>> ${dateStr}');
+        //   var response = await dio.get(
+        //     '$ondeURL/api/Booking/GetAllBooking?CurrentPage=$_curPage&RecordPerPage=$_perPage&CenterId=${profileMe['centerId']}&key=bookingno&direction=descending&bookingdate',
+        //     options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+        //   );
+        //   setState(() {
+        //     listData = response.data['data'];
+        //     listData =
+        //         listData
+        //           ..sort((a, b) => b['bookingno'].compareTo(a['bookingno']));
+        //     _futureModel = Future.value(listData);
+        //     _loading = false;
+        //   });
+        // }
       } else {
         Dio dio = Dio();
         var response = await dio.get(
-          '$ondeURL/api/Booking/GetAllBooking?CurrentPage=$_curPage&RecordPerPage=$_perPage&CenterId=${profileMe['centerId']}&key=bookingno&direction=descending&bookingdate=$dateStr',
+          '$ondeURL/api/Booking/GetAllBooking?CurrentPage=$_curPage&RecordPerPage=$_perPage&CenterId=${profileMe['centerId']}&key=bookingno&direction=descending',
           options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
         );
 
+        List<dynamic> allData = response.data['data'];
+
+        // ฟิลเตอร์เฉพาะวันที่อยู่ในช่วง -3ถึง +3 วัน
+        List<dynamic> filteredData =
+            allData.where((item) {
+              DateTime bookingDate = DateTime.parse(item['bookingdate']);
+              return bookingDate.isAfter(
+                    _fromDate.subtract(const Duration(days: 1)),
+                  ) &&
+                  bookingDate.isBefore(_toDate.add(const Duration(days: 1)));
+            }).toList();
+
+        // เรียงลำดับตาม bookingno
+        // filteredData.sort((a, b) => b['bookingno'].compareTo(a['bookingno']));
+        filteredData.sort(
+          (a, b) => DateTime.parse(
+            b['bookingdate'],
+          ).compareTo(DateTime.parse(a['bookingdate'])),
+        );
+
         setState(() {
-          listData = response.data['data'];
-          listData =
-              listData
-                ..sort((a, b) => b['bookingno'].compareTo(a['bookingno']));
+          listData = filteredData;
           _futureModel = Future.value(listData);
           _loading = false;
         });
@@ -162,6 +198,31 @@ class _ReservationTodayPageState extends State<ReservationTodayPage> {
               const SizedBox(height: 10),
               _category(),
               const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child:
+                      _selectedCategory == ''
+                          ? Text(
+                            'ข้อมูลวันที่ ${DateFormat("d ", "th").format(_fromDate)}-${DateFormat("d MMM yyyy", "th").format(_toDate)}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: const Color(0xFFB325F8).withOpacity(.4),
+                            ),
+                          )
+                          : _selectedCategory == '1'
+                          ? Text(
+                            'ข้อมูลการจองวันนี้',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: const Color(0xFFB325F8).withOpacity(.4),
+                            ),
+                          )
+                          : SizedBox(),
+                ),
+              ),
+
               Expanded(
                 child: SmartRefresher(
                   enablePullDown: false,
