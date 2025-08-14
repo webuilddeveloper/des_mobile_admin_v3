@@ -261,9 +261,24 @@ class _MenupageState extends State<Menupage> {
                   //   logWTF(response.data);
                   //   setState(() => loadingcheckIn = false);
                   await _callReadGetStaffCalende();
+                  print('=======================');
+                  print(getStaffCalende['checkin'].runtimeType);
+                  print("---------checkin---------$getStaffCalende['checkin']");
+                  print("--------checkout--------$getStaffCalende['checkout']");
+
+                  print('=======================');
+
                   getStaffCalende['checkin'] == null
-                      ? _addButtonCheckin('')
-                      : _addButtonCheckin('OUT');
+                      ? _addButtonCheckin(
+                        '',
+                        getStaffCalende['checkin'],
+                        getStaffCalende['checkout'],
+                      )
+                      : _addButtonCheckin(
+                        'OUT',
+                        getStaffCalende['checkin'],
+                        getStaffCalende['checkout'],
+                      );
                   // if (response.data['status'].toUpperCase() == 'S') {
                   //   _addButtonCheckin(
                   //       response.data?['objectData']?['title'] ?? '');
@@ -649,16 +664,13 @@ class _MenupageState extends State<Menupage> {
     }
   }
 
-  _addButtonCheckin(String type) {
+  _addButtonCheckin(String type, String? checkin, String? checkout) {
     showModalBottomSheet(
       context: context,
       barrierColor: Colors.white.withOpacity(0.2),
       builder: (BuildContext bc) {
         return StatefulBuilder(
-          builder: (
-            BuildContext context,
-            StateSetter mSetState /*You can rename this!*/,
-          ) {
+          builder: (BuildContext context, StateSetter mSetState) {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               decoration: BoxDecoration(
@@ -679,35 +691,94 @@ class _MenupageState extends State<Menupage> {
                 children: [
                   Stack(
                     children: [
-                      GestureDetector(
-                        onTap: () async {
-                          _eventCheckIn(mSetState, type.toUpperCase());
-                        },
-                        child: Container(
-                          height: 50,
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(7),
-                            boxShadow: const [
-                              BoxShadow(
-                                blurRadius: 4,
-                                color: Color(0x40F3D2FF),
-                                offset: Offset(0, 4),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                if (checkin == null) {
+                                  _eventCheckIn(mSetState, type.toUpperCase());
+                                }
+                              },
+                              child: Container(
+                                height: 50,
+                                width: double.infinity,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color:
+                                      checkin == null
+                                          ? Theme.of(context).primaryColor
+                                          : const Color(0xFFDDDDDD),
+                                  borderRadius: BorderRadius.circular(7),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      blurRadius: 4,
+                                      color: Color(0x40F3D2FF),
+                                      offset: Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  // type == ''
+                                  //     ? 'การบันทึกเข้า - ออกงาน ' // เข้างาน
+                                  //     : 'การบันทึกเข้า - ออกงาน ', // ออกงาน
+                                  checkin != null
+                                      ? "เวลาเข้างาน  ${formatThaiDateTime(checkin)} น."
+                                      : 'การบันทึกเข้างาน',
+
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color:
+                                        checkin == null
+                                            ? Colors.white
+                                            : Color(0xFF707070),
+                                  ),
+                                ),
                               ),
-                            ],
-                          ),
-                          child: Text(
-                            type == ''
-                                ? 'การบันทึกเข้า - ออกงาน'
-                                : 'การบันทึกเข้า - ออกงาน',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white,
                             ),
-                          ),
+                            SizedBox(height: 12),
+                            GestureDetector(
+                              onTap: () async {
+                                if (checkout == null && checkin != null) {
+                                  _eventCheckIn(mSetState, type.toUpperCase());
+                                }
+                              },
+                              child: Container(
+                                height: 50,
+                                width: double.infinity,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color:
+                                      checkout == null && checkin != null
+                                          ? Theme.of(context).primaryColor
+                                          : const Color(0xFFDDDDDD),
+                                  borderRadius: BorderRadius.circular(7),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      blurRadius: 4,
+                                      color: Color(0x40F3D2FF),
+                                      offset: Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  checkout != null
+                                      ? "เวลาออกงาน  ${formatThaiDateTime(checkout)} น."
+                                      : 'การบันทึกออกงาน',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color:
+                                        checkout == null && checkin != null
+                                            ? Colors.white
+                                            : Color(0xFF707070),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       if (loadingcheckIn)
@@ -1550,6 +1621,7 @@ class _MenupageState extends State<Menupage> {
     );
     if (response.statusCode == 200) {
       List<dynamic> data = response.data['data'];
+      print('=============Workday=============');
       logWTF(data);
 
       var selectedWorkData = data.firstWhere((item) {
@@ -1784,6 +1856,31 @@ class _MenupageState extends State<Menupage> {
     } on DioError catch (e) {
       logE(e.toString());
       return true;
+    }
+  }
+
+  String formatThaiDateTime(String? dateTimeString) {
+    if (dateTimeString == null || dateTimeString.isEmpty) {
+      return '';
+    }
+
+    try {
+      final dateTime = DateTime.parse(dateTimeString).toLocal();
+      // แปลงปี ค.ศ. → พ.ศ.
+      // final buddhistYear = dateTime.year + 543;
+
+      // จัดรูปแบบเป็น วัน เดือน ปี(พ.ศ.) เวลา
+      final formatted = DateFormat('HH:mm', 'th').format(dateTime);
+
+      // แทนที่ปี ค.ศ. ด้วย พ.ศ.
+      // Replace the year with Buddhist year (uncomment if needed)
+      // return formatted.replaceFirst(
+      //   dateTime.year.toString(),
+      //   buddhistYear.toString(),
+      // );
+      return formatted;
+    } catch (e) {
+      return dateTimeString; // ถ้าแปลงไม่ได้ก็ส่งคืนค่าดั้งเดิม
     }
   }
 }

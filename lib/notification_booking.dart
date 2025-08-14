@@ -591,6 +591,7 @@ class _NotificationListState extends State<NotificationBookingPage> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Flexible(
