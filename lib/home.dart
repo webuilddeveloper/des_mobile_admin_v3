@@ -51,8 +51,8 @@ class _HomePageState extends State<HomePage> {
   String now = DateFormat('dd/MM/yyyy').format(DateTime.now());
   Future<dynamic>? _futureProfile;
   Future<dynamic>? _futureNews;
-  List<dynamic> listDesktop = [];
-  bool isShowDesktop = false;
+  Map<String, dynamic> DashBoardBookingSlot = {};
+  bool isShow = false;
   String desktopName = "";
   late String _timeReservation;
 
@@ -989,7 +989,7 @@ class _HomePageState extends State<HomePage> {
                     height: 20,
                     width: 20,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFDDDDDD),
+                      color: const Color(0xFF03BA0A),
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
@@ -1006,7 +1006,7 @@ class _HomePageState extends State<HomePage> {
                     height: 20,
                     width: 20,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF03BA0A),
+                      color: const Color(0xFFDDDDDD),
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
@@ -1017,23 +1017,24 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  Container(
-                    height: 20,
-                    width: 20,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2539ED),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  const Text(
-                    'จองแล้ว',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-                  ),
-                ],
-              ),
+
+              // Row(
+              //   children: [
+              //     Container(
+              //       height: 20,
+              //       width: 20,
+              //       decoration: BoxDecoration(
+              //         color: const Color(0xFF2539ED),
+              //         borderRadius: BorderRadius.circular(5),
+              //       ),
+              //     ),
+              //     const SizedBox(width: 8),
+              //     const Text(
+              //       'จองแล้ว',
+              //       style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
           const SizedBox(height: 15),
@@ -1044,25 +1045,21 @@ class _HomePageState extends State<HomePage> {
               spacing: 6,
               runSpacing: 7,
               children: [
-                for (var item in listDesktop)
+                for (var item in DashBoardBookingSlot['data'] ?? [])
                   InkWell(
                     onTap: () {
                       setState(() {
-                        if (isShowDesktop == true) {
-                          if (desktopName == item['hostname']) {
-                            isShowDesktop = false;
-                          } else {
-                            desktopName = item['hostname'];
-                          }
-                        } else {
-                          isShowDesktop = true;
-                          desktopName = item['hostname'];
+                        if (item['isActive'] == false) {
+                          setState(() {
+                            isShow = true;
+                            desktopName = item['slotname'];
+                          });
                         }
                       });
                     },
                     child: Container(
-                      height: 30,
-                      width: 30,
+                      height: 35,
+                      width: 35,
                       margin: EdgeInsets.only(
                         right: item['margin'] == true ? 15 : 0,
                       ),
@@ -1070,22 +1067,21 @@ class _HomePageState extends State<HomePage> {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color:
-                            item['host_status'] == "Up"
+                            item['isActive'] == false
                                 ? const Color(0xFF03BA0A)
-                                : item['host_status'] == "Down"
-                                ? const Color(0xFFDDDDDD)
-                                : const Color(0xFF2539ED),
+                                : const Color(0xFFDDDDDD),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Text(
-                        item['hostname'],
+                        item['slotname'],
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w400,
                           color:
-                              item['host_status'] == ""
-                                  ? const Color(0x80000000)
-                                  : Colors.white,
+                              item['isActive'] == false
+                                  ? Colors.white
+                                  : const Color(0x80000000),
                         ),
                       ),
                     ),
@@ -1094,13 +1090,13 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const Expanded(child: SizedBox()),
-          if (isShowDesktop)
+          if (isShow)
             Container(
               margin: const EdgeInsets.only(bottom: 15),
               child: Text(
                 desktopName,
                 style: const TextStyle(
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF000000),
                 ),
@@ -1403,84 +1399,32 @@ class _HomePageState extends State<HomePage> {
   }
 
   _readDesktop() async {
-    profile = await ManageStorage.readDynamic('staffProfileData') ?? '';
-    var result = await Dio().post(
-      'https://desktopmgmt.dcc.onde.go.th/api/login/standard',
-      data: {"Username": "admin_desk", "Password": "P@ssw0rd1234!"},
-      options: Options(
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-      ),
+    var profile = await ManageStorage.readDynamic('profileMe');
+    String token = await ManageStorage.read('accessToken_122') ?? '';
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    String formattedTime = DateFormat('HH:mm').format(now);
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    var dio = Dio();
+    var response = await dio.request(
+      // 'https://dcc.onde.go.th/dcc-api/api/Booking/GetDashBoardBookingSlotdate=${formattedDate}&time=${formattedTime}&${profile['centerId']}',
+      'https://dcc.onde.go.th/dcc-api/api/Booking/GetDashBoardBookingSlot?date=$formattedDate&time=$formattedTime&centerId=${profile['centerId']}',
+      options: Options(method: 'GET', headers: headers),
     );
 
-    dynamic param = jsonEncode({
-      "length": 40,
-      "DataSourceName": "desktop host",
-      "Filter": [
-        {
-          "PropertyName": "Level3",
-          "AreEqualText": "is",
-          "Value": ["${profile['centerName']}"],
-        },
-      ],
-    });
-    String basicAuth = result.headers['authorizationtoken']
-        .toString()
-        .replaceAll('[', '')
-        .replaceAll(']', '');
-
-    String basicCookie = result.headers['set-cookie']
-        .toString()
-        .replaceAll('[', '')
-        .replaceAll(']', '');
-    var parts = basicCookie.split(';');
-    var cookie = parts[0].trim();
-    var url = Uri.parse(
-      'https://desktopmgmt.dcc.onde.go.th/api/DashboardDefault/defaulttable',
-    );
-    var response = await http.post(
-      url,
-      body: param,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': basicAuth,
-        'Cookie': cookie,
-      },
-    );
-    // print('Response status: ${response.statusCode}');
-    // print('Response body: ${response.body}');
-    var data = json.decode(response.body);
-    String minute = DateTime.now().minute.toString();
-    if (DateTime.now().minute < 10) {
-      minute = '0$minute';
+    if (response.statusCode == 200) {
+      setState(() {
+        DashBoardBookingSlot = response.data;
+      });
+    } else {
+      print(response.statusMessage);
     }
-    setState(() {
-      _timeReservation = '${DateTime.now().hour}:$minute น.';
-      listDesktop = data['data'];
-    });
   }
 
-  // _callReadUser() async {
-  //   var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
-  //   var staffProfileData =
-  //       await ManageStorage.readDynamic('staffProfileData') ?? '';
-
-  //   // data from DCC
-  //   profileMe['roleName'] = staffProfileData?['roleName'] ?? '';
-  //   profileMe['centerName'] = staffProfileData?['centerName'] ?? '';
-  //   if (profileMe == '') {
-  //     if (!mounted) return;
-  //     Navigator.of(context).pushAndRemoveUntil(
-  //       MaterialPageRoute(builder: (context) => const LoginPage()),
-  //       (Route<dynamic> route) => false,
-  //     );
-  //   }
-  //   setState(() async {
-  //     _futureProfile = Future.value(profileMe);
-  //   });
-  // }
   _callReadUser() async {
     try {
       var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
