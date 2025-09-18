@@ -762,6 +762,7 @@ class _ReportPageState extends State<ReportPage> {
                           ),
                           Text(
                             '${reportModel['ticketCount'] ?? '0'}',
+                            // '${reportModel != null ? reportModel['ticketCount'] ?? '0' : '0'}',
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
@@ -862,6 +863,7 @@ class _ReportPageState extends State<ReportPage> {
                           ),
                           Text(
                             '${reportModel['ticketInProgress'] ?? '0'}',
+                            // '${reportModel != null ? reportModel['ticketInProgress'] ?? '0' : '0'}',
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
@@ -971,6 +973,7 @@ class _ReportPageState extends State<ReportPage> {
                       ),
                       Text(
                         '${reportModel['ticketContinue'] ?? '0'}',
+                        // '${reportModel != null ? reportModel['ticketContinue'] ?? '0' : '0'}',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
@@ -1066,6 +1069,7 @@ class _ReportPageState extends State<ReportPage> {
                       ),
                       Text(
                         '${reportModel['ticketDone'] ?? '0'}',
+                        // '${reportModel != null ? reportModel['ticketDone'] ?? '0' : '0'}',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
@@ -1427,35 +1431,63 @@ class _ReportPageState extends State<ReportPage> {
     super.dispose();
   }
 
-  _callReadSummary() async {
+  Future<void> _callReadSummary() async {
     setState(() => _loading = true);
-    DateTime now = new DateTime.now();
-    var currentYear = now.year;
-    var dateStart = '${currentYear}-01-01';
-    var dateEnd = '${currentYear}-12-31';
-    String token = await ManageStorage.read('accessToken_122') ?? '';
 
-    Dio dio = Dio();
-    var response = await dio.get(
-      'https://dcc.onde.go.th/dcc-api/api/ticket/getTicketSummary/$dateStart/$dateEnd',
-      options: Options(
-        validateStatus: (_) => true,
-        contentType: 'application/x-www-form-urlencoded',
-        responseType: ResponseType.json,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Bearer $token',
-        },
-      ),
-    );
+    try {
+      // DateTime now = DateTime.now();
+      // var currentYear = now.year;
+      // var dateStart = '$currentYear-01-01';
+      // var dateEnd = '$currentYear-12-31';
 
-    setState(() {
-      reportModel = response.data['data'];
-      // logWTF(response.data['data']);
-      _futureModelTicketSummary = Future.value(listData);
-    });
+      // String token = await ManageStorage.read('accessToken_122') ?? '';
+      DateTime dateEnd = DateTime.now();
+      DateTime dateStart = DateTime(
+        dateEnd.year,
+        dateEnd.month - 3,
+        dateEnd.day,
+      );
 
-    setState(() => _loading = false);
+      String dateEndStr = dateEnd.toIso8601String().substring(0, 10);
+      String dateStartStr = dateStart.toIso8601String().substring(0, 10);
+      print('----------------------------');
+      print(dateStart);
+      print(dateEnd);
+      print(dateEndStr);
+      print(dateStartStr);
+      print(
+        'https://dcc.onde.go.th/dcc-api/api/ticket/getTicketSummary/$dateStartStr/$dateEndStr',
+      );
+      print('----------------------------');
+
+      String token = await ManageStorage.read('accessToken_122') ?? '';
+      print('----->> $token');
+
+      final dio = Dio();
+      final response = await dio.get(
+        'https://dcc.onde.go.th/dcc-api/api/ticket/getTicketSummary/$dateStartStr/$dateEndStr',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          reportModel = response.data['data'] ?? {};
+        });
+      } else {
+        print('Error: ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Exception: $e');
+    } finally {
+      if (mounted) {
+        setState(() => _loading = false);
+      }
+    }
   }
 
   _callReadTrack() async {

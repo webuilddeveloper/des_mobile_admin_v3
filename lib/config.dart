@@ -1,5 +1,5 @@
-const version = '1.2.3';
-const versionNumber = 123;
+const version = '1.2.4';
+const versionNumber = 124;
 const serverUrl = 'https://decms.dcc.onde.go.th';
 const serverBooking = 'http://dcc-portal.webview.co/dcc-api';
 

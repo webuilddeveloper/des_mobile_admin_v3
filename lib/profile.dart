@@ -2163,7 +2163,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
         await _getLeaveday();
 
-        logWTF(result);
+        // logWTF(result);
 
         setState(() {
           _futureProfile = Future.value(result);

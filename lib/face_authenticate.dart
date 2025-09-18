@@ -73,7 +73,8 @@ class _FaceAuthenticatePageState extends State<FaceAuthenticatePage> {
 
       // ✅ ดึงภาพจาก URL แล้วแปลงเป็น Uint8List
       Uint8List imageBytes = await networkImageToBytes(i['imageUrl']);
-
+      print('===================>>> imageUrl');
+      print(imageBytes);
       // ✅ สร้าง MatchFacesImage (PRINTED)
       final mfImage2 = regula.MatchFacesImage(
         imageBytes,

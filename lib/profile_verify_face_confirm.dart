@@ -42,11 +42,13 @@ class _ProfileVerifyFaceConfirmPageState
   }
 
   _getImageUnit8List() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? action = prefs.getString('imageTempAdmin');
+    final prefs = await SharedPreferences.getInstance();
+    final base64String = prefs.getString('imageTempAdmin');
+
     setState(() {
-      imageUint8List = Uint8List.fromList(action!.codeUnits);
+      imageUint8List = base64Decode(base64String!);
     });
+    print('-------imageUint8List------->>> $imageUint8List');
   }
 
   _getUserData() async {

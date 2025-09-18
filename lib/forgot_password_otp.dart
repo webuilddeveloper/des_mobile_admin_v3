@@ -10,10 +10,8 @@ import 'config.dart';
 import 'forgot_password_new_password.dart';
 
 class ForgotPasswordOTPPage extends StatefulWidget {
-  const ForgotPasswordOTPPage({
-    Key? key,
-    required this.email,
-  }) : super(key: key);
+  const ForgotPasswordOTPPage({Key? key, required this.email})
+    : super(key: key);
   final String email;
 
   @override
@@ -63,10 +61,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
               ),
               const Text(
                 'กรุณากรอกรหัส OTP ที่ท่านได้รับทางอีเมล\nเพื่อรับรหัสผ่านใหม่',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
               ),
               const SizedBox(height: 32),
               Form(
@@ -119,7 +114,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                       blurRadius: 4,
                       color: Color(0x40F3D2FF),
                       offset: Offset(0, 4),
-                    )
+                    ),
                   ],
                   onCompleted: (v) async {
                     _send();
@@ -161,7 +156,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                           blurRadius: 4,
                           color: Color(0x40F3D2FF),
                           offset: Offset(0, 4),
-                        )
+                        ),
                       ],
                     ),
                     child: const Text(
@@ -183,6 +178,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
                       _passwordController.text = '';
                     });
                     _requestOTP();
+                    print('---------->> _requestOTP new');
                   },
                   child: RichText(
                     text: TextSpan(
@@ -223,10 +219,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
       if (token.isEmpty) return null;
       Response response = await Dio().put(
         '$ondeURL/api/user/resetPassword',
-        data: {
-          'email': widget.email,
-          'password': _passwordController.text,
-        },
+        data: {'email': widget.email, 'password': _passwordController.text},
       );
 
       if (response.statusCode == 200) {
@@ -260,9 +253,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => ForgotPasswordNewPasswordPage(
-            email: widget.email,
-          ),
+          builder: (_) => ForgotPasswordNewPasswordPage(email: widget.email),
         ),
       );
     } else {
@@ -271,8 +262,10 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
   }
 
   _requestOTP() async {
-    var response = await Dio().post('$serverUrl/dcc-api/m/register/otp/request',
-        data: {'email': widget.email.trim().toLowerCase()});
+    var response = await Dio().post(
+      '$serverUrl/dcc-api/m/register/otp/request',
+      data: {'email': widget.email.trim().toLowerCase()},
+    );
     setState(() => _loadingSubmit = false);
     if (response.data['status'] == 'S') {
       // pass

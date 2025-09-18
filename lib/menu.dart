@@ -1252,6 +1252,7 @@ class _MenupageState extends State<Menupage> {
   }
 
   _checkImage() async {
+    print('===============>>>> _checkImage');
     try {
       var profileMe = await ManageStorage.readDynamic('profileMe');
       if (profileMe['idcard'] == null) {
@@ -1268,7 +1269,7 @@ class _MenupageState extends State<Menupage> {
         data: {'idcard': profileMe['idcard']},
       );
 
-      logWTF(response.data);
+      // logWTF(response.data);
 
       if (response.data['message'] == 'invalid_idcard') {
         // ไม่พบข้อมูล ไปยืนยันใบหน้า
@@ -1337,10 +1338,7 @@ class _MenupageState extends State<Menupage> {
         '$ondeURL/api/OfficeDigital/GetCenterByID/${profileMe['centerId']}',
       );
 
-      // logWTF(responseCenter.data);
-
       if (responseCenter.data['status'] == 1) {
-        // พบข้อมูล
         var distance = _checkDistance(
           position.latitude,
           position.longitude,
@@ -1609,6 +1607,7 @@ class _MenupageState extends State<Menupage> {
 
     Response response = await Dio().get(
       '$ondeURL/api/StaffCalendar/GetStaffCalenderWorkday?month=$month&year=$year&isPagination=false&key=false&direction=true&isGetPrvious_Next_Data=true',
+
       options: Options(
         validateStatus: (_) => true,
         contentType: 'application/x-www-form-urlencoded',
@@ -1619,6 +1618,7 @@ class _MenupageState extends State<Menupage> {
         },
       ),
     );
+
     if (response.statusCode == 200) {
       List<dynamic> data = response.data['data'];
       print('=============Workday=============');
@@ -1866,21 +1866,10 @@ class _MenupageState extends State<Menupage> {
 
     try {
       final dateTime = DateTime.parse(dateTimeString).toLocal();
-      // แปลงปี ค.ศ. → พ.ศ.
-      // final buddhistYear = dateTime.year + 543;
-
-      // จัดรูปแบบเป็น วัน เดือน ปี(พ.ศ.) เวลา
       final formatted = DateFormat('HH:mm', 'th').format(dateTime);
-
-      // แทนที่ปี ค.ศ. ด้วย พ.ศ.
-      // Replace the year with Buddhist year (uncomment if needed)
-      // return formatted.replaceFirst(
-      //   dateTime.year.toString(),
-      //   buddhistYear.toString(),
-      // );
       return formatted;
     } catch (e) {
-      return dateTimeString; // ถ้าแปลงไม่ได้ก็ส่งคืนค่าดั้งเดิม
+      return dateTimeString;
     }
   }
 }

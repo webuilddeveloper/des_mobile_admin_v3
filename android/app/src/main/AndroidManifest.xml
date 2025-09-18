@@ -27,6 +27,7 @@
         android:icon="@mipmap/launcher_icon"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
+        android:enableOnBackInvokedCallback="true"
 
         <activity
             android:name="com.regula.faceapi.activity.FaceCaptureActivity"

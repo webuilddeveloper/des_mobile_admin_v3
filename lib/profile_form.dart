@@ -34,8 +34,9 @@ class ProfileFormPage extends StatefulWidget {
 
 class _ProfileFormPageState extends State<ProfileFormPage> {
   late DateTime currentBackPressTime;
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(
+    initialRefresh: false,
+  );
 
   // late Future<dynamic> _futureProfile;
   dynamic _model;
@@ -89,8 +90,9 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
   _getImageProfile() async {
     try {
       var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
-      var responseCenter = await Dio()
-          .get('$ondeURL/api/user/GetImageProfile/${profileMe['userid']}');
+      var responseCenter = await Dio().get(
+        '$ondeURL/api/user/GetImageProfile/${profileMe['userid']}',
+      );
 
       setState(() {
         _imageProfile = responseCenter.data;
@@ -104,7 +106,6 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
     var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
     var staffProfileData =
         await ManageStorage.readDynamic('staffProfileData') ?? '';
-    logWTF(profileMe);
 
     setState(() {
       _model = profileMe;
@@ -155,10 +156,13 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
       FormData formData = FormData.fromMap({
         'Userid': _model['userid'],
         'Phonenumber': txtPhone.text,
-        'photo': file != null
-            ? await MultipartFile.fromFile(file.path,
-                filename: _imageFile!.name)
-            : null,
+        'photo':
+            file != null
+                ? await MultipartFile.fromFile(
+                  file.path,
+                  filename: _imageFile!.name,
+                )
+                : null,
         'Firstname': _model['firstnameTh'],
         'Lastname': _model['lastnameTh'],
         'Email': _model['email'],
@@ -174,9 +178,7 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
         options: Options(
           validateStatus: (_) => true,
           responseType: ResponseType.json,
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-          },
+          headers: {'Authorization': 'Bearer $accessToken'},
         ),
       );
 
@@ -189,15 +191,13 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
           value: json.encode(profileMe['data']),
           key: 'profileMe',
         );
+
         setState(() => _loadingSubmit = false);
         _dialog(text: 'อัพเดตข้อมูลเรียบร้อยแล้ว');
       } else {
         logE(response.data);
         setState(() => _loadingSubmit = false);
-        _dialog(
-          text: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
-          error: true,
-        );
+        _dialog(text: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', error: true);
       }
     } on DioError catch (e) {
       logE('e.error');
@@ -251,43 +251,42 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
   _dialog({required String text, bool error = false}) {
     return showDialog(
       context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 16,
-            fontFamily: 'Kanit',
-            color: Colors.black,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
-        content: const Text(" "),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: const Text(
-              "ตกลง",
-              style: TextStyle(
-                fontSize: 13,
+      builder:
+          (BuildContext context) => CupertinoAlertDialog(
+            title: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 16,
                 fontFamily: 'Kanit',
-                color: Color(0xFF005C9E),
+                color: Colors.black,
                 fontWeight: FontWeight.normal,
               ),
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
-              if (!error) {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => const Menupage(),
+            content: const Text(" "),
+            actions: [
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                child: const Text(
+                  "ตกลง",
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontFamily: 'Kanit',
+                    color: Color(0xFF005C9E),
+                    fontWeight: FontWeight.normal,
                   ),
-                  (Route<dynamic> route) => false,
-                );
-              }
-            },
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  if (!error) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => const Menupage()),
+                      (Route<dynamic> route) => false,
+                    );
+                  }
+                },
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -328,20 +327,15 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
           title: Text(
             widget.title!,
             style: const TextStyle(
-                fontSize: 18,
-                fontFamily: 'Kanit',
-                color: Colors.black,
-                fontWeight: FontWeight.w700),
+              fontSize: 18,
+              fontFamily: 'Kanit',
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
         body: ListView(
-          children: [
-            _buildUser(),
-            const SizedBox(
-              height: 10,
-            ),
-            _buildForm(),
-          ],
+          children: [_buildUser(), const SizedBox(height: 10), _buildForm()],
         ),
       ),
     );
@@ -361,21 +355,24 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
                   width: 90,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(45),
-                    child: _imageFile != null
-                        ? Image.file(
-                            File(_imageFile!.path),
-                            fit: BoxFit.cover,
-                          )
-                        : Image.memory(
-                            base64Decode(_imageProfile),
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Container(
-                              padding: const EdgeInsets.all(10),
-                              alignment: Alignment.center,
-                              child: Image.asset('assets/images/logo.png'),
+                    child:
+                        _imageFile != null
+                            ? Image.file(
+                              File(_imageFile!.path),
+                              fit: BoxFit.cover,
+                            )
+                            : Image.memory(
+                              base64Decode(_imageProfile),
+                              fit: BoxFit.cover,
+                              errorBuilder:
+                                  (context, error, stackTrace) => Container(
+                                    padding: const EdgeInsets.all(10),
+                                    alignment: Alignment.center,
+                                    child: Image.asset(
+                                      'assets/images/logo.png',
+                                    ),
+                                  ),
                             ),
-                          ),
                   ),
                 ),
               ),
@@ -395,17 +392,13 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(4),
-                    child: Image.asset(
-                      "assets/images/camera.png",
-                    ),
+                    child: Image.asset("assets/images/camera.png"),
                   ),
                 ),
-              )
+              ),
             ],
           ),
-          const SizedBox(
-            width: 20,
-          ),
+          const SizedBox(width: 20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,9 +412,7 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
+                const SizedBox(height: 5),
                 Text(
                   '${_model?['roleName'] ?? ''} ${_model?['centerName'] ?? ''}',
                   style: TextStyle(
@@ -435,7 +426,7 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -446,45 +437,16 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          labelTextFormField(
-            "ชื่อ",
-            txtFirstName,
-            readOnly: true,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          labelTextFormField(
-            "นามสกุล",
-            txtLastName,
-            readOnly: true,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          labelTextFormField(
-            "เลขบัตรประชาชน",
-            txtIdCard,
-            readOnly: true,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          labelTextFormField(
-            "ชื่อผู้ใช้งาน",
-            txtUserName,
-            readOnly: true,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          labelTextFormField(
-            "โทรศัพท์มือถือ",
-            txtPhone,
-          ),
-          const SizedBox(
-            height: 60,
-          ),
+          labelTextFormField("ชื่อ", txtFirstName, readOnly: true),
+          const SizedBox(height: 15),
+          labelTextFormField("นามสกุล", txtLastName, readOnly: true),
+          const SizedBox(height: 15),
+          labelTextFormField("เลขบัตรประชาชน", txtIdCard, readOnly: true),
+          const SizedBox(height: 15),
+          labelTextFormField("ชื่อผู้ใช้งาน", txtUserName, readOnly: true),
+          const SizedBox(height: 15),
+          labelTextFormField("โทรศัพท์มือถือ", txtPhone),
+          const SizedBox(height: 60),
           Stack(
             children: [
               GestureDetector(
@@ -569,7 +531,7 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: TextFormField(
@@ -592,12 +554,9 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
             padding: const EdgeInsets.only(left: 5, top: 3),
             child: Text(
               validateString,
-              style: const TextStyle(
-                fontSize: 10,
-                color: Colors.red,
-              ),
+              style: const TextStyle(fontSize: 10, color: Colors.red),
             ),
-          )
+          ),
       ],
     );
   }
@@ -617,7 +576,7 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
             color: Color.fromARGB(255, 249, 233, 255),
             blurRadius: 10,
             offset: Offset(0, 5),
-          )
+          ),
         ],
       ),
       child: Container(
@@ -637,8 +596,9 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
             decoration: InputDecoration(
               labelText: label,
               labelStyle: const TextStyle(color: Colors.black),
-              floatingLabelStyle:
-                  TextStyle(color: Colors.black.withOpacity(0.24)),
+              floatingLabelStyle: TextStyle(
+                color: Colors.black.withOpacity(0.24),
+              ),
               enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.white, width: 0),
               ),
@@ -657,25 +617,52 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext bc) {
-        return StatefulBuilder(builder: (BuildContext context,
-            StateSetter mSetState /*You can rename this!*/) {
-          return SafeArea(
-            child: SizedBox(
-              height: 120 + MediaQuery.of(context).padding.bottom,
-              child: Stack(
-                children: [
-                  Column(
-                    children: <Widget>[
-                      SizedBox(
-                        child: ListTile(
-                          leading: const Icon(Icons.photo_library),
-                          title: const Text('Photo Library'),
+        return StatefulBuilder(
+          builder: (
+            BuildContext context,
+            StateSetter mSetState /*You can rename this!*/,
+          ) {
+            return SafeArea(
+              child: SizedBox(
+                height: 120 + MediaQuery.of(context).padding.bottom,
+                child: Stack(
+                  children: [
+                    Column(
+                      children: <Widget>[
+                        SizedBox(
+                          child: ListTile(
+                            leading: const Icon(Icons.photo_library),
+                            title: const Text('Photo Library'),
+                            onTap: () async {
+                              try {
+                                mSetState(() {
+                                  loading = true;
+                                });
+                                XFile? image = await ImagePickerFrom.gallery();
+
+                                setState(() {
+                                  _imageFile = image;
+                                });
+                              } catch (e) {
+                                Fluttertoast.showToast(msg: 'ลอกงอีกครั้ง');
+                              }
+                              if (!mounted) return;
+                              mSetState(() {
+                                loading = false;
+                              });
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.photo_camera),
+                          title: const Text('Camera'),
                           onTap: () async {
                             try {
                               mSetState(() {
                                 loading = true;
                               });
-                              XFile? image = await ImagePickerFrom.gallery();
+                              XFile? image = await ImagePickerFrom.camera();
 
                               setState(() {
                                 _imageFile = image;
@@ -690,43 +677,18 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
                             Navigator.of(context).pop();
                           },
                         ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.photo_camera),
-                        title: const Text('Camera'),
-                        onTap: () async {
-                          try {
-                            mSetState(() {
-                              loading = true;
-                            });
-                            XFile? image = await ImagePickerFrom.camera();
-
-                            setState(() {
-                              _imageFile = image;
-                            });
-                          } catch (e) {
-                            Fluttertoast.showToast(msg: 'ลอกงอีกครั้ง');
-                          }
-                          if (!mounted) return;
-                          mSetState(() {
-                            loading = false;
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  ),
-                  if (loading)
-                    const Positioned.fill(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                      ],
                     ),
-                ],
+                    if (loading)
+                      const Positioned.fill(
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                  ],
+                ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
       },
     );
   }

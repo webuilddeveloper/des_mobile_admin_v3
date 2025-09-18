@@ -207,7 +207,6 @@ class _NotificationListState extends State<NotificationBookingPage> {
         options: Options(method: 'PUT', headers: headers),
       );
       if (response.statusCode == 200) {
-        print('--------Update Success-------- : ${response.data}');
         setState(() {
           for (var item in _listNotify) {
             if (item['id'] == id) {
@@ -231,9 +230,6 @@ class _NotificationListState extends State<NotificationBookingPage> {
       // Fluttertoast.showToast(msg: err);
     } catch (e) {
       setState(() => _loadingWidget = false);
-      print('---------- Error -----------: $e');
-      logE(e);
-      print('----------------------------');
     }
   }
 
@@ -253,13 +249,6 @@ class _NotificationListState extends State<NotificationBookingPage> {
         _listNotifyNotRead =
             _listNotify.where((e) => e['isRead'] == 0).toList();
         setState(() => _loadingWidget = false);
-        print('------1--->>>  _listNotify: $_listNotify');
-        print('------1.2--->>>  _listNotifyNotRead  $_listNotifyNotRead');
-        print('------2--->>>  _listNotify length: ${_listNotify.length}');
-        print(
-          '------2.2--->>>  _listNotifyNotRead length: ${_listNotifyNotRead.length}',
-        );
-        print('------3--->>>  _listNotify: ${_listNotify[0]['message']}');
       });
     } else {
       print('Error: ${response.statusMessage}');

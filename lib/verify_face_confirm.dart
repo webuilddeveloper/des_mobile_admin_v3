@@ -123,7 +123,7 @@ class _VerifyFaceConfirmPageState extends State<VerifyFaceConfirmPage> {
                     ],
                   ),
                   child: const Text(
-                    'เลือกภาพนี้',
+                    'เลือกภาพนี้ ',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
