@@ -487,38 +487,43 @@ class _ReportPageState extends State<ReportPage> {
             ],
           ),
           const SizedBox(height: 14),
-          FutureBuilder<dynamic>(
-            future: _futureFollowModel,
-            builder: (_, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data.length == 0) {
-                  return const NoDataWidget();
+          if (_loading) // ✅ ใช้เช็ก _loading
+            Expanded(child: Center(child: CircularProgressIndicator()))
+          else
+            FutureBuilder<dynamic>(
+              future: _futureFollowModel,
+              builder: (_, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.length == 0) {
+                    return const NoDataWidget();
+                  } else {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      // padding: const EdgeInsets.symmetric(
+                      //   horizontal: 20,
+                      //   vertical: 10,
+                      // ),
+                      itemCount: snapshot.data.length,
+                      // separatorBuilder: (_, __) => const SizedBox(height: 15),
+                      itemBuilder:
+                          (_, __) => _buildFollowResult(
+                            snapshot.data.toList()[__],
+                            __,
+                          ),
+                    );
+                  }
+                } else if (snapshot.hasError) {
+                  return Container();
                 } else {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    // padding: const EdgeInsets.symmetric(
-                    //   horizontal: 20,
-                    //   vertical: 10,
-                    // ),
-                    itemCount: snapshot.data.length,
-                    // separatorBuilder: (_, __) => const SizedBox(height: 15),
-                    itemBuilder:
-                        (_, __) =>
-                            _buildFollowResult(snapshot.data.toList()[__], __),
+                  return const Center(
+                    heightFactor: 15,
+                    child: CircularProgressIndicator(),
                   );
                 }
-              } else if (snapshot.hasError) {
-                return Container();
-              } else {
-                return const Center(
-                  heightFactor: 15,
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-            // ),
-          ),
+              },
+              // ),
+            ),
 
           // )
         ],
@@ -1491,6 +1496,7 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   _callReadTrack() async {
+    setState(() => _loading = true);
     DateTime dateEnd = DateTime.now();
     DateTime dateStart = DateTime(dateEnd.year, dateEnd.month - 3, dateEnd.day);
 
@@ -1518,6 +1524,7 @@ class _ReportPageState extends State<ReportPage> {
     } catch (e) {
       print('Exception: $e');
     }
+    setState(() => _loading = false);
   }
 
   dynamic subTypesTicketk;
