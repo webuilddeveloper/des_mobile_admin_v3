@@ -795,7 +795,7 @@ class _LoginPageState extends State<LoginPage> {
       final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
       pattern.allMatches(token).forEach((match) => print(match.group(0)));
       Response response = await Dio().get(
-        '$ondeURL/api/user/ProfileMe',
+        '$bdeURL/api/user/ProfileMe',
         options: Options(
           validateStatus: (_) => true,
           contentType: 'application/x-www-form-urlencoded',
@@ -839,7 +839,7 @@ class _LoginPageState extends State<LoginPage> {
       // get info
       if (token.isEmpty) return null;
       Response response = await Dio().post(
-        '$ondeURL/api/user/GetStaffProfileData',
+        '$bdeURL/api/user/GetStaffProfileData',
         options: Options(
           validateStatus: (_) => true,
           contentType: 'application/x-www-form-urlencoded',

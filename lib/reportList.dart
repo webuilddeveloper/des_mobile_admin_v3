@@ -724,7 +724,7 @@ class _ReportListPageState extends State<ReportListPage> {
 
     Dio dio = Dio();
     var response = await dio.get(
-      'https://dcc.onde.go.th/dcc-api/api/ticket/getTicketSummary/$dateStart/$dateEnd',
+      'https://dcc.bde.go.th/dcc-api/api/ticket/getTicketSummary/$dateStart/$dateEnd',
       options: Options(
         validateStatus: (_) => true,
         contentType: 'application/x-www-form-urlencoded',
@@ -755,7 +755,7 @@ class _ReportListPageState extends State<ReportListPage> {
     setState(() => _loading = true);
     Dio dio = Dio();
     var response = await dio.get(
-      '$ondeURL/api/ticket/getTickets/$dateStart/$dateEnd',
+      '$bdeURL/api/ticket/getTickets/$dateStart/$dateEnd',
     );
 
     // logWTF(response.data['data']);

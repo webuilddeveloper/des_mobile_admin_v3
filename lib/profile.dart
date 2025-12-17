@@ -91,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _save(String leaveCode) async {
-    final url = 'https://dcc.onde.go.th/dcc-api/api/Leave/AddLeave';
+    final url = 'https://dcc.bde.go.th/dcc-api/api/Leave/AddLeave';
     String token = await ManageStorage.read('accessToken_122') ?? '';
 
     // Format dates
@@ -2188,7 +2188,7 @@ class _ProfilePageState extends State<ProfilePage> {
       // ตรวจสอบว่ามี email และ token ก่อนทำการ request
       if (email.isNotEmpty && token.isNotEmpty) {
         Response response = await Dio().get(
-          '$ondeURL/api/user/staff/$email/$month/$year',
+          '$bdeURL/api/user/staff/$email/$month/$year',
           options: Options(
             validateStatus: (_) => true,
             contentType: 'application/x-www-form-urlencoded',
@@ -2226,7 +2226,7 @@ class _ProfilePageState extends State<ProfilePage> {
     try {
       var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
       var responseCenter = await Dio().get(
-        '$ondeURL/api/user/GetImageProfile/${profileMe['userid']}',
+        '$bdeURL/api/user/GetImageProfile/${profileMe['userid']}',
       );
       setState(() {
         _imageProfile = responseCenter.data;

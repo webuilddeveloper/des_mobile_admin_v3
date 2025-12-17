@@ -11,10 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'config.dart';
 
 class ForgotPasswordNewPasswordPage extends StatefulWidget {
-  const ForgotPasswordNewPasswordPage({
-    super.key,
-    required this.email,
-  });
+  const ForgotPasswordNewPasswordPage({super.key, required this.email});
 
   final String email;
 
@@ -66,11 +63,7 @@ class _ForgotPasswordNewPasswordPageState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 55,
-                    width: 55,
-                  ),
+                  Image.asset('assets/images/logo.png', height: 55, width: 55),
                   const SizedBox(height: 12),
                   Text(
                     'รีเซ็ตรหัสผ่าน',
@@ -127,7 +120,7 @@ class _ForgotPasswordNewPasswordPageState
                                       blurRadius: 4,
                                       color: Color(0x40F3D2FF),
                                       offset: Offset(0, 4),
-                                    )
+                                    ),
                                   ],
                                 ),
                                 child: const Text(
@@ -188,7 +181,7 @@ class _ForgotPasswordNewPasswordPageState
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: TextFormField(
@@ -211,12 +204,9 @@ class _ForgotPasswordNewPasswordPageState
             padding: const EdgeInsets.only(left: 5, top: 3),
             child: Text(
               validateString,
-              style: const TextStyle(
-                fontSize: 10,
-                color: Colors.red,
-              ),
+              style: const TextStyle(fontSize: 10, color: Colors.red),
             ),
-          )
+          ),
       ],
     );
   }
@@ -226,7 +216,7 @@ class _ForgotPasswordNewPasswordPageState
       setState(() => _loadingSubmit = true);
       // update password
       Response response = await Dio().post(
-        '$ondeURL/api/user/resetPassword',
+        '$bdeURL/api/user/resetPassword',
         data: {
           'email': widget.email.trim().toLowerCase(),
           'password': _passwordController.text,

@@ -42,8 +42,9 @@ class _ProfileVerifyPageState extends State<ProfileVerifyPage> {
       var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
       _userData = profileMe;
       var response = await Dio().post(
-          '$serverUrl/dcc-api/m/register/checkImage/read',
-          data: {'idcard': _userData['idcard']});
+        '$serverUrl/dcc-api/m/register/checkImage/read',
+        data: {'idcard': _userData['idcard']},
+      );
 
       logWTF(response.data);
 
@@ -76,15 +77,13 @@ class _ProfileVerifyPageState extends State<ProfileVerifyPage> {
       if (token.isEmpty) {
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const LoginPage(),
-          ),
+          MaterialPageRoute(builder: (context) => const LoginPage()),
           (Route<dynamic> route) => false,
         );
       }
       // logWTF(token);
       Response response = await Dio().get(
-        '$ondeURL/api/user/ProfileMe',
+        '$bdeURL/api/user/ProfileMe',
         options: Options(
           validateStatus: (_) => true,
           contentType: 'application/x-www-form-urlencoded',
@@ -140,10 +139,7 @@ class _ProfileVerifyPageState extends State<ProfileVerifyPage> {
         title: const Text(
           'ยืนยันตัวตน',
           textAlign: TextAlign.start,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
       ),
       body: Padding(
@@ -240,11 +236,7 @@ class _ProfileVerifyPageState extends State<ProfileVerifyPage> {
       },
       child: Row(
         children: [
-          Image.asset(
-            image,
-            height: 40,
-            width: 40,
-          ),
+          Image.asset(image, height: 40, width: 40),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -262,16 +254,17 @@ class _ProfileVerifyPageState extends State<ProfileVerifyPage> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                    color: value
-                        ? const Color(0xFF767676)
-                        : const Color(0xFF767676),
+                    color:
+                        value
+                            ? const Color(0xFF767676)
+                            : const Color(0xFF767676),
                   ),
                 ),
               ],
             ),
           ),
           const SizedBox(width: 3),
-          _buildBtnVerify(value)
+          _buildBtnVerify(value),
         ],
       ),
     );
@@ -290,11 +283,12 @@ class _ProfileVerifyPageState extends State<ProfileVerifyPage> {
       width: 90,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: !value ? Colors.white : const Color(0xFFD9D9D9),
-          border: Border.all(
-            color: !value ? const Color(0xff7209B7) : const Color(0xFFD9D9D9),
-          )),
+        borderRadius: BorderRadius.circular(10),
+        color: !value ? Colors.white : const Color(0xFFD9D9D9),
+        border: Border.all(
+          color: !value ? const Color(0xff7209B7) : const Color(0xFFD9D9D9),
+        ),
+      ),
       child: Text(
         'ยืนยันตัวตน',
         style: TextStyle(

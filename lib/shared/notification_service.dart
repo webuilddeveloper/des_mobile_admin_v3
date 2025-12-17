@@ -60,7 +60,7 @@ class NotificationService {
     try {
       var accessToken = await ManageStorage.read('accessToken_122') ?? '';
       final response = await Dio().get(
-        '$ondeURL/api/Notify/count/me?isPortal=false',
+        '$bdeURL/api/Notify/count/me?isPortal=false',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -200,7 +200,7 @@ class NotificationService {
           String? accessToken = prefs.getString('access_token');
 
           final response = await Dio().get(
-            '$ondeURL/api/ticket/getTrackTicket/$dateStart/$dateEnd',
+            '$bdeURL/api/ticket/getTrackTicket/$dateStart/$dateEnd',
             data: {'token': token},
             options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
           );

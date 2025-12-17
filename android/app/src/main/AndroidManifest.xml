@@ -76,7 +76,7 @@
                 <!-- Accepts URIs that begin with https://YOUR_HOST -->
                 <data
                 android:scheme="https"
-                android:host="decms.dcc.onde.go.th" 
+                android:host="decms.dcc.bde.go.th" 
                 android:pathPrefix="/auth" />
             </intent-filter>
         </activity>

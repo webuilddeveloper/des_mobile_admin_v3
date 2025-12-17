@@ -93,17 +93,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           title: const Text(
             'เปลี่ยนรหัสผ่าน',
             style: TextStyle(
-                fontSize: 18,
-                fontFamily: 'Kanit',
-                color: Colors.black,
-                fontWeight: FontWeight.w700),
+              fontSize: 18,
+              fontFamily: 'Kanit',
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 15,
-            vertical: 15,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           child: Form(
             key: _formKey,
             child: Column(
@@ -187,16 +185,17 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     width: double.infinity,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: _loadingSubmit
-                          ? Theme.of(context).primaryColor.withOpacity(0.8)
-                          : Theme.of(context).primaryColor,
+                      color:
+                          _loadingSubmit
+                              ? Theme.of(context).primaryColor.withOpacity(0.8)
+                              : Theme.of(context).primaryColor,
                       borderRadius: BorderRadius.circular(7),
                       boxShadow: const [
                         BoxShadow(
                           blurRadius: 4,
                           color: Color(0x40F3D2FF),
                           offset: Offset(0, 4),
-                        )
+                        ),
                       ],
                     ),
                     child: Stack(
@@ -213,9 +212,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           const Positioned.fill(
                             child: Center(
                               child: SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator()),
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(),
+                              ),
                             ),
                           ),
                       ],
@@ -226,9 +226,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const ChangePasswordSendPage()));
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ChangePasswordSendPage(),
+                      ),
+                    );
                   },
                   child: const Text(
                     'ลืมรหัสผ่าน',
@@ -237,7 +239,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       decoration: TextDecoration.underline,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -270,7 +272,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: TextFormField(
@@ -293,12 +295,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             padding: const EdgeInsets.only(left: 5, top: 3),
             child: Text(
               validateString,
-              style: const TextStyle(
-                fontSize: 10,
-                color: Colors.red,
-              ),
+              style: const TextStyle(fontSize: 10, color: Colors.red),
             ),
-          )
+          ),
       ],
     );
   }
@@ -307,67 +306,68 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext context) => WillPopScope(
-        onWillPop: () => Future.value(false),
-        child: Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          elevation: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SizedBox(
-              height: 127,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'สำเร็จ',
-                    style: TextStyle(
-                      color: Color(0xFF7A4CB1),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Text(
-                    'เปลี่ยนรหัสผ่านสำเร็จ',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 95,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF7A4CB1),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'ตกลง',
+      builder:
+          (BuildContext context) => WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SizedBox(
+                  height: 127,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'สำเร็จ',
                         style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
+                          color: Color(0xFF7A4CB1),
+                          fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ),
-                  )
-                ],
+                      const Text(
+                        'เปลี่ยนรหัสผ่านสำเร็จ',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 95,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF7A4CB1),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'ตกลง',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
     );
   }
 
@@ -430,7 +430,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       }
 
       Response response = await Dio().post(
-        '$ondeURL/api/user/resetPassword',
+        '$bdeURL/api/user/resetPassword',
         data: {
           'email': profileMe['email'],
           'password': _passwordNewController.text,

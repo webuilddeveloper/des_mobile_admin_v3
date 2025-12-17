@@ -27,10 +27,10 @@ class _FaceAuthenticateWebPageState extends State<FaceAuthenticateWebPage> {
   Widget build(BuildContext context) {
     if (widget.type == "checkIn") {
       faceScanUrl =
-          "https://uis.dcc.onde.go.th/staff/check-in?id=${widget.idCard}&start=1";
+          "https://uis.dcc.bde.go.th/staff/check-in?id=${widget.idCard}&start=1";
     } else if (widget.type == "checkOut") {
       faceScanUrl =
-          "https://uis.dcc.onde.go.th/staff/check-out?id=${widget.idCard}&start=1";
+          "https://uis.dcc.bde.go.th/staff/check-out?id=${widget.idCard}&start=1";
     }
     return MaterialApp(home: InAppWebViewPage(scanFaceWeb: faceScanUrl));
   }

@@ -62,19 +62,15 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
         "phone": widget.model['phone'],
         "desc": widget.model['desc'],
         "remark": widget.model['remark'],
-        'otherCategoryRemark': widget.model['otherCategoryRemark']
+        'otherCategoryRemark': widget.model['otherCategoryRemark'],
       };
       // logWTF(accessToken);
       logWTF(data);
 
       Response response = await Dio().post(
-        '$ondeURL/api/Booking/Booking/mobile',
+        '$bdeURL/api/Booking/Booking/mobile',
         data: data,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-          },
-        ),
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
       );
       setState(() => _loadingSubmit = false);
 
@@ -110,10 +106,7 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
         centerTitle: true,
         title: const Text(
           'เพิ่มการจองทรัพยากร',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
         leading: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -143,10 +136,7 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
             padding: EdgeInsets.all(8.0),
             child: Text(
               'โปรดตรวจสอบการจองของท่าน',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
             ),
           ),
           // const SizedBox(height: 15),
@@ -160,7 +150,7 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
                   blurRadius: 4,
                   color: Color(0x40F3D2FF),
                   offset: Offset(0, 4),
-                )
+                ),
               ],
             ),
             child: Stack(
@@ -203,9 +193,7 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
                 ),
                 if (_loadingData)
                   const Positioned.fill(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: Center(child: CircularProgressIndicator()),
                   ),
               ],
             ),
@@ -220,16 +208,17 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
               width: double.infinity,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: _loadingSubmit
-                    ? Theme.of(context).primaryColor.withOpacity(0.8)
-                    : Theme.of(context).primaryColor,
+                color:
+                    _loadingSubmit
+                        ? Theme.of(context).primaryColor.withOpacity(0.8)
+                        : Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(7),
                 boxShadow: const [
                   BoxShadow(
                     blurRadius: 4,
                     color: Color(0x40F3D2FF),
                     offset: Offset(0, 4),
-                  )
+                  ),
                 ],
               ),
               child: Stack(
@@ -246,9 +235,10 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
                     const Positioned.fill(
                       child: Center(
                         child: SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator()),
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
                     ),
                 ],
@@ -273,7 +263,7 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
                     blurRadius: 4,
                     color: Color(0x40F3D2FF),
                     offset: Offset(0, 4),
-                  )
+                  ),
                 ],
               ),
               child: Text(
@@ -304,7 +294,7 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
                     blurRadius: 4,
                     color: Color(0x40F3D2FF),
                     offset: Offset(0, 4),
-                  )
+                  ),
                 ],
               ),
               child: Text(
@@ -351,71 +341,72 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext context) => WillPopScope(
-        onWillPop: () => Future.value(false),
-        child: Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          elevation: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SizedBox(
-              height: 127,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'จองสำเร็จ',
-                    style: TextStyle(
-                      color: Color(0xFF7A4CB1),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Text(
-                    'ทำการจองใช้บริการเรียบร้อย',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Menupage(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 95,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF7A4CB1),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'ตกลง',
+      builder:
+          (BuildContext context) => WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SizedBox(
+                  height: 127,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'จองสำเร็จ',
                         style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
+                          color: Color(0xFF7A4CB1),
+                          fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ),
-                  )
-                ],
+                      const Text(
+                        'ทำการจองใช้บริการเรียบร้อย',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Menupage(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 95,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF7A4CB1),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'ตกลง',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
     );
   }
 
@@ -427,16 +418,21 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
         return Padding(
           padding: const EdgeInsets.all(20.0),
           child: Dialog(
-            insetPadding:
-                const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            insetPadding: const EdgeInsets.symmetric(
+              horizontal: 0,
+              vertical: 0,
+            ),
             backgroundColor: Colors.white,
             shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(11.0))),
+              borderRadius: BorderRadius.all(Radius.circular(11.0)),
+            ),
             child: Stack(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 35, horizontal: 25),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 35,
+                    horizontal: 25,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -449,15 +445,14 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
                             'ยกเลิกการจอง',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: Color(0xFF7209B7),
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700),
+                              color: Color(0xFF7209B7),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
                       const Center(
                         child: Text(
                           'คุณยืนยันที่จะยกเลิกการจองนี้\nใช่หรือไม่?',
@@ -465,9 +460,7 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
+                      const SizedBox(height: 30),
                       InkWell(
                         onTap: () {
                           Navigator.of(context).pop();
@@ -504,12 +497,9 @@ class _ReservationAddPageState extends State<ReservationAddPage> {
                   top: 14,
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: const Icon(
-                      Icons.close,
-                      size: 35,
-                    ),
+                    child: const Icon(Icons.close, size: 35),
                   ),
-                )
+                ),
               ],
             ),
           ),

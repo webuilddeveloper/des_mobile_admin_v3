@@ -40,11 +40,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 55,
-                    width: 55,
-                  ),
+                  Image.asset('assets/images/logo.png', height: 55, width: 55),
                   const SizedBox(height: 12),
                   Text(
                     'Welcome to',
@@ -56,10 +52,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ),
                   const Text(
                     'กรุณากรอกEmailของท่าน ระบบจะส่งรหัสยืนยัน\nเผื่อรีเซ็ตรหัสผ่านของท่าน',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
                   ),
                   const SizedBox(height: 58),
                   AutofillGroup(
@@ -101,7 +94,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                       blurRadius: 4,
                                       color: Color(0x40F3D2FF),
                                       offset: Offset(0, 4),
-                                    )
+                                    ),
                                   ],
                                 ),
                                 child: const Text(
@@ -185,7 +178,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: TextFormField(
@@ -193,10 +186,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             keyboardType: TextInputType.emailAddress,
             controller: controller,
             style: const TextStyle(fontSize: 14),
-            decoration: CusInpuDecoration.base(
-              context,
-              hintText: hint,
-            ),
+            decoration: CusInpuDecoration.base(context, hintText: hint),
             validator: (String? value) => validator!(value),
           ),
         ),
@@ -205,12 +195,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             padding: const EdgeInsets.only(left: 5, top: 3),
             child: Text(
               validateString,
-              style: const TextStyle(
-                fontSize: 8,
-                color: Colors.red,
-              ),
+              style: const TextStyle(fontSize: 8, color: Colors.red),
             ),
-          )
+          ),
       ],
     );
   }
@@ -233,12 +220,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       String email = _emailController.text.trim().toLowerCase();
 
       var verifyResponse = await Dio().get(
-          '$ondeURL/api/user/verify/duplicate/$email?isDatabaseOnly=false');
+        '$bdeURL/api/user/verify/duplicate/$email?isDatabaseOnly=false',
+      );
 
       if (verifyResponse.data == true) {
         var otpResponse = await Dio().post(
-            '$serverUrl/dcc-api/m/register/otp/request',
-            data: {'email': email});
+          '$serverUrl/dcc-api/m/register/otp/request',
+          data: {'email': email},
+        );
 
         setState(() => _loading = false);
 
@@ -247,9 +236,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => ForgotPasswordOTPPage(
-                email: email,
-              ),
+              builder: (_) => ForgotPasswordOTPPage(email: email),
             ),
           );
         }

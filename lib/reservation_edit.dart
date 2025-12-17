@@ -99,7 +99,7 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
 
       setState(() => _loadingSubmit = true);
       Response response = await Dio().put(
-        '$ondeURL/api/Booking/PostponeBooking',
+        '$bdeURL/api/Booking/PostponeBooking',
         data: data,
         options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
       );
@@ -290,7 +290,7 @@ class _ReservationEditPageState extends State<ReservationEditPage> {
       setState(() => _loadingSubmit = true);
       var accessToken = await ManageStorage.read('accessToken_122') ?? '';
       Response response = await Dio().put(
-        '$ondeURL/api/Booking/Cancel?bookingNo=${widget.model['bookingno']}',
+        '$bdeURL/api/Booking/Cancel?bookingNo=${widget.model['bookingno']}',
         options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
       );
       setState(() => _loadingSubmit = false);

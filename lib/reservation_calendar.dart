@@ -29,8 +29,9 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
   late ValueNotifier<List<dynamic>> _selectedEvents;
   Map<DateTime, List>? _events;
   late CalendarFormat _calendarFormat;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
-      .toggledOff; // Can be toggled on/off by longpressing a date
+  RangeSelectionMode _rangeSelectionMode =
+      RangeSelectionMode
+          .toggledOff; // Can be toggled on/off by longpressing a date
   DateTime _focusedDay = DateTime.now();
   late DateTime _selectedDay;
   DateTime? _rangeStart;
@@ -68,8 +69,8 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
         "recordId": 99999,
         "typeName": "โปรดเลือกประเภทการจอง",
         "remark": null,
-        "refNo": ""
-      }
+        "refNo": "",
+      },
     ];
     super.initState();
     fToast = FToast();
@@ -106,8 +107,9 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
   _callReadType() async {
     try {
       setState(() => _loadingDropdownType = true);
-      Response response =
-          await Dio().get('$ondeURL/api/masterdata/book/slotType');
+      Response response = await Dio().get(
+        '$bdeURL/api/masterdata/book/slotType',
+      );
 
       setState(() => _loadingDropdownType = false);
       setState(() {
@@ -116,9 +118,9 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
             "recordId": 99999,
             "typeName": "โปรดเลือกประเภทการจอง",
             "remark": null,
-            "refNo": ""
+            "refNo": "",
           },
-          ...response.data
+          ...response.data,
         ];
       });
       logWTF(_modelType);
@@ -131,8 +133,9 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
   _callReadBookingCategory() async {
     try {
       setState(() => _loadingDropdownType = true);
-      Response response =
-          await Dio().get('$ondeURL/api/masterdata/bookingcategories');
+      Response response = await Dio().get(
+        '$bdeURL/api/masterdata/bookingcategories',
+      );
 
       setState(() => _loadingDropdownType = false);
       setState(() {
@@ -164,10 +167,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
           centerTitle: true,
           title: const Text(
             'รายละเอียด',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
           leading: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -191,11 +191,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
           ),
         ),
         body: ListView(
-          children: [
-            _buildTable(),
-            _buildToggle(),
-            _buildValueListenable(),
-          ],
+          children: [_buildTable(), _buildToggle(), _buildValueListenable()],
         ),
       ),
     );
@@ -244,9 +240,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
           cellMargin: const EdgeInsets.all(10),
           outsideDaysVisible: true,
           weekendDecoration: BoxDecoration(
-            border: Border.all(
-              color: const Color(0xFFA06CD5),
-            ),
+            border: Border.all(color: const Color(0xFFA06CD5)),
             borderRadius: BorderRadius.circular(10),
           ),
           weekendTextStyle: TextStyle(
@@ -256,9 +250,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
           ),
           defaultDecoration: BoxDecoration(
             // ขอบวันทำงาน
-            border: Border.all(
-              color: const Color(0xFFA06CD5),
-            ),
+            border: Border.all(color: const Color(0xFFA06CD5)),
             borderRadius: BorderRadius.circular(10),
           ),
           defaultTextStyle: const TextStyle(
@@ -267,22 +259,16 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
             color: Color(0xFFA06CD5), //ตัวเลขวัน
           ),
           markerDecoration: BoxDecoration(
-            border: Border.all(
-              color: const Color(0xFFA06CD5),
-            ),
+            border: Border.all(color: const Color(0xFFA06CD5)),
             borderRadius: BorderRadius.circular(10),
           ),
           selectedDecoration: BoxDecoration(
-            border: Border.all(
-              color: const Color(0xFFA06CD5),
-            ),
+            border: Border.all(color: const Color(0xFFA06CD5)),
             borderRadius: BorderRadius.circular(10),
           ),
           todayDecoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
-            border: Border.all(
-              color: Theme.of(context).primaryColor,
-            ),
+            border: Border.all(color: Theme.of(context).primaryColor),
             borderRadius: BorderRadius.circular(10),
           ),
           todayTextStyle: const TextStyle(
@@ -304,9 +290,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: const Color(0xFFA06CD5),
-                border: Border.all(
-                  color: const Color(0xFFA06CD5),
-                ),
+                border: Border.all(color: const Color(0xFFA06CD5)),
                 borderRadius: BorderRadius.circular(10),
               ),
               width: 100,
@@ -329,13 +313,15 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
               margin: const EdgeInsets.all(10.0),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: isPast
-                    ? const Color(0xFFD9D9D9)
-                    : Colors.white, // Set grey for past dates
+                color:
+                    isPast
+                        ? const Color(0xFFD9D9D9)
+                        : Colors.white, // Set grey for past dates
                 border: Border.all(
-                  color: isPast
-                      ? const Color(0xFFB3B3B3)
-                      : const Color(0xFFA06CD5),
+                  color:
+                      isPast
+                          ? const Color(0xFFB3B3B3)
+                          : const Color(0xFFA06CD5),
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -345,10 +331,12 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
                 '${date.day}',
                 style: TextStyle(
                   fontSize: 16.0,
-                  color: isPast
-                      ? const Color(0xFFB3B3B3)
-                      : const Color(
-                          0xFFA06CD5), // Set text color for past dates
+                  color:
+                      isPast
+                          ? const Color(0xFFB3B3B3)
+                          : const Color(
+                            0xFFA06CD5,
+                          ), // Set text color for past dates
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -362,10 +350,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
   _buildToggle() {
     return Stack(
       children: [
-        const SizedBox(
-          height: 106,
-          width: double.infinity,
-        ),
+        const SizedBox(height: 106, width: double.infinity),
         Positioned(
           top: 0,
           left: 0,
@@ -384,7 +369,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
                   offset: const Offset(0, 6),
                   color: Colors.black.withOpacity(0.1),
                   // spreadRadius: 2,
-                )
+                ),
               ],
             ),
             child: Column(
@@ -392,10 +377,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    height: 1,
-                    color: const Color(0xFFD9D9D9),
-                  ),
+                  child: Container(height: 1, color: const Color(0xFFD9D9D9)),
                 ),
                 const SizedBox(height: 10),
                 Expanded(
@@ -407,9 +389,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
                         width: 15,
                         decoration: BoxDecoration(
                           color: const Color(0xFFA06CD5),
-                          border: Border.all(
-                            color: const Color(0xFFA06CD5),
-                          ),
+                          border: Border.all(color: const Color(0xFFA06CD5)),
                           borderRadius: BorderRadius.circular(3),
                         ),
                       ),
@@ -423,9 +403,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
                         height: 15,
                         width: 15,
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color(0xFFA06CD5),
-                          ),
+                          border: Border.all(color: const Color(0xFFA06CD5)),
                           borderRadius: BorderRadius.circular(3),
                         ),
                       ),
@@ -448,11 +426,12 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
           right: 0,
           child: Center(
             child: GestureDetector(
-              onTap: () => setState(() {
-                _calendarFormat == CalendarFormat.week
-                    ? _calendarFormat = CalendarFormat.month
-                    : _calendarFormat = CalendarFormat.week;
-              }),
+              onTap:
+                  () => setState(() {
+                    _calendarFormat == CalendarFormat.week
+                        ? _calendarFormat = CalendarFormat.month
+                        : _calendarFormat = CalendarFormat.week;
+                  }),
               child: Container(
                 height: 40,
                 width: 40,
@@ -460,19 +439,20 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
                   shape: BoxShape.circle,
                   color: Theme.of(context).primaryColor,
                 ),
-                child: _calendarFormat == CalendarFormat.week
-                    ? const Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        color: Colors.white,
-                      )
-                    : const Icon(
-                        Icons.keyboard_arrow_up_rounded,
-                        color: Colors.white,
-                      ),
+                child:
+                    _calendarFormat == CalendarFormat.week
+                        ? const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: Colors.white,
+                        )
+                        : const Icon(
+                          Icons.keyboard_arrow_up_rounded,
+                          color: Colors.white,
+                        ),
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -489,10 +469,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
               children: [
                 const Text(
                   'เวลาเริ่ม - เวลาเลิก',
-                  style: TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 15),
                 Stack(
@@ -502,11 +479,14 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
                       child: Wrap(
                         alignment: WrapAlignment.spaceAround,
                         runSpacing: 12,
-                        children: _timeData
-                            .asMap()
-                            .map((i, e) => MapEntry(i, _buildTimeItem(e, i)))
-                            .values
-                            .toList(),
+                        children:
+                            _timeData
+                                .asMap()
+                                .map(
+                                  (i, e) => MapEntry(i, _buildTimeItem(e, i)),
+                                )
+                                .values
+                                .toList(),
                       ),
                     ),
                     if (_loadingPeriod)
@@ -514,7 +494,8 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
                         child: Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.5)),
+                            color: Colors.white.withOpacity(0.5),
+                          ),
                           child: const CircularProgressIndicator(),
                         ),
                       ),
@@ -562,10 +543,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
       const SizedBox(height: 30),
       const Text(
         'เลือกประเภทการจอง',
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
-        ),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
       ),
       const SizedBox(height: 5),
       _dropdown(
@@ -580,10 +558,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
       const SizedBox(height: 15),
       const Text(
         'ข้อมูลสมาชิก',
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
-        ),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
       ),
       const SizedBox(height: 10),
       _buildFeild(
@@ -618,10 +593,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
       const SizedBox(height: 15),
       const Text(
         'หมวดหมู่การใช้งาน',
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
-        ),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
       ),
       SizedBox(height: 10),
       _buildBookingCategory(),
@@ -648,9 +620,10 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
           try {
             var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
 
-            var tempDate = DateFormat('yyyy-MM-ddT00:00:00')
-                .format(_selectedDay)
-                .toString();
+            var tempDate =
+                DateFormat(
+                  'yyyy-MM-ddT00:00:00',
+                ).format(_selectedDay).toString();
 
             var bookingCategory = '';
             _modelBookingCategory.forEach((e) {
@@ -666,8 +639,10 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
             });
             var data = {
               "bookingDate": tempDate,
-              "bookingSlotType": _modelType
-                  .firstWhere((e) => e['refNo'] == _typeSelected)['recordId'],
+              "bookingSlotType":
+                  _modelType.firstWhere(
+                    (e) => e['refNo'] == _typeSelected,
+                  )['recordId'],
               "centerId": profileMe?['centerId'].toString() ?? '',
               "startTime": _rangeTimeStr.split('-')[0].trim(),
               "endTime": _rangeTimeStr.split('-')[1].trim(),
@@ -677,8 +652,10 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
               "desc": '', //_hoursAmountStr
               "remark": bookingCategory,
               "otherCategoryRemark": _otherController.text,
-              'bookingSlotTypeName': _modelType
-                  .firstWhere((e) => e['refNo'] == _typeSelected)['typeName'],
+              'bookingSlotTypeName':
+                  _modelType.firstWhere(
+                    (e) => e['refNo'] == _typeSelected,
+                  )['typeName'],
               'hours': _hoursAmountStr,
               'date': _selectedDay,
             };
@@ -689,9 +666,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => ReservationAddPage(
-                  model: data,
-                ),
+                builder: (_) => ReservationAddPage(model: data),
               ),
             );
             setState(() => _loadingSubmit = false);
@@ -706,16 +681,17 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
           width: double.infinity,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: _loadingSubmit
-                ? Theme.of(context).primaryColor.withOpacity(0.8)
-                : Theme.of(context).primaryColor,
+            color:
+                _loadingSubmit
+                    ? Theme.of(context).primaryColor.withOpacity(0.8)
+                    : Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(7),
             boxShadow: const [
               BoxShadow(
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: Stack(
@@ -732,9 +708,10 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
                 const Positioned.fill(
                   child: Center(
                     child: SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator()),
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
                 ),
             ],
@@ -744,10 +721,11 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
     ];
   }
 
-  _dropdown(
-      {required List<dynamic> data,
-      required String value,
-      Function(String)? onChanged}) {
+  _dropdown({
+    required List<dynamic> data,
+    required String value,
+    Function(String)? onChanged,
+  }) {
     return Container(
       height: 50,
       decoration: BoxDecoration(
@@ -758,19 +736,12 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
             blurRadius: 4,
             color: Color(0x40F3D2FF),
             offset: Offset(0, 4),
-          )
+          ),
         ],
       ),
       child: DropdownButtonFormField(
-        icon: Image.asset(
-          'assets/images/arrow_down.png',
-          width: 16,
-          height: 8,
-        ),
-        style: const TextStyle(
-          fontSize: 14,
-          color: Color(0x807209B7),
-        ),
+        icon: Image.asset('assets/images/arrow_down.png', width: 16, height: 8),
+        style: const TextStyle(fontSize: 14, color: Color(0x807209B7)),
         decoration: CusInpuDecoration.base(context),
         value: value,
         // validator: (value) =>
@@ -778,19 +749,20 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
         onChanged: (dynamic newValue) {
           onChanged!(newValue);
         },
-        items: data.map((item) {
-          return DropdownMenuItem(
-            value: item['refNo'],
-            child: Text(
-              '${item['typeName']}',
-              style: const TextStyle(
-                fontSize: 14,
-                color: Color(0x807209B7),
-                fontFamily: 'Kanit',
-              ),
-            ),
-          );
-        }).toList(),
+        items:
+            data.map((item) {
+              return DropdownMenuItem(
+                value: item['refNo'],
+                child: Text(
+                  '${item['typeName']}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Color(0x807209B7),
+                    fontFamily: 'Kanit',
+                  ),
+                ),
+              );
+            }).toList(),
       ),
     );
   }
@@ -817,7 +789,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: TextFormField(
@@ -826,10 +798,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
             controller: controller,
             style: const TextStyle(fontSize: 14),
             inputFormatters: inputFormatters,
-            decoration: CusInpuDecoration.base(
-              context,
-              hintText: hint,
-            ),
+            decoration: CusInpuDecoration.base(context, hintText: hint),
             validator: (String? value) => validator!(value),
           ),
         ),
@@ -838,12 +807,9 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
             padding: const EdgeInsets.only(left: 5, top: 3),
             child: Text(
               validateString,
-              style: const TextStyle(
-                fontSize: 10,
-                color: Colors.red,
-              ),
+              style: const TextStyle(fontSize: 10, color: Colors.red),
             ),
-          )
+          ),
       ],
     );
   }
@@ -857,7 +823,8 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
 
     // แปลงเวลาในรูปแบบ String เป็น DateTime
     DateTime startTime = DateTime.parse(
-        '${DateTime.now().toString().split(' ')[0]} ${e['start']}:00');
+      '${DateTime.now().toString().split(' ')[0]} ${e['start']}:00',
+    );
     DateTime currentTime = DateTime.now();
 
     // เช็คเฉพาะเวลาที่ผ่านในวันปัจจุบัน
@@ -869,9 +836,10 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
           try {
             var current = _timeData[i]['selected'];
             var previous = i == 0 ? false : _timeData[i - 1]['selected'];
-            var next = i == _timeData.length - 1
-                ? false
-                : _timeData[i + 1]['selected'];
+            var next =
+                i == _timeData.length - 1
+                    ? false
+                    : _timeData[i + 1]['selected'];
             var result = false;
             if (!previous && !next) {
               bool hasItem = _timeData.any((e) => e['selected']);
@@ -915,9 +883,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
             });
             // _fDeviceList();
           } catch (e) {
-            Fluttertoast.showToast(
-              msg: 'เกิดข้อผิดพลาด',
-            );
+            Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด');
           }
         }
       },
@@ -926,9 +892,10 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
         width: 100,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: e['selected']
-              ? const Color(0xFFA06CD5)
-              : isPast
+          color:
+              e['selected']
+                  ? const Color(0xFFA06CD5)
+                  : isPast
                   ? const Color(0xFFD9D9D9)
                   : Colors.white,
           border: Border.all(
@@ -940,9 +907,10 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
           e['title'],
           style: TextStyle(
             fontSize: 13,
-            color: e['selected']
-                ? Colors.white
-                : isPast
+            color:
+                e['selected']
+                    ? Colors.white
+                    : isPast
                     ? Color(0xFFB3B3B3)
                     : const Color(0xFFA06CD5),
             fontWeight: e['selected'] ? FontWeight.w700 : FontWeight.w400,
@@ -956,11 +924,10 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
     var objectData = [];
     // var value = await storage.read(key: 'dataUserLoginKSP');
     // var data = json.decode(value);
-    final response = await Dio()
-        .post('$serverUrl/dcc-api/m/eventCalendar/mark/read2', data: {
-      "year": DateTime.now().year - 1,
-      "organization": [],
-    });
+    final response = await Dio().post(
+      '$serverUrl/dcc-api/m/eventCalendar/mark/read2',
+      data: {"year": DateTime.now().year - 1, "organization": []},
+    );
     var result = response.data;
     if (result['status'] == 'S') {
       objectData = result['objectData'];
@@ -1029,65 +996,68 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
       physics: ClampingScrollPhysics(),
       itemCount: _modelBookingCategory.length,
       separatorBuilder: (_, __) => const SizedBox(height: 8),
-      itemBuilder: (_, __) => GestureDetector(
-        onTap: () {
-          setState(() {
-            _modelBookingCategory[__]['selected'] =
-                !_modelBookingCategory[__]['selected'];
-          });
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Column(
-            children: [
-              Row(
+      itemBuilder:
+          (_, __) => GestureDetector(
+            onTap: () {
+              setState(() {
+                _modelBookingCategory[__]['selected'] =
+                    !_modelBookingCategory[__]['selected'];
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Column(
                 children: [
-                  Container(
-                    height: 20,
-                    width: 20,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: Color(0xFFA06CD5),
-                      ),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                    child: Container(
-                      margin: EdgeInsets.all(2),
-                      decoration: BoxDecoration(
+                  Row(
+                    children: [
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: Color(0xFFA06CD5),
+                          ),
                           borderRadius: BorderRadius.circular(2),
-                          color: _modelBookingCategory[__]['selected']
-                              ? Color(0xFFA06CD5)
-                              : Color(0xFFFFFFFF)),
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      '${_modelBookingCategory[__]['catNameTh']}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Color(0xFFA06CD5),
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2),
+                            color:
+                                _modelBookingCategory[__]['selected']
+                                    ? Color(0xFFA06CD5)
+                                    : Color(0xFFFFFFFF),
+                          ),
+                        ),
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          '${_modelBookingCategory[__]['catNameTh']}',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Color(0xFFA06CD5),
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
+                  if (_modelBookingCategory[__]['bookingCatId'] == 8 &&
+                      _modelBookingCategory[__]['selected']) ...[
+                    const SizedBox(height: 10),
+                    _buildFeild(
+                      controller: _otherController,
+                      hint: 'กรอกข้อมูลเพิ่มเติม',
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                  ],
                 ],
               ),
-              if (_modelBookingCategory[__]['bookingCatId'] == 8 &&
-                  _modelBookingCategory[__]['selected']) ...[
-                const SizedBox(height: 10),
-                _buildFeild(
-                  controller: _otherController,
-                  hint: 'กรอกข้อมูลเพิ่มเติม',
-                  keyboardType: TextInputType.emailAddress,
-                ),
-              ]
-            ],
+            ),
           ),
-        ),
-      ),
     );
   }
 
@@ -1127,13 +1097,14 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
 
     // logWTF('mergeList $mergeList');
 
-    var result = mergeList
-        .map((e) => {'code': e, 'title': 'เครื่องคอมพิวเตอร์ $e'})
-        .toList();
+    var result =
+        mergeList
+            .map((e) => {'code': e, 'title': 'เครื่องคอมพิวเตอร์ $e'})
+            .toList();
 
     result = [
       {'code': '0', 'title': 'เลือกเครื่องคอมพิวเตอร์'},
-      ...result
+      ...result,
     ];
     setState(() {
       _deviceList = result;
@@ -1290,7 +1261,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
       // เรียกข้อมูลจาก API
       var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
       Response centerResponse = await dio.get(
-        'https://dcc.onde.go.th/dcc-api/api/OfficeDigital/GetCenterByID/${profileMe['centerId']}',
+        'https://dcc.bde.go.th/dcc-api/api/OfficeDigital/GetCenterByID/${profileMe['centerId']}',
       );
 
       if (centerResponse.statusCode == 200) {
@@ -1306,7 +1277,8 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
         // String endTime = "16:30:00";
         // Print ตรวจสอบค่าเวลาเริ่มต้นและสิ้นสุด
         print(
-            " ============1============> Start Time from API:      $startTime");
+          " ============1============> Start Time from API:      $startTime",
+        );
         print(" ==============2==========> End Time from API:        $endTime");
 
         // แปลงเวลาเริ่มต้นและสิ้นสุดเป็น DateTime
@@ -1369,9 +1341,7 @@ class _ReservationCalendarPageState extends State<ReservationCalendarPage>
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset('assets/images/warning_icon.png', height: 21, width: 21),
-          const SizedBox(
-            width: 12.0,
-          ),
+          const SizedBox(width: 12.0),
           Text(
             title,
             style: const TextStyle(

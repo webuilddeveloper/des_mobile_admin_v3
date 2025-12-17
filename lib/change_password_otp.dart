@@ -9,10 +9,8 @@ import 'change_password_new.dart';
 import 'config.dart';
 
 class ChangePasswordOTPPage extends StatefulWidget {
-  const ChangePasswordOTPPage({
-    Key? key,
-    required this.email,
-  }) : super(key: key);
+  const ChangePasswordOTPPage({Key? key, required this.email})
+    : super(key: key);
   final String email;
 
   @override
@@ -62,10 +60,7 @@ class _ChangePasswordOTPPageState extends State<ChangePasswordOTPPage> {
               ),
               const Text(
                 'กรุณากรอกรหัส OTP ที่ท่านได้รับทางอีเมล\nเพื่อรับรหัสผ่านใหม่',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
               ),
               const SizedBox(height: 32),
               Form(
@@ -118,7 +113,7 @@ class _ChangePasswordOTPPageState extends State<ChangePasswordOTPPage> {
                       blurRadius: 4,
                       color: Color(0x40F3D2FF),
                       offset: Offset(0, 4),
-                    )
+                    ),
                   ],
                   onCompleted: (v) async {
                     _send();
@@ -160,7 +155,7 @@ class _ChangePasswordOTPPageState extends State<ChangePasswordOTPPage> {
                           blurRadius: 4,
                           color: Color(0x40F3D2FF),
                           offset: Offset(0, 4),
-                        )
+                        ),
                       ],
                     ),
                     child: const Text(
@@ -221,11 +216,8 @@ class _ChangePasswordOTPPageState extends State<ChangePasswordOTPPage> {
       // update password
       if (token.isEmpty) return null;
       Response response = await Dio().put(
-        '$ondeURL/api/user/resetPassword',
-        data: {
-          'email': widget.email,
-          'password': _passwordController.text,
-        },
+        '$bdeURL/api/user/resetPassword',
+        data: {'email': widget.email, 'password': _passwordController.text},
       );
 
       if (response.statusCode == 200) {
@@ -259,9 +251,7 @@ class _ChangePasswordOTPPageState extends State<ChangePasswordOTPPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => ChangePasswordNewPage(
-            email: widget.email,
-          ),
+          builder: (_) => ChangePasswordNewPage(email: widget.email),
         ),
       );
     } else {
@@ -270,8 +260,10 @@ class _ChangePasswordOTPPageState extends State<ChangePasswordOTPPage> {
   }
 
   _requestOTP() async {
-    var response = await Dio().post('$serverUrl/dcc-api/m/register/otp/request',
-        data: {'email': widget.email.trim().toLowerCase()});
+    var response = await Dio().post(
+      '$serverUrl/dcc-api/m/register/otp/request',
+      data: {'email': widget.email.trim().toLowerCase()},
+    );
     setState(() => _loadingSubmit = false);
     if (response.data['status'] == 'S') {
       // pass

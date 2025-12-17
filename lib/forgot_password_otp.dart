@@ -218,7 +218,7 @@ class _ForgotPasswordOTPPageState extends State<ForgotPasswordOTPPage> {
       // update password
       if (token.isEmpty) return null;
       Response response = await Dio().put(
-        '$ondeURL/api/user/resetPassword',
+        '$bdeURL/api/user/resetPassword',
         data: {'email': widget.email, 'password': _passwordController.text},
       );
 

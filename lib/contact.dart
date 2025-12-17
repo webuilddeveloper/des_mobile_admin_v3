@@ -18,8 +18,9 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends State<ContactPage> {
   late DateTime currentBackPressTime;
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(
+    initialRefresh: false,
+  );
 
   // late Future<dynamic> _futureProfile;
   dynamic profile;
@@ -47,14 +48,15 @@ class _ContactPageState extends State<ContactPage> {
     try {
       var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
       var responseCenter = await Dio().get(
-          '$ondeURL/api/OfficeDigital/GetCenterByID/${profileMe['centerId']}');
+        '$bdeURL/api/OfficeDigital/GetCenterByID/${profileMe['centerId']}',
+      );
 
       // _provinceCenterName =
       //     (responseCenter.data?['data']?['changwatT'] ?? '') != ''
       //         ? 'จ.${responseCenter.data?['data']?['changwatT']}'
       //         : '';
       var response = await Dio().get(
-        '$ondeURL/api/masterdata/centers/province/${responseCenter.data['data']['chId']}',
+        '$bdeURL/api/masterdata/centers/province/${responseCenter.data['data']['chId']}',
       );
       if (response.statusCode == 200) {
         setState(() {
@@ -111,10 +113,11 @@ class _ContactPageState extends State<ContactPage> {
           title: const Text(
             'เบอร์โทรติดต่อ',
             style: TextStyle(
-                fontSize: 18,
-                fontFamily: 'Kanit',
-                color: Colors.black,
-                fontWeight: FontWeight.w700),
+              fontSize: 18,
+              fontFamily: 'Kanit',
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
         body: ListView(
@@ -125,18 +128,17 @@ class _ContactPageState extends State<ContactPage> {
               child: Text(
                 'ศูนย์ดิจิทัลชุมชน',
                 style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Kanit',
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600),
+                  fontSize: 16,
+                  fontFamily: 'Kanit',
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             const SizedBox(height: 10),
             if (_loading) const Center(child: CircularProgressIndicator()),
             if (_centerList.isEmpty && !_loading)
-              const Center(
-                child: Text('ไม่พบข้อมูล'),
-              ),
+              const Center(child: Text('ไม่พบข้อมูล')),
             ..._centerList.map((e) => _centerListItem(e)).toList(),
             const SizedBox(height: 20),
             // const Padding(
@@ -160,15 +162,9 @@ class _ContactPageState extends State<ContactPage> {
 
   Widget _centerListItem(dynamic model) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 5,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 10,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         width: double.infinity,
         // height: 60,
         decoration: const BoxDecoration(
@@ -185,12 +181,16 @@ class _ContactPageState extends State<ContactPage> {
                   Text(
                     model?['label'] ?? '',
                     style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w700),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   Text(
                     model?['centerTel'] ?? 'ไม่พบเบอร์โทรศัพท์',
                     style: const TextStyle(
-                        fontSize: 11, fontWeight: FontWeight.w300),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
                 ],
               ),
@@ -210,8 +210,9 @@ class _ContactPageState extends State<ContactPage> {
                 height: 30,
                 padding: const EdgeInsets.all(5),
                 decoration: const BoxDecoration(
-                    color: Color(0xFF7209B7),
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                  color: Color(0xFF7209B7),
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                ),
                 child: Image.asset(
                   "assets/images/phone.png",
                   color: Colors.white,
@@ -230,15 +231,9 @@ class _ContactPageState extends State<ContactPage> {
 
   Widget _exigentContactList(dynamic model) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 5,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 10,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         width: double.infinity,
         // height: 60,
         decoration: const BoxDecoration(
@@ -255,12 +250,16 @@ class _ContactPageState extends State<ContactPage> {
                   Text(
                     model['title'],
                     style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w700),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   Text(
                     model['centerTel'],
                     style: const TextStyle(
-                        fontSize: 11, fontWeight: FontWeight.w300),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
                 ],
               ),
@@ -277,8 +276,9 @@ class _ContactPageState extends State<ContactPage> {
                 height: 30,
                 padding: const EdgeInsets.all(5),
                 decoration: const BoxDecoration(
-                    color: Color(0xFF7209B7),
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                  color: Color(0xFF7209B7),
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                ),
                 child: Image.asset(
                   "assets/images/phone.png",
                   color: Colors.white,

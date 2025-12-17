@@ -61,16 +61,16 @@ class _RegisterPageState extends State<RegisterPage> {
   dynamic _center;
 
   List<dynamic> _provinceList = [
-    {'code': '', 'title': 'เลือกจังหวัด'}
+    {'code': '', 'title': 'เลือกจังหวัด'},
   ];
   List<dynamic> _districtList = [
-    {'code': '', 'title': 'เลือกอำเภอ'}
+    {'code': '', 'title': 'เลือกอำเภอ'},
   ];
   List<dynamic> _subDistrictList = [
-    {'code': '', 'title': 'เลือกตำบล'}
+    {'code': '', 'title': 'เลือกตำบล'},
   ];
   List<dynamic> _postCodeList = [
-    {'code': '', 'title': 'เลือกรหัสไปรษณีย์'}
+    {'code': '', 'title': 'เลือกรหัสไปรษณีย์'},
   ];
   List<dynamic> memberTypeList = [
     // {'code': '', 'title': 'เลือกประเภทสมาชิก'},
@@ -90,13 +90,11 @@ class _RegisterPageState extends State<RegisterPage> {
   ];
 
   List<dynamic> _centerList = [
-    {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'}
+    {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'},
   ];
   List<dynamic> _centerListTemp = [
-    {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'}
+    {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'},
   ];
-
- 
 
   String _provinceSelected = '';
   String _districtSelected = '';
@@ -132,11 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 55,
-                    width: 55,
-                  ),
+                  Image.asset('assets/images/logo.png', height: 55, width: 55),
                   const SizedBox(height: 12),
                   Text(
                     'ลงทะเบียนเจ้าหน้าที่',
@@ -254,8 +248,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             (widget.model?['email'] ?? '') != '' ? true : false,
                         hint: 'E-mail',
                         validateString: _emailStringValidate,
-                        onEditingComplete: () =>
-                            FocusScope.of(context).unfocus(),
+                        onEditingComplete:
+                            () => FocusScope.of(context).unfocus(),
                         validator: (value) {
                           var result = ValidateForm.email(value!);
                           setState(() {
@@ -340,7 +334,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         _centerSelected = '';
                         _centerController.text = '';
                         _centerList = [
-                          {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'}
+                          {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'},
                         ];
                       });
 
@@ -488,15 +482,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           children: const [
                             Text(
                               'ฉันยอมรับการให้ข้อมูล',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.w500),
                             ),
                             Text(
                               'ยอมรับการให้ข้อมูลเพื่อสมัครสมาชิก เพื่อให้เป็นไปตามหลักข้อกำหนดในการเก็บข้อมูลส่วนบุคคล',
-                              style: TextStyle(
-                                color: Color(0xFF707070),
-                              ),
+                              style: TextStyle(color: Color(0xFF707070)),
                               maxLines: 3,
                             ),
                           ],
@@ -543,11 +533,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => RegisterLinkAccountPage(
-                                      email: _emailController.text,
-                                      category: widget.category,
-                                      model: widget.model,
-                                    ),
+                                    builder:
+                                        (_) => RegisterLinkAccountPage(
+                                          email: _emailController.text,
+                                          category: widget.category,
+                                          model: widget.model,
+                                        ),
                                   ),
                                 );
                                 return;
@@ -571,20 +562,21 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: double.infinity,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: _acceptPolicy
-                            ? _loadingSubmit
-                                ? Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(0.8)
-                                : Theme.of(context).primaryColor
-                            : const Color(0xFFc5c5c5),
+                        color:
+                            _acceptPolicy
+                                ? _loadingSubmit
+                                    ? Theme.of(
+                                      context,
+                                    ).primaryColor.withOpacity(0.8)
+                                    : Theme.of(context).primaryColor
+                                : const Color(0xFFc5c5c5),
                         borderRadius: BorderRadius.circular(7),
                         boxShadow: const [
                           BoxShadow(
                             blurRadius: 4,
                             color: Color(0x40F3D2FF),
                             offset: Offset(0, 4),
-                          )
+                          ),
                         ],
                       ),
                       child: Stack(
@@ -601,9 +593,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             const Positioned.fill(
                               child: Center(
                                 child: SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator()),
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(),
+                                ),
                               ),
                             ),
                         ],
@@ -651,9 +644,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildRadio({required String value}) {
     return GestureDetector(
-      onTap: () => setState(() {
-        _prefixName = value;
-      }),
+      onTap:
+          () => setState(() {
+            _prefixName = value;
+          }),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         child: Row(
@@ -668,9 +662,10 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: value == _prefixName
-                      ? Theme.of(context).primaryColor
-                      : Colors.white,
+                  color:
+                      value == _prefixName
+                          ? Theme.of(context).primaryColor
+                          : Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
@@ -678,11 +673,8 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(width: 4),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Color(0x807209B7),
-              ),
-            )
+              style: const TextStyle(fontSize: 14, color: Color(0x807209B7)),
+            ),
           ],
         ),
       ),
@@ -718,7 +710,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: TextFormField(
@@ -731,10 +723,7 @@ class _RegisterPageState extends State<RegisterPage> {
             onChanged: (val) => onChanged!(val),
             onFieldSubmitted: (val) => onFieldSubmitted!(val),
             style: const TextStyle(fontSize: 14),
-            decoration: CusInpuDecoration.base(
-              context,
-              hintText: hint,
-            ),
+            decoration: CusInpuDecoration.base(context, hintText: hint),
             inputFormatters: inputFormatters,
             validator: (String? value) => validator!(value),
           ),
@@ -744,12 +733,9 @@ class _RegisterPageState extends State<RegisterPage> {
             padding: const EdgeInsets.only(left: 5, top: 3),
             child: Text(
               validateString,
-              style: const TextStyle(
-                fontSize: 10,
-                color: Colors.red,
-              ),
+              style: const TextStyle(fontSize: 10, color: Colors.red),
             ),
-          )
+          ),
       ],
     );
   }
@@ -778,7 +764,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: TextFormField(
@@ -801,12 +787,9 @@ class _RegisterPageState extends State<RegisterPage> {
             padding: const EdgeInsets.only(left: 5, top: 3),
             child: Text(
               validateString,
-              style: const TextStyle(
-                fontSize: 10,
-                color: Colors.red,
-              ),
+              style: const TextStyle(fontSize: 10, color: Colors.red),
             ),
-          )
+          ),
       ],
     );
   }
@@ -829,7 +812,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: DropdownButtonFormField(
@@ -838,10 +821,7 @@ class _RegisterPageState extends State<RegisterPage> {
               width: 16,
               height: 8,
             ),
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0x807209B7),
-            ),
+            style: const TextStyle(fontSize: 14, color: Color(0x807209B7)),
             decoration: CusInpuDecoration.base(context),
             value: value,
             // validator: (value) =>
@@ -849,19 +829,20 @@ class _RegisterPageState extends State<RegisterPage> {
             onChanged: (dynamic newValue) {
               onChanged!(newValue);
             },
-            items: data.map((item) {
-              return DropdownMenuItem(
-                value: item['code'],
-                child: Text(
-                  '${item['title']}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0x807209B7),
-                    fontFamily: 'Kanit',
-                  ),
-                ),
-              );
-            }).toList(),
+            items:
+                data.map((item) {
+                  return DropdownMenuItem(
+                    value: item['code'],
+                    child: Text(
+                      '${item['title']}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0x807209B7),
+                        fontFamily: 'Kanit',
+                      ),
+                    ),
+                  );
+                }).toList(),
           ),
         ),
         if (type == _loadingDropdown && type != '')
@@ -909,7 +890,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: TextFormField(
@@ -922,10 +903,7 @@ class _RegisterPageState extends State<RegisterPage> {
             onChanged: (val) => onChanged!(val),
             onFieldSubmitted: (val) => onFieldSubmitted!(val),
             style: const TextStyle(fontSize: 14),
-            decoration: CusInpuDecoration.base(
-              context,
-              hintText: hint,
-            ),
+            decoration: CusInpuDecoration.base(context, hintText: hint),
             inputFormatters: inputFormatters,
             validator: (String? value) => validator!(value),
             onTap: () {
@@ -942,12 +920,9 @@ class _RegisterPageState extends State<RegisterPage> {
             padding: const EdgeInsets.only(left: 5, top: 3),
             child: Text(
               validateString,
-              style: const TextStyle(
-                fontSize: 10,
-                color: Colors.red,
-              ),
+              style: const TextStyle(fontSize: 10, color: Colors.red),
             ),
-          )
+          ),
       ],
     );
   }
@@ -982,19 +957,17 @@ class _RegisterPageState extends State<RegisterPage> {
   _getProvinceCenter() async {
     try {
       setState(() => _loadingDropdown = 'province');
-      var response = await Dio().get(
-        '$ondeURL/api/masterdata/changwat',
-      );
+      var response = await Dio().get('$bdeURL/api/masterdata/changwat');
       if (response.statusCode == 200) {
         setState(() {
           _provinceList = [
-            {'code': '', 'title': 'เลือกจังหวัด'}
+            {'code': '', 'title': 'เลือกจังหวัด'},
           ];
 
           for (var i = 0; i < response.data.length; i++) {
             _province = {
               'code': response.data[i]['value'].toString(),
-              'title': response.data[i]['label']
+              'title': response.data[i]['label'],
             };
             _provinceList.add(_province);
           }
@@ -1010,21 +983,21 @@ class _RegisterPageState extends State<RegisterPage> {
   _getCenter() async {
     setState(() => _loadingDropdown = 'center');
     var response = await Dio().get(
-      '$ondeURL/api/masterdata/centers/province/$_provinceSelected',
+      '$bdeURL/api/masterdata/centers/province/$_provinceSelected',
     );
     if (response.statusCode == 200) {
       setState(() {
         _centerList = [
-          {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'}
+          {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'},
         ];
         _centerListTemp = [
-          {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'}
+          {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'},
         ];
 
         for (var i = 0; i < response.data.length; i++) {
           _center = {
             'code': response.data[i]['value'].toString(),
-            'title': response.data[i]['label']
+            'title': response.data[i]['label'],
           };
           _centerList.add(_center);
           _centerListTemp.add(_center);
@@ -1077,13 +1050,15 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<dynamic> _getProvince() async {
     try {
       setState(() => _loadingDropdown = 'province');
-      dynamic response =
-          await Dio().post("$serverUrl/dcc-api/route/province/read", data: {});
+      dynamic response = await Dio().post(
+        "$serverUrl/dcc-api/route/province/read",
+        data: {},
+      );
       if (response.statusCode == 200) {
         setState(() {
           _provinceList = [
             {'code': '', 'title': 'เลือกจังหวัด'},
-            ...response.data['objectData']
+            ...response.data['objectData'],
           ];
           _loadingDropdown = '';
         });
@@ -1098,15 +1073,13 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() => _loadingDropdown = 'district');
     dynamic response = await Dio().post(
       "$serverUrl/dcc-api/route/district/read",
-      data: {
-        'province': _provinceSelected,
-      },
+      data: {'province': _provinceSelected},
     );
     if (response.statusCode == 200) {
       setState(() {
         _districtList = [
           {'code': '', 'title': 'เลือกอำเภอ'},
-          ...response.data['objectData']
+          ...response.data['objectData'],
         ];
         _loadingDropdown = '';
       });
@@ -1117,16 +1090,13 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() => _loadingDropdown = 'subDistrict');
     dynamic response = await Dio().post(
       "$serverUrl/dcc-api/route/tambon/read",
-      data: {
-        'province': _provinceSelected,
-        'district': _districtSelected,
-      },
+      data: {'province': _provinceSelected, 'district': _districtSelected},
     );
     if (response.statusCode == 200) {
       setState(() {
         _subDistrictList = [
           {'code': '', 'title': 'เลือกตำบล'},
-          ...response.data['objectData']
+          ...response.data['objectData'],
         ];
         _loadingDropdown = '';
       });
@@ -1136,9 +1106,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<dynamic> getPostCode() async {
     dynamic response = await Dio().post(
       "$serverUrl/dcc-api/route/postcode/read",
-      data: {
-        'tambon': _subDistrictSelected,
-      },
+      data: {'tambon': _subDistrictSelected},
     );
     if (response.statusCode == 200) {
       setState(() {
@@ -1150,12 +1118,10 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-
-
   // Future<bool?> _checkDuplicateEmail() async {
   //   try {
   //     Response<bool> response = await Dio().get(
-  //       '$ondeURL/api/user/verify/duplicate/${_emailController.text}',
+  //       '$bdeURL/api/user/verify/duplicate/${_emailController.text}',
   //     );
   //     return response.data;
   //   } catch (e) {
@@ -1197,7 +1163,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       children: [
                         Expanded(
                           child: labelTextFormField(
-                              'ค้นหาชื่อศูนย์ดิจิทัลชุมชน', txtDescription),
+                            'ค้นหาชื่อศูนย์ดิจิทัลชุมชน',
+                            txtDescription,
+                          ),
                         ),
                         const SizedBox(width: 8.0),
                         InkWell(
@@ -1209,8 +1177,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             width: 40,
                             height: 40,
                             decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
                               color: Color(0xFF7209B7),
                             ),
                             child: Image.asset(
@@ -1292,13 +1261,17 @@ class _RegisterPageState extends State<RegisterPage> {
           centerCode = '';
 
       if (_provinceSelected.isNotEmpty) {
-        provinceName = _provinceList
-            .firstWhere((e) => e['code'] == _provinceSelected)['title'];
+        provinceName =
+            _provinceList.firstWhere(
+              (e) => e['code'] == _provinceSelected,
+            )['title'];
       }
 
       if (_centerController.text != '') {
-        centerCode = _centerList
-            .firstWhere((e) => e['title'] == _centerController.text)['code'];
+        centerCode =
+            _centerList.firstWhere(
+              (e) => e['title'] == _centerController.text,
+            )['code'];
       }
       // if (_districtSelected.isNotEmpty) {
       //   districtName = _districtList
@@ -1314,21 +1287,26 @@ class _RegisterPageState extends State<RegisterPage> {
       // }
 
       dynamic param = {
-        'memberType': memberTypeList.firstWhere(
-            (element) => element['code'] == _memberTypeSelected)['title'],
+        'memberType':
+            memberTypeList.firstWhere(
+              (element) => element['code'] == _memberTypeSelected,
+            )['title'],
         'prefixName': _prefixName,
         'firstName': _firstNameController.text,
         'lastName': _lastNameController.text,
         'fullName': '${_firstNameController.text} ${_lastNameController.text}',
         'idcard': _idCardController.text,
         'age': int.parse(_ageRangeSelected),
-        'ageRange': ageRangeList.firstWhere(
-            (element) => element['code'] == _ageRangeSelected)['title'],
+        'ageRange':
+            ageRangeList.firstWhere(
+              (element) => element['code'] == _ageRangeSelected,
+            )['title'],
         'email': _emailController.text.toLowerCase(),
         'phone': _phoneController.text,
-        'username': widget.category.isNotEmpty
-            ? widget.model['username']
-            : _emailController.text,
+        'username':
+            widget.category.isNotEmpty
+                ? widget.model['username']
+                : _emailController.text,
         'password': _passwordController.text,
         'provinceCode': _provinceSelected,
         'province': provinceName,
@@ -1363,9 +1341,7 @@ class _RegisterPageState extends State<RegisterPage> {
       if (!mounted) return;
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (_) => const VerifyConfirmDataPage(),
-        ),
+        MaterialPageRoute(builder: (_) => const VerifyConfirmDataPage()),
       );
     } catch (e) {
       setState(() {
@@ -1375,10 +1351,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  Widget labelTextFormField(
-    String label,
-    TextEditingController txtController,
-  ) {
+  Widget labelTextFormField(String label, TextEditingController txtController) {
     return Container(
       height: 40,
       decoration: const BoxDecoration(
@@ -1389,7 +1362,7 @@ class _RegisterPageState extends State<RegisterPage> {
             color: Color.fromARGB(255, 249, 233, 255),
             blurRadius: 10,
             offset: Offset(0, 5),
-          )
+          ),
         ],
       ),
       child: Container(
@@ -1401,19 +1374,21 @@ class _RegisterPageState extends State<RegisterPage> {
           borderRadius: BorderRadius.all(Radius.circular(7)),
         ),
         child: TextField(
-            style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFFCEA8F3)),
-            controller: txtDescription,
-            decoration: CusInpuDecoration.base(
-              context,
-              hintText: 'ค้นหาชื่อศูนย์ดิจิทัลชุมชน',
-            ),
-            onChanged: (value) {
-              // setData(value);
-            },
-            focusNode: FirstDisabledFocusNode()),
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFFCEA8F3),
+          ),
+          controller: txtDescription,
+          decoration: CusInpuDecoration.base(
+            context,
+            hintText: 'ค้นหาชื่อศูนย์ดิจิทัลชุมชน',
+          ),
+          onChanged: (value) {
+            // setData(value);
+          },
+          focusNode: FirstDisabledFocusNode(),
+        ),
       ),
     );
   }

@@ -37,14 +37,14 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
   dynamic _province;
 
   List<dynamic> _provinceList = [
-    {'code': '', 'title': 'เลือกจังหวัด'}
+    {'code': '', 'title': 'เลือกจังหวัด'},
   ];
 
   List<dynamic> _centerList = [
-    {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'}
+    {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'},
   ];
   List<dynamic> _centerListTemp = [
-    {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'}
+    {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'},
   ];
 
   @override
@@ -67,10 +67,7 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
           title: const Text(
             'ยืนยันศูนย์ดิจิทัลที่ประจำการ',
             textAlign: TextAlign.start,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
         ),
         backgroundColor: const Color(0xFFFAF4FF),
@@ -99,7 +96,7 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
                   _centerSelected = '';
                   _centerController.text = '';
                   _centerList = [
-                    {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'}
+                    {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'},
                   ];
                 });
                 if (_provinceSelected.isNotEmpty) {
@@ -131,16 +128,17 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
                 width: double.infinity,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: _loading
-                      ? Theme.of(context).primaryColor.withOpacity(0.8)
-                      : Theme.of(context).primaryColor,
+                  color:
+                      _loading
+                          ? Theme.of(context).primaryColor.withOpacity(0.8)
+                          : Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(7),
                   boxShadow: const [
                     BoxShadow(
                       blurRadius: 4,
                       color: Color(0x40F3D2FF),
                       offset: Offset(0, 4),
-                    )
+                    ),
                   ],
                 ),
                 child: Stack(
@@ -157,9 +155,10 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
                       const Positioned.fill(
                         child: Center(
                           child: SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator()),
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
                       ),
                   ],
@@ -199,7 +198,7 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: TextFormField(
@@ -212,10 +211,7 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
             onChanged: (val) => onChanged!(val),
             onFieldSubmitted: (val) => onFieldSubmitted!(val),
             style: const TextStyle(fontSize: 14),
-            decoration: CusInpuDecoration.base(
-              context,
-              hintText: hint,
-            ),
+            decoration: CusInpuDecoration.base(context, hintText: hint),
             inputFormatters: inputFormatters,
             validator: (String? value) => validator!(value),
           ),
@@ -225,12 +221,9 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
             padding: const EdgeInsets.only(left: 5, top: 3),
             child: Text(
               validateString,
-              style: const TextStyle(
-                fontSize: 10,
-                color: Colors.red,
-              ),
+              style: const TextStyle(fontSize: 10, color: Colors.red),
             ),
-          )
+          ),
       ],
     );
   }
@@ -252,19 +245,17 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
   _getProvinceCenter() async {
     try {
       setState(() => _loadingDropdown = 'province');
-      var response = await Dio().get(
-        '$ondeURL/api/masterdata/changwat',
-      );
+      var response = await Dio().get('$bdeURL/api/masterdata/changwat');
       if (response.statusCode == 200) {
         setState(() {
           _provinceList = [
-            {'code': '', 'title': 'เลือกจังหวัด'}
+            {'code': '', 'title': 'เลือกจังหวัด'},
           ];
 
           for (var i = 0; i < response.data.length; i++) {
             _province = {
               'code': response.data[i]['value'].toString(),
-              'title': response.data[i]['label']
+              'title': response.data[i]['label'],
             };
             _provinceList.add(_province);
           }
@@ -282,8 +273,10 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
       var value = await ManageStorage.read('profileData') ?? '';
       var user = json.decode(value);
 
-      var centerCode = _centerList
-          .firstWhere((e) => e['title'] == _centerController.text)['code'];
+      var centerCode =
+          _centerList.firstWhere(
+            (e) => e['title'] == _centerController.text,
+          )['code'];
       user['centerName'] = _centerController.text;
       user['centerCode'] = centerCode;
 
@@ -309,43 +302,42 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
   _dialog({required String text, bool error = false}) {
     return showDialog(
       context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 16,
-            fontFamily: 'Kanit',
-            color: Colors.black,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
-        content: const Text(" "),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: const Text(
-              "ตกลง",
-              style: TextStyle(
-                fontSize: 13,
+      builder:
+          (BuildContext context) => CupertinoAlertDialog(
+            title: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 16,
                 fontFamily: 'Kanit',
-                color: Color(0xFF005C9E),
+                color: Colors.black,
                 fontWeight: FontWeight.normal,
               ),
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
-              if (!error) {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => const Menupage(),
+            content: const Text(" "),
+            actions: [
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                child: const Text(
+                  "ตกลง",
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontFamily: 'Kanit',
+                    color: Color(0xFF005C9E),
+                    fontWeight: FontWeight.normal,
                   ),
-                  (Route<dynamic> route) => false,
-                );
-              }
-            },
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  if (!error) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => const Menupage()),
+                      (Route<dynamic> route) => false,
+                    );
+                  }
+                },
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -367,7 +359,7 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: DropdownButtonFormField(
@@ -376,10 +368,7 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
               width: 16,
               height: 8,
             ),
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0x807209B7),
-            ),
+            style: const TextStyle(fontSize: 14, color: Color(0x807209B7)),
             decoration: CusInpuDecoration.base(context),
             value: value,
             // validator: (value) =>
@@ -387,19 +376,20 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
             onChanged: (dynamic newValue) {
               onChanged!(newValue);
             },
-            items: data.map((item) {
-              return DropdownMenuItem(
-                value: item['code'],
-                child: Text(
-                  '${item['title']}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0x807209B7),
-                    fontFamily: 'Kanit',
-                  ),
-                ),
-              );
-            }).toList(),
+            items:
+                data.map((item) {
+                  return DropdownMenuItem(
+                    value: item['code'],
+                    child: Text(
+                      '${item['title']}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0x807209B7),
+                        fontFamily: 'Kanit',
+                      ),
+                    ),
+                  );
+                }).toList(),
           ),
         ),
         if (type == _loadingDropdown && type != '')
@@ -447,7 +437,7 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
                 blurRadius: 4,
                 color: Color(0x40F3D2FF),
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: TextFormField(
@@ -460,10 +450,7 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
             onChanged: (val) => onChanged!(val),
             onFieldSubmitted: (val) => onFieldSubmitted!(val),
             style: const TextStyle(fontSize: 14),
-            decoration: CusInpuDecoration.base(
-              context,
-              hintText: hint,
-            ),
+            decoration: CusInpuDecoration.base(context, hintText: hint),
             inputFormatters: inputFormatters,
             validator: (String? value) => validator!(value),
             onTap: () {
@@ -480,12 +467,9 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
             padding: const EdgeInsets.only(left: 5, top: 3),
             child: Text(
               validateString,
-              style: const TextStyle(
-                fontSize: 10,
-                color: Colors.red,
-              ),
+              style: const TextStyle(fontSize: 10, color: Colors.red),
             ),
-          )
+          ),
       ],
     );
   }
@@ -520,11 +504,11 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
                       children: [
                         Expanded(
                           child: labelTextFormField(
-                              'ค้นหาชื่อศูนย์ดิจิทัลชุมชน', txtDescription),
+                            'ค้นหาชื่อศูนย์ดิจิทัลชุมชน',
+                            txtDescription,
+                          ),
                         ),
-                        SizedBox(
-                          width: 8.0,
-                        ),
+                        SizedBox(width: 8.0),
                         InkWell(
                           onTap: () {
                             setData(txtDescription.text);
@@ -534,8 +518,9 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
                             width: 40,
                             height: 40,
                             decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
                               color: Color(0xFF7209B7),
                             ),
                             child: Image.asset(
@@ -584,10 +569,7 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
     );
   }
 
-  Widget labelTextFormField(
-    String label,
-    TextEditingController txtController,
-  ) {
+  Widget labelTextFormField(String label, TextEditingController txtController) {
     return Container(
       height: 40,
       decoration: const BoxDecoration(
@@ -598,7 +580,7 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
             color: Color.fromARGB(255, 249, 233, 255),
             blurRadius: 10,
             offset: Offset(0, 5),
-          )
+          ),
         ],
       ),
       child: Container(
@@ -610,19 +592,21 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
           borderRadius: BorderRadius.all(Radius.circular(7)),
         ),
         child: TextField(
-            style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFFCEA8F3)),
-            controller: txtDescription,
-            decoration: CusInpuDecoration.base(
-              context,
-              hintText: 'ค้นหาชื่อศูนย์ดิจิทัลชุมชน',
-            ),
-            onChanged: (value) {
-              setData(value);
-            },
-            focusNode: FirstDisabledFocusNode()),
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFFCEA8F3),
+          ),
+          controller: txtDescription,
+          decoration: CusInpuDecoration.base(
+            context,
+            hintText: 'ค้นหาชื่อศูนย์ดิจิทัลชุมชน',
+          ),
+          onChanged: (value) {
+            setData(value);
+          },
+          focusNode: FirstDisabledFocusNode(),
+        ),
       ),
     );
   }
@@ -668,11 +652,11 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
                       children: [
                         Expanded(
                           child: labelTextFormField(
-                              'ค้นหาชื่อศูนย์ดิจิทัลชุมชน', txtDescription),
+                            'ค้นหาชื่อศูนย์ดิจิทัลชุมชน',
+                            txtDescription,
+                          ),
                         ),
-                        SizedBox(
-                          width: 8.0,
-                        ),
+                        SizedBox(width: 8.0),
                         InkWell(
                           onTap: () {
                             setData(txtDescription.text);
@@ -682,8 +666,9 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
                             width: 40,
                             height: 40,
                             decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
                               color: Color(0xFF7209B7),
                             ),
                             child: Image.asset(
@@ -722,21 +707,21 @@ class _ProfileVerifyCenterPageState extends State<ProfileVerifyCenterPage> {
   _getCenter() async {
     setState(() => _loadingDropdown = 'center');
     var response = await Dio().get(
-      '$ondeURL/api/masterdata/centers/province/$_provinceSelected',
+      '$bdeURL/api/masterdata/centers/province/$_provinceSelected',
     );
     if (response.statusCode == 200) {
       setState(() {
         _centerList = [
-          {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'}
+          {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'},
         ];
         _centerListTemp = [
-          {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'}
+          {'code': '', 'title': 'เลือกศูนย์ดิจิทัลชุมชน'},
         ];
 
         for (var i = 0; i < response.data.length; i++) {
           _center = {
             'code': response.data[i]['value'].toString(),
-            'title': response.data[i]['label']
+            'title': response.data[i]['label'],
           };
           _centerList.add(_center);
           _centerListTemp.add(_center);

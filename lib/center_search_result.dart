@@ -23,8 +23,9 @@ class CenterSearchResultPage extends StatefulWidget {
 
 class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
   late DateTime currentBackPressTime;
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(
+    initialRefresh: false,
+  );
   late TextEditingController _searchController;
 
   // late Future<dynamic> _futureProfile;
@@ -76,17 +77,19 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
   _filterSearch() async {
     try {
       setState(() => _loading = true);
-      Response responseCenter = await Dio()
-          .get('https://dcc.onde.go.th/dcc-api/api/masterdata/centers');
+      Response responseCenter = await Dio().get(
+        'https://dcc.bde.go.th/dcc-api/api/masterdata/centers',
+      );
 
       logWTF(widget.keySearch);
       logWTF(responseCenter.data);
       List<dynamic> responseData = responseCenter.data;
       var data = responseData;
       if (widget.keySearch!.isNotEmpty) {
-        data = responseData
-            .where((item) => item['label'].contains(widget.keySearch!))
-            .toList();
+        data =
+            responseData
+                .where((item) => item['label'].contains(widget.keySearch!))
+                .toList();
       }
       setState(() {
         _modelFilter = data;
@@ -136,27 +139,27 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
           title: const Text(
             'ผลการค้นหาศูนย์ดิจิทัลชุมชน',
             style: TextStyle(
-                fontSize: 18, color: Colors.black, fontWeight: FontWeight.w700),
+              fontSize: 18,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
         body: Column(
           children: [
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             _buildBoxSearch(),
-            const SizedBox(
-              height: 16,
-            ),
+            const SizedBox(height: 16),
             Expanded(
-              child: _loading
-                  ? Container(
-                      height: 200,
-                      alignment: Alignment.center,
-                      child: const CircularProgressIndicator(),
-                    )
-                  : _listItems(),
-            )
+              child:
+                  _loading
+                      ? Container(
+                        height: 200,
+                        alignment: Alignment.center,
+                        child: const CircularProgressIndicator(),
+                      )
+                      : _listItems(),
+            ),
           ],
         ),
       ),
@@ -165,10 +168,7 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
 
   Widget _listItems() {
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 10,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       itemCount: _modelFilter.length,
       separatorBuilder: (_, __) => const SizedBox(height: 15),
       itemBuilder: (_, __) => _buildResultList(__),
@@ -184,7 +184,7 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('พบข้อมูลการค้นหา " ${_modelFilter.length} " รายการ')
+              Text('พบข้อมูลการค้นหา " ${_modelFilter.length} " รายการ'),
               //   Text(
               // 'พบข้อมูลการค้นหา "${widget.keySearch}" ${_modelFilter.length}" รายการ')
             ],
@@ -244,12 +244,16 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
               color: Color(0xFFF9E9FF),
               blurRadius: 5,
               offset: Offset(0, 5),
-            )
+            ),
           ],
         ),
         child: Container(
-          padding:
-              const EdgeInsets.only(top: 12, bottom: 12, left: 16, right: 25),
+          padding: const EdgeInsets.only(
+            top: 12,
+            bottom: 12,
+            left: 16,
+            right: 25,
+          ),
           width: double.infinity,
           decoration: const BoxDecoration(
             color: Colors.white,
@@ -267,9 +271,7 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
                     height: 60,
                     decoration: BoxDecoration(
                       color: const Color(0xFFB325F8).withOpacity(0.10),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(10),
-                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Image.asset(
                       "assets/images/logo.png",
@@ -281,23 +283,25 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
                     child: Text(
                       _modelFilter[index]?["label"] ?? '',
                       style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w700),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   (_modelFilter[index]?['showMore'] ?? false)
                       ? RotationTransition(
-                          turns: const AlwaysStoppedAnimation(180 / 360),
-                          child: Image.asset(
-                            'assets/images/arrow_down.png',
-                            width: 15,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        )
-                      : Image.asset(
+                        turns: const AlwaysStoppedAnimation(180 / 360),
+                        child: Image.asset(
                           'assets/images/arrow_down.png',
                           width: 15,
                           color: Theme.of(context).primaryColor,
-                        )
+                        ),
+                      )
+                      : Image.asset(
+                        'assets/images/arrow_down.png',
+                        width: 15,
+                        color: Theme.of(context).primaryColor,
+                      ),
                 ],
               ),
               if ((_modelFilter[index]?['showMore'] ?? false)) _listMore(index),
@@ -312,13 +316,14 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
     try {
       if (_modelFilter[index]?['centerRefno'] == null) {
         Response response = await Dio().get(
-            'https://dcc.onde.go.th/dcc-api/api/OfficeDigital/GetCenterByID/${_modelFilter[index]['value']}');
+          'https://dcc.bde.go.th/dcc-api/api/OfficeDigital/GetCenterByID/${_modelFilter[index]['value']}',
+        );
         logWTF(response.data['data']);
         dynamic data = response.data['data'];
         setState(() {
           _modelFilter[index] = <dynamic, dynamic>{
             ..._modelFilter[index],
-            ...data
+            ...data,
           };
         });
         logWTF(_modelFilter[index]);
@@ -351,9 +356,7 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
                   child: CircularProgressIndicator(),
                 ),
               ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -365,22 +368,20 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
                     height: 16,
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
+                const SizedBox(width: 10),
                 Expanded(
                   flex: 10,
                   child: Text(
                     _appareAddress(index),
                     style: const TextStyle(
-                        fontSize: 11, fontWeight: FontWeight.w300),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
-                )
+                ),
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -392,17 +393,17 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
                     height: 16,
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
+                const SizedBox(width: 10),
                 Expanded(
                   flex: 10,
                   child: Text(
                     _modelFilter[index]?["centerTel"] ?? "-",
                     style: const TextStyle(
-                        fontSize: 11, fontWeight: FontWeight.w300),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
-                )
+                ),
               ],
             ),
             Row(
@@ -413,26 +414,29 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
                   GestureDetector(
                     onTap: () {
                       launchUrl(
-                          Uri.parse('tel:${_modelFilter[index]['centerTel']}'));
+                        Uri.parse('tel:${_modelFilter[index]['centerTel']}'),
+                      );
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 4),
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
                       decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(12.5)),
-                          color: Color(0xFF7209B7)),
+                        borderRadius: BorderRadius.all(Radius.circular(12.5)),
+                        color: Color(0xFF7209B7),
+                      ),
                       child: const Text(
                         'โทรเลย',
                         style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                const SizedBox(
-                  width: 10,
-                ),
+                const SizedBox(width: 10),
                 if (_modelFilter[index]?['latitude'] != null &&
                     _modelFilter[index]?['longitude'] != null)
                   GestureDetector(
@@ -440,27 +444,34 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
                       String googleMapsLocationUrl =
                           'https://www.google.com/maps/search/?api=1&query=${_modelFilter[index]['latitude']},${_modelFilter[index]['longitude']}';
 
-                      final String encodedURl =
-                          Uri.encodeFull(googleMapsLocationUrl);
+                      final String encodedURl = Uri.encodeFull(
+                        googleMapsLocationUrl,
+                      );
 
-                      launchUrl(Uri.parse(encodedURl),
-                          mode: LaunchMode.externalApplication);
+                      launchUrl(
+                        Uri.parse(encodedURl),
+                        mode: LaunchMode.externalApplication,
+                      );
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 4),
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
                       decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(12.5)),
-                          color: Color(0xFF7209B7)),
+                        borderRadius: BorderRadius.all(Radius.circular(12.5)),
+                        color: Color(0xFF7209B7),
+                      ),
                       child: const Text(
                         'ดูแผนที่',
                         style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  )
+                  ),
               ],
             ),
           ],
@@ -469,16 +480,21 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
     );
   }
 
-  Widget DropdownCustom(List<dynamic> itemModel, String label,
-      Function onChanged, String valueDropdown) {
+  Widget DropdownCustom(
+    List<dynamic> itemModel,
+    String label,
+    Function onChanged,
+    String valueDropdown,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       width: double.infinity,
       // height: 50,
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          border: Border.all(color: const Color(0xFF7209B7))),
+        color: Colors.white,
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        border: Border.all(color: const Color(0xFF7209B7)),
+      ),
       child: SizedBox(
         child: DropdownButtonHideUnderline(
           child: DropdownButton(
@@ -487,29 +503,29 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
               color: const Color(0xFF7209B7).withOpacity(0.5),
               size: 40,
             ),
-            items: itemModel.map<DropdownMenuItem<String>>(
-              (value) {
-                return DropdownMenuItem(
-                  value: value['code'],
-                  child: Text(
-                    value['title'].toString(),
-                    style: TextStyle(
-                      color: const Color(0xFF7209B7).withOpacity(.50),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Kanit',
+            items:
+                itemModel.map<DropdownMenuItem<String>>((value) {
+                  return DropdownMenuItem(
+                    value: value['code'],
+                    child: Text(
+                      value['title'].toString(),
+                      style: TextStyle(
+                        color: const Color(0xFF7209B7).withOpacity(.50),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Kanit',
+                      ),
                     ),
-                  ),
-                );
-              },
-            ).toList(),
+                  );
+                }).toList(),
             onChanged: (value) => onChanged(value),
             hint: Text(
               label,
               style: TextStyle(
-                  color: const Color(0xFF7209B7).withOpacity(.50),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500),
+                color: const Color(0xFF7209B7).withOpacity(.50),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
             value: valueDropdown,
           ),
@@ -518,10 +534,7 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
     );
   }
 
-  Widget labelTextFormField(
-    String label,
-    TextEditingController txtController,
-  ) {
+  Widget labelTextFormField(String label, TextEditingController txtController) {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -531,7 +544,7 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
             color: Color.fromARGB(255, 249, 233, 255),
             blurRadius: 10,
             offset: Offset(0, 5),
-          )
+          ),
         ],
       ),
       child: Container(
@@ -545,9 +558,10 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
         child: SizedBox(
           child: TextFormField(
             style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFFCEA8F3)),
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: Color(0xFFCEA8F3),
+            ),
             controller: txtController,
             decoration: InputDecoration(
               labelText: label,
@@ -555,8 +569,9 @@ class _CenterSearchResultPageState extends State<CenterSearchResultPage> {
                 color: Color(0xFFCEA8F3),
                 fontSize: 16,
               ),
-              floatingLabelStyle:
-                  TextStyle(color: Colors.black.withOpacity(0.24)),
+              floatingLabelStyle: TextStyle(
+                color: Colors.black.withOpacity(0.24),
+              ),
               enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.white, width: 0),
               ),

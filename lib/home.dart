@@ -1293,7 +1293,7 @@ class _HomePageState extends State<HomePage> {
       // );
 
       final response = await Dio().get(
-        '$ondeURL/api/Notify/count/me?isPortal=false',
+        '$bdeURL/api/Notify/count/me?isPortal=false',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -1340,7 +1340,7 @@ class _HomePageState extends State<HomePage> {
 
     try {
       Response response = await Dio().get(
-        '$ondeURL/api/Booking/GetDashBoardBooking',
+        '$bdeURL/api/Booking/GetDashBoardBooking',
         options: Options(
           validateStatus: (_) => true,
           contentType: 'application/x-www-form-urlencoded',
@@ -1411,8 +1411,8 @@ class _HomePageState extends State<HomePage> {
 
     var dio = Dio();
     var response = await dio.request(
-      // 'https://dcc.onde.go.th/dcc-api/api/Booking/GetDashBoardBookingSlotdate=${formattedDate}&time=${formattedTime}&${profile['centerId']}',
-      'https://dcc.onde.go.th/dcc-api/api/Booking/GetDashBoardBookingSlot?date=$formattedDate&time=$formattedTime&centerId=${profile['centerId']}',
+      // 'https://dcc.bde.go.th/dcc-api/api/Booking/GetDashBoardBookingSlotdate=${formattedDate}&time=${formattedTime}&${profile['centerId']}',
+      'https://dcc.bde.go.th/dcc-api/api/Booking/GetDashBoardBookingSlot?date=$formattedDate&time=$formattedTime&centerId=${profile['centerId']}',
       options: Options(method: 'GET', headers: headers),
     );
 
@@ -1468,7 +1468,7 @@ class _HomePageState extends State<HomePage> {
       // logWTF('_getImageProfile');
       var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
       var responseCenter = await Dio().get(
-        '$ondeURL/api/user/GetImageProfile/${profileMe['userid']}',
+        '$bdeURL/api/user/GetImageProfile/${profileMe['userid']}',
       );
 
       setState(() {
@@ -1484,7 +1484,7 @@ class _HomePageState extends State<HomePage> {
     try {
       // logWTF(profileMe);
       var responseCenter = await Dio().get(
-        '$ondeURL/api/OfficeDigital/GetCenterByID/${profileMe['centerId']}',
+        '$bdeURL/api/OfficeDigital/GetCenterByID/${profileMe['centerId']}',
       );
 
       // logWTF(profileMe['centerId']);
@@ -1614,7 +1614,7 @@ class _HomePageState extends State<HomePage> {
       }
 
       Response response = await Dio().get(
-        '$ondeURL/api/user/ProfileMe',
+        '$bdeURL/api/user/ProfileMe',
         options: Options(
           validateStatus: (_) => true,
           contentType: 'application/x-www-form-urlencoded',

@@ -75,14 +75,14 @@ class _ReservationTodayPageState extends State<ReservationTodayPage> {
           "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}";
 
       // print(
-      //     "$ondeURL/api/Booking/GetAllBooking?CurrentPage=$_curPage&RecordPerPage=$_perPage&CenterId=${profileMe['centerId']}&Status=$_selectedCategory");
+      //     "$bdeURL/api/Booking/GetAllBooking?CurrentPage=$_curPage&RecordPerPage=$_perPage&CenterId=${profileMe['centerId']}&Status=$_selectedCategory");
       // logWTF(response.data);
       // print(_selectedCategory);
 
       if (_selectedCategory != '') {
         Dio dio = Dio();
         var response = await dio.get(
-          '$ondeURL/api/Booking/GetAllBooking?CurrentPage=$_curPage&RecordPerPage=$_perPage&CenterId=${profileMe['centerId']}&key=bookingno&direction=descending&bookingdate=$dateStr&Status=$_selectedCategory',
+          '$bdeURL/api/Booking/GetAllBooking?CurrentPage=$_curPage&RecordPerPage=$_perPage&CenterId=${profileMe['centerId']}&key=bookingno&direction=descending&bookingdate=$dateStr&Status=$_selectedCategory',
           options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
         );
 
@@ -98,7 +98,7 @@ class _ReservationTodayPageState extends State<ReservationTodayPage> {
         //   Dio dio = Dio();
         //   print('--------dateStr------>>> ${dateStr}');
         //   var response = await dio.get(
-        //     '$ondeURL/api/Booking/GetAllBooking?CurrentPage=$_curPage&RecordPerPage=$_perPage&CenterId=${profileMe['centerId']}&key=bookingno&direction=descending&bookingdate',
+        //     '$bdeURL/api/Booking/GetAllBooking?CurrentPage=$_curPage&RecordPerPage=$_perPage&CenterId=${profileMe['centerId']}&key=bookingno&direction=descending&bookingdate',
         //     options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
         //   );
         //   setState(() {
@@ -113,7 +113,7 @@ class _ReservationTodayPageState extends State<ReservationTodayPage> {
       } else {
         Dio dio = Dio();
         var response = await dio.get(
-          '$ondeURL/api/Booking/GetAllBooking?CurrentPage=$_curPage&RecordPerPage=$_perPage&CenterId=${profileMe['centerId']}&key=bookingno&direction=descending',
+          '$bdeURL/api/Booking/GetAllBooking?CurrentPage=$_curPage&RecordPerPage=$_perPage&CenterId=${profileMe['centerId']}&key=bookingno&direction=descending',
           options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
         );
 
@@ -801,7 +801,7 @@ class _ReservationTodayPageState extends State<ReservationTodayPage> {
       var accessToken = await ManageStorage.read('accessToken_122') ?? '';
 
       var data = {"bookingNo": param['bookingno'], "status": "4"};
-      final String baseUrl = '$ondeURL';
+      final String baseUrl = '$bdeURL';
 
       print(data.toString());
       print('${baseUrl}/api/Booking/UserCheckin');

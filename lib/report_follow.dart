@@ -38,7 +38,7 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
   String selectSubDistrict = "1";
   int tabSelector = 510;
   bool _loading = false;
-  dynamic listData;
+  // dynamic listData;
 
   dynamic reportModel = {
     "problemListCount": 0,
@@ -164,6 +164,9 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
         future: _futureFollowModel,
         builder: (_, snapshot) {
           if (snapshot.hasData) {
+            print('snapshot data: ${snapshot.data}');
+            logWTF(snapshot.data);
+
             if (snapshot.data.length == 0) {
               return const Center(child: Text('ไม่พบข้อมูล'));
             } else {
@@ -209,7 +212,7 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
   _dialogReportDetails(dynamic model, index) {
     return showDialog(
       context: context,
-      barrierDismissible: true, // user must tap button!
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return Padding(
           padding: const EdgeInsets.all(20.0),
@@ -231,7 +234,7 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
                 children: [
                   const Center(
                     child: Text(
-                      'ติดตามปัญหา',
+                      'ติดตามปัญหา ',
                       style: TextStyle(
                         fontSize: 18,
                         fontFamily: 'Kanit',
@@ -246,7 +249,7 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
                     children: [
                       Text(
                         'วันที่รับแจ้ง ${_convertDate(model['ticketDate'] ?? '')}',
-                        // modellistDataTrack[index]['ticketName'],
+
                         style: const TextStyle(
                           fontSize: 14,
                           fontFamily: 'Kanit',
@@ -254,7 +257,6 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      // const SizedBox(width: 20),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
@@ -262,21 +264,16 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
                         ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: const Color(0xFF8414B5),
-                          ), // Border color
+                          border: Border.all(color: const Color(0xFF8414B5)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const CircleAvatar(
-                              radius: 4, // Size of the dot
-                              backgroundColor:
-                                  Colors.yellow, // Color of the dot
+                              radius: 4,
+                              backgroundColor: Colors.yellow,
                             ),
-                            const SizedBox(
-                              width: 8,
-                            ), // Spacing between dot and text
+                            const SizedBox(width: 8),
                             Text(
                               model['statusCodeText'], // Your text here
                               style: const TextStyle(
@@ -429,7 +426,7 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
                     title: 'ชื่อผู้ใช้าน',
                     subTitle: 'ticketByUserName',
                     title1: "ผู้รับผิดชอบ",
-                    subTitle1: '',
+                    subTitle1: 'ticketOwnerName',
                   ),
                   const SizedBox(height: 12),
                   _detailTrackTicket(
@@ -482,7 +479,7 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
                 ),
               ),
               Text(
-                listData[index][subTitle] ?? '',
+                modellistDataTrack[index][subTitle] ?? '',
                 style: const TextStyle(
                   fontSize: 16,
                   fontFamily: 'Kanit',
@@ -509,7 +506,7 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
                   ),
                 ),
                 Text(
-                  listData[index][subTitle1] ?? '',
+                  modellistDataTrack[index][subTitle1] ?? '',
                   style: const TextStyle(
                     fontSize: 16,
                     fontFamily: 'Kanit',
@@ -750,18 +747,15 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
 
   // _callRead() async {
   //   setState(() => _loading = true);
-
   //   // DateTime now = new DateTime.now();
   //   // var currentYear = now.year;
   //   // var dateStart = '2023-01-01';
   //   // var dateEnd = '${currentYear}-12-31';
-
   //   // Dio dio = Dio();
   //   // var response = await dio.get(
-  //   //   '$ondeURL/api/ticket/getTrackTicket/$dateStart/$dateEnd',
+  //   //   '$bdeURL/api/ticket/getTrackTicket/$dateStart/$dateEnd',
   //   // );
   //   // logWTF(response.data['data']);
-
   //   // setState(() {
   //   //   if (tabSelector == 1) {
   //   //     listData =
@@ -783,20 +777,16 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
   //   // setState(() => _loading = false);
   //   DateTime dateEnd = DateTime.now();
   //   DateTime dateStart = DateTime(dateEnd.year, dateEnd.month - 3, dateEnd.day);
-
   //   String dateEndStr = dateEnd.toIso8601String().substring(0, 10);
   //   String dateStartStr = dateStart.toIso8601String().substring(0, 10);
-
   //   String token = await ManageStorage.read('accessToken_122') ?? '';
-
   //   try {
   //     final dio = Dio();
   //     final response = await dio.get(
-  //       '$ondeURL/api/ticket/getTrackTicket/$dateStartStr/$dateEndStr/$tabSelector/NNOTFILTER/0',
+  //       '$bdeURL/api/ticket/getTrackTicket/$dateStartStr/$dateEndStr/$tabSelector/NNOTFILTER/0',
   //       queryParameters: {'CurrentPage': 1, 'RecordPerPage': 10},
   //       options: Options(headers: {'Authorization': 'Bearer $token'}),
   //     );
-
   //     if (response.statusCode == 200) {
   //       setState(() {
   //         modellistDataTrack = response.data['data'];
@@ -809,6 +799,7 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
   //     print('Exception: $e');
   //   }
   // }
+
   _callRead() async {
     setState(() => _loading = true);
 
@@ -842,7 +833,8 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
     try {
       final dio = Dio();
       final response = await dio.get(
-        '$ondeURL/api/ticket/getTrackTicket/$dateStartStr/$dateEndStr/$statusCode/NNOTFILTER/0',
+        '$bdeURL/api/ticket/getTrackTicket/$dateStartStr/$dateEndStr/$statusCode/NNOTFILTER/0',
+
         queryParameters: {'CurrentPage': 1, 'RecordPerPage': 10},
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
@@ -850,6 +842,7 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
       if (response.statusCode == 200) {
         setState(() {
           modellistDataTrack = response.data['data'];
+
           _futureFollowModel = Future.value(modellistDataTrack);
         });
       } else {
@@ -873,7 +866,7 @@ class _ReportFollowPageState extends State<ReportFollowPage> {
     Dio dio = Dio();
     try {
       var response = await dio.get(
-        '$ondeURL/api/masterdata/ticket/subTypes?ticketTypeCode=$ticketTypeCode',
+        '$bdeURL/api/masterdata/ticket/subTypes?ticketTypeCode=$ticketTypeCode',
         options: Options(
           validateStatus: (_) => true,
           contentType: 'application/x-www-form-urlencoded',

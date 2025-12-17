@@ -91,7 +91,7 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
     try {
       var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
       var responseCenter = await Dio().get(
-        '$ondeURL/api/user/GetImageProfile/${profileMe['userid']}',
+        '$bdeURL/api/user/GetImageProfile/${profileMe['userid']}',
       );
 
       setState(() {
@@ -173,7 +173,7 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
       });
 
       Response response = await Dio().put(
-        '$ondeURL/api/user/UpdateById',
+        '$bdeURL/api/user/UpdateById',
         data: formData,
         options: Options(
           validateStatus: (_) => true,
@@ -217,7 +217,7 @@ class _ProfileFormPageState extends State<ProfileFormPage> {
       // get info
       if (token.isEmpty) return null;
       Response response = await Dio().get(
-        '$ondeURL/api/user/ProfileMe',
+        '$bdeURL/api/user/ProfileMe',
         options: Options(
           validateStatus: (_) => true,
           contentType: 'application/x-www-form-urlencoded',

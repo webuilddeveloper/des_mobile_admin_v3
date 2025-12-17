@@ -39,6 +39,8 @@ class _ReportPageState extends State<ReportPage> {
   dynamic listData;
   dynamic listDataTrack;
   dynamic modellistDataTrack;
+  dynamic subTypesTicketk;
+  dynamic ticketTypeCode;
 
   dynamic reportModel = {
     "ticketCount": 0,
@@ -154,7 +156,7 @@ class _ReportPageState extends State<ReportPage> {
           // backgroundColor: Color(0xFF9A1120),
           centerTitle: true,
           title: const Text(
-            'แจ้งปัญหา',
+            'แจ้งปัญหา ',
             style: TextStyle(
               fontSize: 18,
               fontFamily: 'Kanit',
@@ -500,12 +502,9 @@ class _ReportPageState extends State<ReportPage> {
                     return ListView.builder(
                       shrinkWrap: true,
                       physics: const ClampingScrollPhysics(),
-                      // padding: const EdgeInsets.symmetric(
-                      //   horizontal: 20,
-                      //   vertical: 10,
-                      // ),
+
                       itemCount: snapshot.data.length,
-                      // separatorBuilder: (_, __) => const SizedBox(height: 15),
+
                       itemBuilder:
                           (_, __) => _buildFollowResult(
                             snapshot.data.toList()[__],
@@ -1120,7 +1119,7 @@ class _ReportPageState extends State<ReportPage> {
                 children: [
                   const Center(
                     child: Text(
-                      'ติดตามปัญหา',
+                      'ติดตามปัญหา ',
                       style: TextStyle(
                         fontSize: 18,
                         fontFamily: 'Kanit',
@@ -1262,6 +1261,7 @@ class _ReportPageState extends State<ReportPage> {
                           ],
                         ),
                       ),
+
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.only(left: 12),
@@ -1308,7 +1308,7 @@ class _ReportPageState extends State<ReportPage> {
                     title: 'ชื่อผู้ใช้าน',
                     subTitle: 'ticketByUserName',
                     title1: "ผู้รับผิดชอบ",
-                    subTitle1: '',
+                    subTitle1: 'ticketOwnerName',
                   ),
                   const SizedBox(height: 12),
                   _detailTrackTicket(
@@ -1461,7 +1461,7 @@ class _ReportPageState extends State<ReportPage> {
       print(dateEndStr);
       print(dateStartStr);
       print(
-        'https://dcc.onde.go.th/dcc-api/api/ticket/getTicketSummary/$dateStartStr/$dateEndStr',
+        'https://dcc.bde.go.th/dcc-api/api/ticket/getTicketSummary/$dateStartStr/$dateEndStr',
       );
       print('----------------------------');
 
@@ -1470,7 +1470,7 @@ class _ReportPageState extends State<ReportPage> {
 
       final dio = Dio();
       final response = await dio.get(
-        'https://dcc.onde.go.th/dcc-api/api/ticket/getTicketSummary/$dateStartStr/$dateEndStr',
+        'https://dcc.bde.go.th/dcc-api/api/ticket/getTicketSummary/$dateStartStr/$dateEndStr',
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
@@ -1508,7 +1508,7 @@ class _ReportPageState extends State<ReportPage> {
     try {
       final dio = Dio();
       final response = await dio.get(
-        '$ondeURL/api/ticket/getTrackTicket/$dateStartStr/$dateEndStr/$_selectedDashboard/NNOTFILTER/0',
+        '$bdeURL/api/ticket/getTrackTicket/$dateStartStr/$dateEndStr/$_selectedDashboard/NNOTFILTER/0',
         queryParameters: {'CurrentPage': 1, 'RecordPerPage': 10},
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
@@ -1527,9 +1527,6 @@ class _ReportPageState extends State<ReportPage> {
     setState(() => _loading = false);
   }
 
-  dynamic subTypesTicketk;
-  dynamic ticketTypeCode;
-
   _callsubTypesTicketk(model) async {
     String token = await ManageStorage.read('accessToken_122') ?? '';
     ticketTypeCode = model['ticketTypeCode'];
@@ -1537,7 +1534,7 @@ class _ReportPageState extends State<ReportPage> {
     Dio dio = Dio();
     try {
       var response = await dio.get(
-        '$ondeURL/api/masterdata/ticket/subTypes?ticketTypeCode=$ticketTypeCode',
+        '$bdeURL/api/masterdata/ticket/subTypes?ticketTypeCode=$ticketTypeCode',
         options: Options(
           validateStatus: (_) => true,
           contentType: 'application/x-www-form-urlencoded',

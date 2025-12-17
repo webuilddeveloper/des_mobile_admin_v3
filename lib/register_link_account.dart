@@ -359,7 +359,7 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
       if (token.isEmpty) return null;
       logWTF(token);
       Response response = await Dio().get(
-        '$ondeURL/api/user/ProfileMe',
+        '$bdeURL/api/user/ProfileMe',
         options: Options(
           validateStatus: (_) => true,
           contentType: 'application/x-www-form-urlencoded',
@@ -403,7 +403,7 @@ class _RegisterLinkAccountPageState extends State<RegisterLinkAccountPage> {
       // get info
       if (token.isEmpty) return null;
       Response response = await Dio().post(
-        '$ondeURL/api/user/GetStaffProfileData',
+        '$bdeURL/api/user/GetStaffProfileData',
         options: Options(
           validateStatus: (_) => true,
           contentType: 'application/x-www-form-urlencoded',

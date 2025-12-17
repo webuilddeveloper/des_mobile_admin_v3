@@ -203,7 +203,7 @@ class _NotificationListState extends State<NotificationBookingPage> {
 
     try {
       Response response = await Dio().request(
-        '$ondeURL/api/notify/read/$id',
+        '$bdeURL/api/notify/read/$id',
         options: Options(method: 'PUT', headers: headers),
       );
       if (response.statusCode == 200) {
@@ -239,7 +239,7 @@ class _NotificationListState extends State<NotificationBookingPage> {
     var dio = Dio();
 
     var response = await dio.request(
-      '$ondeURL/api/Notify/me?take=10&onlyNotRead=false&IsPortal=false',
+      '$bdeURL/api/Notify/me?take=10&onlyNotRead=false&IsPortal=false',
       options: Options(method: 'GET', headers: headers),
     );
 

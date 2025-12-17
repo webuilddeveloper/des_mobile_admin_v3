@@ -474,7 +474,7 @@ class _MenupageState extends State<Menupage> {
               const SizedBox(height: 15),
               GestureDetector(
                 onTap: () async {
-                  const url = 'https://dcc.onde.go.th/user/register';
+                  const url = 'https://dcc.bde.go.th/user/register';
                   if (await canLaunch(url)) {
                     await launch(url);
                   } else {
@@ -584,7 +584,7 @@ class _MenupageState extends State<Menupage> {
       // logWTF('_getImageProfile');
       var profileMe = await ManageStorage.readDynamic('profileMe') ?? '';
       var responseCenter = await Dio().get(
-        '$ondeURL/api/user/GetImageProfile/${profileMe['userid']}',
+        '$bdeURL/api/user/GetImageProfile/${profileMe['userid']}',
       );
 
       setState(() {
@@ -1335,7 +1335,7 @@ class _MenupageState extends State<Menupage> {
       var profileMe = await ManageStorage.readDynamic('profileMe');
 
       var responseCenter = await Dio().get(
-        '$ondeURL/api/OfficeDigital/GetCenterByID/${profileMe['centerId']}',
+        '$bdeURL/api/OfficeDigital/GetCenterByID/${profileMe['centerId']}',
       );
 
       if (responseCenter.data['status'] == 1) {
@@ -1401,7 +1401,7 @@ class _MenupageState extends State<Menupage> {
       }
       // logWTF(token);
       Response response = await Dio().get(
-        '$ondeURL/api/user/ProfileMe',
+        '$bdeURL/api/user/ProfileMe',
         options: Options(
           validateStatus: (_) => true,
           contentType: 'application/x-www-form-urlencoded',
@@ -1606,7 +1606,7 @@ class _MenupageState extends State<Menupage> {
     }
 
     Response response = await Dio().get(
-      '$ondeURL/api/StaffCalendar/GetStaffCalenderWorkday?month=$month&year=$year&isPagination=false&key=false&direction=true&isGetPrvious_Next_Data=true',
+      '$bdeURL/api/StaffCalendar/GetStaffCalenderWorkday?month=$month&year=$year&isPagination=false&key=false&direction=true&isGetPrvious_Next_Data=true',
 
       options: Options(
         validateStatus: (_) => true,
