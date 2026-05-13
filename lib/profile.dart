@@ -166,15 +166,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
       var response = await dio.post(url, data: formData);
 
-      // Close the loading dialog
       Navigator.of(context).pop();
 
       if (response.statusCode == 200) {
         _showDialog(context, 'สำเร็จ', 'บันทึกข้อมูลสำเร็จ');
-        logWTF(response.data);
+        setState(() {
+          _dateStartController.clear();
+          _dateEndController.clear();
+          selectedFile = null;
+        });
       }
     } on DioError catch (e) {
-      // Close the loading dialog
       Navigator.of(context).pop();
 
       if (e.response != null && e.response!.statusCode == 400) {
@@ -1779,10 +1781,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               states,
                             ) {
                               if (states.contains(MaterialState.selected)) {
-                                // สีเมื่อถูกเลือก
                                 return Theme.of(context).primaryColor;
                               }
-                              // สีเมื่อไม่ถูกเลือก
+
                               return Color(0xFFB3B3B3);
                             }),
                             value: isChecked,
@@ -1887,6 +1888,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 child: GestureDetector(
                                   onTap: () {
+                                    mSetState(() {
+                                      _dateStartController.clear();
+                                      _dateEndController.clear();
+                                      selectedFile = null;
+                                    });
+
                                     Navigator.pop(context);
                                   },
                                   child: const Center(
