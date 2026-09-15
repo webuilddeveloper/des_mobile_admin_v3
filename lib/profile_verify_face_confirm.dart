@@ -281,9 +281,14 @@ class _ProfileVerifyFaceConfirmPageState
         "ImageCaption": id,
         "Image": await MultipartFile.fromFile(file.path, filename: fileName),
       });
+      print("========== REQUEST ==========");
+      print("URL : $serverUrl/de-document/upload/face");
+      print("File : ${file.path}");
+      print("FileName : $fileName");
 
       var response = await dio.post(
         '$serverUrl/de-document/upload/face',
+
         data: formData,
       );
 
@@ -298,7 +303,7 @@ class _ProfileVerifyFaceConfirmPageState
     } catch (e) {
       logE('de-document/upload/face');
       logE(e);
-      // throw Exception(e);
+      throw Exception(e);
     }
   }
 

@@ -836,6 +836,8 @@ class _LoginPageState extends State<LoginPage> {
 
   dynamic _getStaffProfileData(String token) async {
     try {
+      print('=============');
+      print(token);
       // get info
       if (token.isEmpty) return null;
       Response response = await Dio().post(
@@ -850,6 +852,7 @@ class _LoginPageState extends State<LoginPage> {
           },
         ),
       );
+      print(response.statusCode);
 
       if (response.statusCode == 200) {
         return response.data;
