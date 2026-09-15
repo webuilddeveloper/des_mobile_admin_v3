@@ -614,10 +614,10 @@ class _MenupageState extends State<Menupage> {
     initializeSDK();
 
     // NotificationService.instance.start(context);
-    NotificationService.setupFirebaseMessaging();
-    NotificationService.requestPermission();
-    NotificationService.initialize();
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    // NotificationService.setupFirebaseMessaging();
+    // NotificationService.requestPermission();
+    // NotificationService.initialize();
+    // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     homePage = HomePage(changePage: _changePage);
     profilePage = ProfilePage(changePage: _changePage);
     messageListPage = MessageListPage(changePage: _changePage);
@@ -1452,7 +1452,8 @@ class _MenupageState extends State<Menupage> {
 
         if (isScanFace) {
           if (!mounted) return;
-          Navigator.push(
+          Navigator.pop(context);
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder:
@@ -1461,9 +1462,9 @@ class _MenupageState extends State<Menupage> {
                     type: type == "" ? "checkIn" : "checkOut",
                   ),
             ),
-          ).then((value) {
-            Navigator.pop(context);
-          });
+          );
+          if (!mounted) return;
+          _callReadGetStaffCalende();
         } else {
           if (!mounted) return;
           Navigator.pop(context);
